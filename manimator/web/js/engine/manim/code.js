@@ -1,5 +1,5 @@
 // A port of manim/mobject/text/code_mobject.py. Manim colours the listing with Pygments; the server works the
-// colours out the same way (manimator/code_highlight.py) and the scene plan hands them over as `highlight`:
+// colours out the same way (manimator/CodeHighlight.py) and the scene plan hands them over as `highlight`:
 // {lines, spans: [[line, start, end, "#RRGGBB"]], foreground, line_number_color, background}.
 
 import { DOWN, LEFT, RIGHT, UP } from "./frozen.js";

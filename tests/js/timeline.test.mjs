@@ -1,5 +1,5 @@
 // Golden projects played by the timeline (scene/timeline.js) against Manim playing their generated Python
-// (tools/make_js_fixtures.py: timeline): at the first, middle and last frame of every step, and at the end, what is
+// (tools/MakeJsFixtures.py: timeline): at the first, middle and last frame of every step, and at the end, what is
 // drawn — the still picture's objects, then the objects over it — object by object, in drawing order.
 //
 // Formula pieces (MathJax lays out like TeX, not identically) are compared as a block by their extent; the rest
@@ -139,7 +139,7 @@ for (const sc of data.scenes) {
 test("objects compared loosely", () => console.log(`${looseUsed} drawn objects needed the loose tolerance`, [...looseWhere]));
 
 // The order objects are drawn in before each step and at the end equals the plan's (ops.screen_orders, itself
-// checked against Manim by tests/test_screen_orders.py).
+// checked against Manim by tests/TestScreenOrders.py).
 const { extractMobjectFamilyMembers } = await import("../../manimator/web/js/engine/scene/scene.js");
 for (const sc of data.scenes) {
   test(`${sc.name} drawing order`, async () => {

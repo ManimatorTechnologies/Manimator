@@ -1,5 +1,5 @@
 """Names of Manim's colours the colour picker shows and the code generator prefers (their hex values are frozen
-in color_table.py by tools/freeze_manim.py)."""
+in ColorTable.py by tools/FreezeManim.py)."""
 
 # Rows shown in the color picker.
 PALETTE_ROWS: list[list[str]] = [

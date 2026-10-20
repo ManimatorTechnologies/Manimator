@@ -14,8 +14,8 @@ import * as numbers from "../manim/numbers.js";
 import * as svg from "../manim/svg.js";
 import * as tex from "../manim/tex.js";
 import * as text from "../manim/text.js";
-import * as threeD from "../manim/three_d.js";
-import * as vectorField from "../manim/vector_field.js";
+import * as threeD from "../manim/ThreeD.js";
+import * as vectorField from "../manim/VectorField.js";
 import * as vmobject from "../manim/vmobject.js";
 
 const classes = {};

@@ -1,4 +1,4 @@
-// MarkupText against Manim (tools/make_js_fixtures.py: markup). Tolerance as for Text; italic is slanted differently
+// MarkupText against Manim (tools/MakeJsFixtures.py: markup). Tolerance as for Text; italic is slanted differently
 // on Windows (see text.test.mjs), so text with <i> is compared by its classes and size only. Underlines and
 // strikethroughs span a run's max(ink, logical) width: on Linux that is the logical width (what the engine draws),
 // while Windows' ink boxes stick out by up to a pixel, so those cases get 0.05.

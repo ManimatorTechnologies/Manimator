@@ -9,7 +9,7 @@ import { SHORT_LABELS, typeLabel } from "./util.js";
 
 export const DRAG_TYPE = "application/x-manimator-mobject";
 
-/** An object's icon (drawn once by tools/make_icons.py); objects without one (customizations too) show their symbol. */
+/** An object's icon (drawn once by tools/MakeIcons.py); objects without one (customizations too) show their symbol. */
 export function iconImg(key, cls = "") {
   if (String(key).startsWith("kit:")) return null;
   return html`<img class=${cls} src=${`/static/icons/${key}.png`} alt="" draggable="false"

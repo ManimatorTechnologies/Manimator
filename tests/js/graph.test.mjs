@@ -1,4 +1,4 @@
-// Graph and DiGraph layouts against Manim + networkx (tools/make_js_fixtures.py: graphs). Spring and random layouts
+// Graph and DiGraph layouts against Manim + networkx (tools/MakeJsFixtures.py: graphs). Spring and random layouts
 // come from numpy's MT19937 and match exactly; circular and shell round through float32 as networkx does.
 // Kamada-Kawai stops where an L-BFGS stops, near scipy's L-BFGS-B result but not on it: 1e-4.
 import { test } from "node:test";

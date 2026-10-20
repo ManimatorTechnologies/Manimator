@@ -1,6 +1,6 @@
 // Customizations: the example packages' kit.js (examples/kits/) registered the way the sandbox registers them, built
 // from a scene plan and played; their objects match Manim's (the same examples' kit.py), and the "manimator" module
-// they import is current. Fixture: tools/make_kit.py --fixture.
+// they import is current. Fixture: tools/MakeKit.py --fixture.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
@@ -10,7 +10,7 @@ import { pathToFileURL } from "node:url";
 import { ROOT, fixture, loadFontFamilies, mobjectState, sameMobject } from "./helpers.mjs";
 
 await loadFontFamilies("DejaVu Sans");
-const { kitApiSource } = await import("../../tools/make_kit_api.mjs");
+const { kitApiSource } = await import("../../tools/MakeKitApi.mjs");
 const apiNow = kitApiSource(); // before the examples join the engine's tables below
 const { registerKitClass } = await import("../../manimator/web/js/engine/kits.js");
 const { buildObjects } = await import("../../manimator/web/js/engine/plan/build.js");
@@ -18,7 +18,7 @@ const { CLASSES } = await import("../../manimator/web/js/engine/plan/names.js");
 const { pyCall } = await import("../../manimator/web/js/engine/manim/pycall.js");
 const { Timeline } = await import("../../manimator/web/js/engine/scene/timeline.js");
 
-const API = pathToFileURL(join(ROOT, "manimator", "web", "js", "engine", "kit-api.js")).href;
+const API = pathToFileURL(join(ROOT, "manimator", "web", "js", "engine", "KitApi.js")).href;
 const dir = mkdtempSync(join(tmpdir(), "kits-"));
 
 /** An example's kit.js as a module (the browser maps "manimator" with an import map; here it is rewritten). */
@@ -30,10 +30,10 @@ async function exampleClass(folder) {
 }
 
 const { plan, manim } = fixture("kits");
-for (const kit of plan.kits) registerKitClass(kit, await exampleClass(kit.class === "Battery" ? "battery" : "pop_in"));
+for (const kit of plan.kits) registerKitClass(kit, await exampleClass(kit.class === "Battery" ? "battery" : "PopIn"));
 
 test("the manimator module is current with the engine", () => {
-  assert.equal(readFileSync(new URL(API), "utf8"), apiNow, "run: node tools/make_kit_api.mjs");
+  assert.equal(readFileSync(new URL(API), "utf8"), apiNow, "run: node tools/MakeKitApi.mjs");
 });
 
 test("the example Battery is Manim's Battery", async () => {

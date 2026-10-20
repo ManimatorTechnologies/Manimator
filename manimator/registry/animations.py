@@ -14,7 +14,7 @@ from .scenes import LINEAR, MOVING_CAMERA, SPECIAL_THREE_D, THREE_D, VECTOR_SCEN
 
 ANIMATE = "Animate"  # special entry: `target.animate.<method>(...)`
 
-# What an animation does to its target's place on screen (checked against Manim in tests/test_scenes.py).
+# What an animation does to its target's place on screen (checked against Manim in tests/TestScenes.py).
 ADD = "add"  # on screen afterwards (brought in if it wasn't)
 REMOVE = "remove"  # gone afterwards
 REPLACE = "replace"  # gone, and the second object takes its place

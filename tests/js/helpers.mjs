@@ -8,11 +8,13 @@ import assert from "node:assert/strict";
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const ROOT = join(HERE, "..", "..");
 
-/** Reference data written by tools/make_js_fixtures.py (gzipped: some are tens of MB as JSON) or by hand. */
+/** Reference data written by tools/MakeJsFixtures.py (gzipped: some are tens of MB as JSON) or by hand. Files are
+ *  named in PascalCase: fixture("three_d") reads ThreeD.json.gz. */
 export function fixture(name) {
-  const packed = join(HERE, "fixtures", `${name}.json.gz`);
+  const file = name.split(/[^A-Za-z0-9]+/).filter(Boolean).map((w) => w[0].toUpperCase() + w.slice(1)).join("");
+  const packed = join(HERE, "fixtures", `${file}.json.gz`);
   if (existsSync(packed)) return JSON.parse(gunzipSync(readFileSync(packed)).toString("utf8"));
-  return JSON.parse(readFileSync(join(HERE, "fixtures", `${name}.json`), "utf8"));
+  return JSON.parse(readFileSync(join(HERE, "fixtures", `${file}.json`), "utf8"));
 }
 
 /** Arrays of numbers (any nesting) equal within `tol`. */
@@ -31,7 +33,7 @@ export function close(actual, expected, tol = 1e-9, where = "") {
   assert.deepEqual(actual, expected, where);
 }
 
-/** Each family member's class, points and style (tools/make_js_fixtures.py: mobject_state). */
+/** Each family member's class, points and style (tools/MakeJsFixtures.py: mobject_state). */
 export function mobjectState(mob) {
   return mob.get_family().map((m) => {
     const entry = { cls: m.constructor.name, points: m.points };

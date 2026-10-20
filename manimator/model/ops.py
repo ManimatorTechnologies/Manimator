@@ -30,7 +30,7 @@ _reserved: set[str] | None = None
 
 def reserved_names() -> set[str]:
     """Names a variable or scene class must not take: keywords and everything `from manim import *` brings in
-    (frozen in registry/reserved.py by tools/freeze_manim.py)."""
+    (frozen in registry/reserved.py by tools/FreezeManim.py)."""
     global _reserved
     if _reserved is None:
         from ..registry.reserved import MANIM_NAMES

@@ -11,6 +11,7 @@ dev = ["manim>=0.19", "pytest", "av", "playwright"]
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+python_files = ["Test*.py"]  # file names are plain PascalCase: TestWeb.py
 filterwarnings = [
     "ignore:\\(rm_rf\\) error removing:pytest.PytestWarning",
     "ignore:'audioop' is deprecated:DeprecationWarning",

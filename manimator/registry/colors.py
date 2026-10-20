@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 
-from .color_table import HEX
+from .ColorTable import HEX
 from .palette import PALETTE_ROWS, PREFERRED
 
 _HEX = re.compile(r"^#[0-9A-F]{6}$")

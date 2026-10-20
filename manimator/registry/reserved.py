@@ -1,4 +1,4 @@
-"""Frozen from Manim 0.21.0 by tools/freeze_manim.py. Do not edit; run the tool again instead."""
+"""Frozen from Manim 0.21.0 by tools/FreezeManim.py. Do not edit; run the tool again instead."""
 
 MANIM_NAMES = frozenset(['AS2700', 'Add', 'AddTextLetterByLetter', 'AddTextWordByWord', 'Angle', 'AnimatedBoundary', 'Animation',
  'AnimationGroup', 'AnnotationDot', 'AnnularSector', 'Annulus', 'ApplyComplexFunction', 'ApplyFunction',

@@ -1,5 +1,5 @@
 // Draws objects made from [class, args, kwargs, ...method calls] specs with the browser engine, for
-// tools/draw_parity.py (which draws the same specs with Manim).
+// tools/DrawParity.py (which draws the same specs with Manim).
 
 import * as V from "/static/js/engine/manim/vmobject.js";
 import * as G from "/static/js/engine/manim/geometry.js";

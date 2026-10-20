@@ -3,8 +3,8 @@
 Two remote MCP servers (Streamable HTTP, stateless, JSON responses). Tool names are PascalCase, as the owner likes
 them shown in the chat.
 - The Guest MCP, /mcp: nobody signs in and nothing is kept.
-  - ReadMe: the scene format (mcp_scene.guide()), read once before the first animation;
-  - ShowAnimation: the assistant's scene, checked like editor edits (mcp_scene.build_project) and turned into the
+  - ReadMe: the scene format (McpScene.guide()), read once before the first animation;
+  - ShowAnimation: the assistant's scene, checked like editor edits (McpScene.build_project) and turned into the
     scene plan the browser engine plays. Its result carries the plan for the player (structuredContent), and a
     short text for the assistant.
 - The User MCP, /mcp/user (only with accounts, which an add-on brings: server/addon.py): acts for one Manimator
@@ -35,10 +35,10 @@ from starlette.concurrency import run_in_threadpool
 from ..model import ops
 from ..model.project import Project
 from ..plan import scene_plan
-from .mcp_preview import layout_problems, preview
+from .McpPreview import layout_problems, preview
 from ..registry import MOBJECTS
 from ..registry.custom import KIT_TYPE_RE, is_kit_type
-from .mcp_scene import (
+from .McpScene import (
     GUEST, MAX_SCENES, KitAccess, Rules, SceneSpecError, build_project, build_saved_project, guide, kit_clash,
     scene_spec,
 )

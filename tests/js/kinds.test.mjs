@@ -1,5 +1,5 @@
 // Every scene kind (the golden actions and settings projects) played by the timeline, frame by frame as Manim
-// writes them, against Manim playing the generated Python (tools/make_js_fixtures.py: kinds): at the first, middle
+// writes them, against Manim playing the generated Python (tools/MakeJsFixtures.py: kinds): at the first, middle
 // and last frame of every play, the camera (frame, or 3D angles) and what it draws, object by object: points as the
 // camera transforms them (3D projection), colours as it shades them; for a ZoomedScene also the zoomed camera.
 //

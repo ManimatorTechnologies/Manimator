@@ -1,7 +1,0 @@
-# Development: the app, its tests, and the tools that check the browser engine against real Manim
-# (tools/parity_report.py, make_icons.py, make_js_fixtures.py, and the tests that run the exported Python).
--r requirements-web.txt
-manim>=0.19
-pytest
-av
-playwright

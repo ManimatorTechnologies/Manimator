@@ -1,4 +1,4 @@
-// The only module that loads the vendored third-party code (pinned and checksummed by tools/vendor_manim_web.py),
+// The only module that loads the vendored third-party code (pinned and checksummed by tools/VendorManimWeb.py),
 // so it can be upgraded or swapped in one place. Each piece is fetched the first time it is needed.
 //
 // From manim-web 0.33.0 the engine uses only prebuilt, self-contained chunks: MathJax (TeX to SVG) and the MP4/WebM

@@ -29,7 +29,7 @@ from .registry import MOBJECTS
 from .registry.params import FILE
 
 FONTS_DIR = Path(__file__).resolve().parent / "web" / "fonts"
-MANIM_REQUIREMENT = "manim~=0.21.0"  # the Manim the browser engine is a port of (docs/browser-engine.md)
+MANIM_REQUIREMENT = "manim~=0.21.0"  # the Manim the browser engine is a port of (docs/BrowserEngine.md)
 
 # family -> (folder in web/fonts, file name prefix, family for the characters it lacks), as FONT_FILES in fonts.js
 FONT_FAMILIES = {

@@ -1,4 +1,4 @@
-// Code against Manim (tools/make_js_fixtures.py: code), with the server's Pygments colours as the scene plan
+// Code against Manim (tools/MakeJsFixtures.py: code), with the server's Pygments colours as the scene plan
 // carries them. Text tolerance as in text.test.mjs.
 import { test } from "node:test";
 import { fixture, loadDejaVu, mobjectState, sameMobject } from "./helpers.mjs";

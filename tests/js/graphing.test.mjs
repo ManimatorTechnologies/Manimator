@@ -1,4 +1,4 @@
-// Coordinate systems, function graphs, braces and tables against Manim (tools/make_js_fixtures.py: graphing).
+// Coordinate systems, function graphs, braces and tables against Manim (tools/MakeJsFixtures.py: graphing).
 // No TeX is involved, so points are compared closely; text (table entries) within 1e-3 as in text.test.mjs.
 import { test } from "node:test";
 import { fixture, loadDejaVu, mobjectState, sameMobject } from "./helpers.mjs";

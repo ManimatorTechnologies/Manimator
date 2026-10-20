@@ -13,7 +13,7 @@ import json
 
 from . import codegen
 from .calltree import statements_json
-from .code_highlight import highlight
+from .CodeHighlight import highlight
 from .model.ops import (
     group_owners, kit_spec, kit_types_in, screen_orders, screen_states, scene_kind, top_level, transform_role,
 )

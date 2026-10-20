@@ -1,4 +1,4 @@
-// Frozen from Manim 0.21.0 by tools/freeze_manim.py. Do not edit; run the tool again instead.
+// Frozen from Manim 0.21.0 by tools/FreezeManim.py. Do not edit; run the tool again instead.
 
 export const CTRL_VALUE = 65507.0;
 export const DEFAULT_ARROW_TIP_LENGTH = 0.35;

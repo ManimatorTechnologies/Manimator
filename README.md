@@ -33,11 +33,11 @@ It starts on the **Projects** screen. Every project is kept on the server as you
 
 Projects and uploads live in `%LOCALAPPDATA%\Manimator` (or `--data-dir`). Videos are made by your browser and never stored on the server. Your projects belong to your browser through a cookie: another browser, a private window or clearing cookies starts an empty workspace, so download anything you want to keep.
 
-The same server can be a website for other people (`--host 0.0.0.0`, or the `Dockerfile`); each visitor gets a private workspace, and requests and storage are limited. See [docs/self-hosting.md](docs/self-hosting.md) for the settings, the security model and hosting notes.
+The same server can be a website for other people (`--host 0.0.0.0`, or the `Dockerfile`); each visitor gets a private workspace, and requests and storage are limited. See [docs/SelfHosting.md](docs/SelfHosting.md) for the settings, the security model and hosting notes.
 
 That is all the app needs: it draws and makes videos in the browser (Chrome, Edge, Safari or desktop Firefox), with no
 Manim, LaTeX or ffmpeg. For development (the tests and the tools that compare the browser engine with real Manim),
-install `requirements-dev.txt` instead; those need ffmpeg and a LaTeX distribution (MiKTeX on Windows) as well.
+install `RequirementsDev.txt` instead; those need ffmpeg and a LaTeX distribution (MiKTeX on Windows) as well.
 
 ## How to use
 
@@ -117,7 +117,7 @@ browser UI (Preact + htm, manimator/web) ──HTTP──► FastAPI (manimator/
                                                                            Cairo camera) ─► canvas, playback and MP4 (WebCodecs)
 ```
 
-- **One code generator.** The canvas, the video and the downloadable Python come from the same call trees, so they can't disagree. The server never runs Manim. See [docs/browser-engine.md](docs/browser-engine.md).
+- **One code generator.** The canvas, the video and the downloadable Python come from the same call trees, so they can't disagree. The server never runs Manim. See [docs/BrowserEngine.md](docs/BrowserEngine.md).
 - **Thin UI.** The UI only displays the project and sends named edits. The server validates every value before it becomes code: directions, choices and easing names come from allow-lists, and colors and numbers are type-checked.
 - **Safe to share.** The server only answers its own host names, needs the app's own header on every change (so other web pages can't drive it), and never takes a file path from the page.
 - **No build step.** `manimator/web/vendor/preact-htm.js` is the only frontend dependency.
@@ -130,7 +130,7 @@ Everything the editor knows about Manim lives in `manimator/registry/` as data:
 - `animations.py`: animations, easing functions and the scene actions (camera moves, grid transformations...)
 - `scenes.py`: the scene types and their settings
 
-To add a mobject, method or animation, add one entry there. The palette, forms, menus and code generation pick it up automatically; the browser engine needs the Manim class it names (`web/js/engine/manim/`). `tests/test_codegen.py` builds every entry against the real Manim to catch mistakes (development only).
+To add a mobject, method or animation, add one entry there. The palette, forms, menus and code generation pick it up automatically; the browser engine needs the Manim class it names (`web/js/engine/manim/`). `tests/TestCodegen.py` builds every entry against the real Manim to catch mistakes (development only).
 
 ```
 manimator/
@@ -147,14 +147,14 @@ manimator/
 ## Tests
 
 ```bash
-.venv/bin/pip install -r requirements-dev.txt
+.venv/bin/pip install -r RequirementsDev.txt
 .venv/bin/python -m pytest
 node --test tests/js/*.test.mjs
 ```
 
 The tests that run the exported Python with real Manim skip themselves when Manim isn't installed. The JavaScript tests
 compare the browser engine with frames and shapes made by real Manim (`tests/js/fixtures/`, made by
-`tools/make_js_fixtures.py`, gzipped).
+`tools/MakeJsFixtures.py`, gzipped).
 
 ## Accounts and the hosted site
 
@@ -167,5 +167,5 @@ This repository is the editor and its server, as you run it yourself: no account
 Manimator is source-available under the [PolyForm Noncommercial License 1.0.0](LICENSE.md): you may use, change and
 share it for any noncommercial purpose (personal use, study, teaching, research, charities and public institutions).
 Commercial use needs a separate license. Parts made by others keep their own licenses: see
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Contributions are welcome under the terms in
+[ThirdPartyNotices.md](ThirdPartyNotices.md). Contributions are welcome under the terms in
 [CONTRIBUTING.md](CONTRIBUTING.md).

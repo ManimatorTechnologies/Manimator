@@ -1,6 +1,6 @@
 // Every object of the golden "all objects" projects (2D and 3D, default and changed parameters), built from the
 // scene plan the browser receives, against the same object made by the generated Python in Manim
-// (tools/make_js_fixtures.py: objects). Objects with TeX are compared by size and place (MathJax lays out like TeX,
+// (tools/MakeJsFixtures.py: objects). Objects with TeX are compared by size and place (MathJax lays out like TeX,
 // not identically), and so is italic text (the reference Manim runs on Windows, which slants text its own way; see
 // text.test.mjs); the rest point by point, within text's tolerance (scaled with the object).
 //

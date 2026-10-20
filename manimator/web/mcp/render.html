@@ -14,7 +14,7 @@ import { registerKitClass } from "../js/engine/kits.js";
 import { CLASSES } from "../js/engine/plan/names.js";
 
 // Customizations' code (server/kits.py) never runs on the server: each package's class name gets a stand-in of our
-// own, an object that draws nothing or an animation that changes nothing (server/mcp_preview.py says so).
+// own, an object that draws nothing or an animation that changes nothing (server/McpPreview.py says so).
 function standIns(kits = []) {
   for (const kit of kits) {
     const Cls = kit.kind === "object"

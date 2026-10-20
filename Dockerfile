@@ -1,7 +1,7 @@
 # Manimator as a website. Build:   docker build -t manimator .
 # Run (try it on your own computer):
 #   docker run --rm -p 8000:8000 -v manimator-data:/data --memory 1g --cpus 1 manimator
-# then open http://localhost:8000/. For a real site read docs/self-hosting.md (domain, HTTPS, limits).
+# then open http://localhost:8000/. For a real site read docs/SelfHosting.md (domain, HTTPS, limits).
 #
 # The server keeps projects, uploads and accounts; pictures and videos are made in the visitor's browser
 # (manimator/web/js/engine/), so the image needs no Manim, LaTeX, Cairo or ffmpeg. The one exception: AI chats
@@ -12,8 +12,8 @@ FROM python:3.12-slim-bookworm
 ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 
 WORKDIR /app
-COPY requirements-web.txt .
-RUN pip install -r requirements-web.txt \
+COPY RequirementsWeb.txt .
+RUN pip install -r RequirementsWeb.txt \
     && python -m playwright install --with-deps --only-shell chromium \
     && rm -rf /var/lib/apt/lists/*
 

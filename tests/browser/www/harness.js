@@ -1,5 +1,5 @@
 // The engine's test page (/dev/ with MANIMATOR_DEV_PAGES=1): draws scene plans with the browser engine, under the
-// site's real Content-Security-Policy. Driven by tools/parity_report.py through window.harness.
+// site's real Content-Security-Policy. Driven by tools/ParityReport.py through window.harness.
 
 import { createEngine } from "/static/js/engine/index.js";
 

@@ -5,7 +5,7 @@ A package is a zip:
                     "description", "license", "params": [...], and "style" (objects) or "introducer",
                     "remover", "run_time" (animations)}
     kit.js          the browser engine's version: `export default class <class> extends ...`, importing only from
-                    "manimator" (web/js/engine/kit-api.js). On the site it runs only in the sandboxed frame (web/sandbox/);
+                    "manimator" (web/js/engine/KitApi.js). On the site it runs only in the sandboxed frame (web/sandbox/);
                     the chat player (web/mcp/player.html) runs it in its own page, as chats allow no nested frame.
     kit.py          the Manim CE version, for the zip download (manimator/export.py): `class <class>(...)`.
     README.md       optional.
