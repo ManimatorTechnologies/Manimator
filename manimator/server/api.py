@@ -21,6 +21,7 @@ from pathlib import Path
 from fastapi import Body, Depends, FastAPI, Request
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse, Response
+from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 from starlette.concurrency import run_in_threadpool
 
@@ -839,4 +840,9 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
         kind = "video/webm" if path.suffix == ".webm" else "video/mp4"
         return FileResponse(path, media_type=kind, headers={"Cache-Control": "private, max-age=31536000, immutable"})
 
+    # HEAD asks for what GET would answer, without the body (link checkers and some crawlers): FastAPI routes only take
+    # the methods they name, and the server (uvicorn) leaves the body out
+    for route in app.routes:
+        if isinstance(route, APIRoute) and "GET" in route.methods:
+            route.methods.add("HEAD")
     return app

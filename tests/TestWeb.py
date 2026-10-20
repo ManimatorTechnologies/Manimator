@@ -153,7 +153,7 @@ def test_security_headers(app):
 
 def test_the_site_icon_is_served_where_browsers_look(app):
     c = visitor(app)
-    for path in ("/favicon.ico", "/static/favicon/favicon.ico", "/apple-touch-icon.png"):
+    for path in ("/favicon.ico", "/static/favicon/favicon.ico", "/static/favicon/icon192.png", "/apple-touch-icon.png"):
         res = c.get(path)
         assert res.status_code == 200 and res.headers["cache-control"] == "no-cache", path
     assert c.get("/favicon.ico").content[:4] == b"\0\0\1\0"  # an .ico
@@ -161,6 +161,14 @@ def test_the_site_icon_is_served_where_browsers_look(app):
     assert svg.status_code == 200 and svg.headers["content-type"].startswith("image/svg+xml")
     page = c.get("/app").text
     assert 'href="/static/favicon/favicon.ico"' in page and 'href="/static/favicon/icon.svg"' in page
+
+
+def test_pages_answer_head_like_get(app):
+    c = visitor(app)
+    for path in ("/app", "/docs", "/favicon.ico", "/static/favicon/icon.svg"):  # link checkers and crawlers ask HEAD
+        get, head = c.get(path), c.head(path)
+        assert head.status_code == 200 and head.headers["content-type"] == get.headers["content-type"], path
+    assert c.head("/api/op").status_code == 405  # only what GET answers
 
 
 def test_docs_pages_link_each_other_and_their_sections(app):

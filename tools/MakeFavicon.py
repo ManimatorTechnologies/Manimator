@@ -6,6 +6,7 @@ Out, in manimator/web/favicon/:
   icon.svg              the browser tab: the mark on a white tile with rounded corners (so it shows on dark tab bars
                         too), cropped so the drawing fills FILL of the tile's width
   favicon.ico           the same at 16, 32 and 48 px, for browsers without SVG icons
+  icon192.png           the same at 192 px, for search results (Google wants more than 48 px) and Android
   apple-touch-icon.png  180 px for phone home screens: the logo as it is, on white (phones round the corners)
 The SVG is drawn with svgelements + pycairo (Manim's own dependencies), drawn 8 times larger and made smaller.
 """
@@ -157,9 +158,10 @@ def main() -> None:
     OUT.mkdir(exist_ok=True)
     (OUT / "icon.svg").write_text(icon_svg(source, box), encoding="utf-8", newline="\n")
     (OUT / "favicon.ico").write_bytes(ico([render(svg, size, box, TILE, RADIUS) for size in (16, 32, 48)]))
+    render(svg, 192, box, TILE, RADIUS).save(OUT / "icon192.png", optimize=True)
     whole = (svg.viewbox.x, svg.viewbox.y, max(svg.viewbox.width, svg.viewbox.height))
     render(svg, 180, whole, TILE, 0).convert("RGB").save(OUT / "apple-touch-icon.png", optimize=True)
-    for name in ("icon.svg", "favicon.ico", "apple-touch-icon.png"):
+    for name in ("icon.svg", "favicon.ico", "icon192.png", "apple-touch-icon.png"):
         print(name, (OUT / name).stat().st_size, "bytes")
 
 
