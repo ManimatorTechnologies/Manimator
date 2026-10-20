@@ -1,0 +1,438 @@
+{
+  "scenes": [
+    {
+      "id": "59c297e5d3",
+      "name": "Intro",
+      "mobjects": [
+        {
+          "id": "3303744098",
+          "type": "Text",
+          "name": "title",
+          "params": {
+            "text": "Made with Manimator",
+            "font_size": 48.0,
+            "font": "",
+            "weight": "NORMAL",
+            "slant": "NORMAL"
+          },
+          "style": {
+            "color": "#FFFFFF",
+            "opacity": 1.0
+          },
+          "position": [
+            0.0,
+            3.0
+          ],
+          "rotation": 0.0,
+          "scale": 1.0,
+          "z_index": 0,
+          "on_screen_at_start": false,
+          "methods": []
+        },
+        {
+          "id": "139353ddbd",
+          "type": "Circle",
+          "name": "circle",
+          "params": {
+            "radius": 1.0
+          },
+          "style": {
+            "stroke_color": "#FC6255",
+            "stroke_width": 4.0,
+            "stroke_opacity": 1.0,
+            "fill_color": "#FC6255",
+            "fill_opacity": 0.5
+          },
+          "position": [
+            -3.5,
+            0.0
+          ],
+          "rotation": 0.0,
+          "scale": 1.0,
+          "z_index": 0,
+          "on_screen_at_start": false,
+          "methods": []
+        },
+        {
+          "id": "668e0c14e5",
+          "type": "Square",
+          "name": "square",
+          "params": {
+            "side_length": 2.0
+          },
+          "style": {
+            "stroke_color": "#58C4DD",
+            "stroke_width": 4.0,
+            "stroke_opacity": 1.0,
+            "fill_color": "#58C4DD",
+            "fill_opacity": 0.5
+          },
+          "position": [
+            0.0,
+            0.0
+          ],
+          "rotation": 45.0,
+          "scale": 1.0,
+          "z_index": 0,
+          "on_screen_at_start": false,
+          "methods": []
+        },
+        {
+          "id": "81f37593f4",
+          "type": "Triangle",
+          "name": "triangle",
+          "params": {},
+          "style": {
+            "stroke_color": "#F7D96F",
+            "stroke_width": 4.0,
+            "stroke_opacity": 1.0,
+            "fill_color": "#F7D96F",
+            "fill_opacity": 0.5
+          },
+          "position": [
+            3.5,
+            0.0
+          ],
+          "rotation": 0.0,
+          "scale": 1.3,
+          "z_index": 0,
+          "on_screen_at_start": false,
+          "methods": []
+        },
+        {
+          "id": "edb64cc03f",
+          "type": "MathTex",
+          "name": "eq",
+          "params": {
+            "tex": "e^{i\\pi} + 1 = 0",
+            "font_size": 48.0
+          },
+          "style": {
+            "color": "#FFFFFF",
+            "opacity": 1.0
+          },
+          "position": [
+            0.0,
+            -2.6
+          ],
+          "rotation": 0.0,
+          "scale": 1.0,
+          "z_index": 0,
+          "on_screen_at_start": false,
+          "methods": []
+        },
+        {
+          "id": "73fcfc0055",
+          "type": "SurroundingRectangle",
+          "name": "box",
+          "params": {
+            "mobject": "edb64cc03f",
+            "buff": 0.1,
+            "corner_radius": 0.0
+          },
+          "style": {
+            "stroke_color": "#F7D96F",
+            "stroke_width": 4.0,
+            "stroke_opacity": 1.0,
+            "fill_color": "#F7D96F",
+            "fill_opacity": 0.0
+          },
+          "position": [
+            0.0,
+            0.0
+          ],
+          "rotation": 0.0,
+          "scale": 1.0,
+          "z_index": 0,
+          "on_screen_at_start": false,
+          "methods": []
+        },
+        {
+          "id": "4ca71fdf96",
+          "type": "Star",
+          "name": "star",
+          "params": {
+            "n": 5,
+            "outer_radius": 1.0,
+            "inner_radius": 0.4
+          },
+          "style": {
+            "stroke_color": "#F0AC5F",
+            "stroke_width": 4.0,
+            "stroke_opacity": 1.0,
+            "fill_color": "#F0AC5F",
+            "fill_opacity": 0.8
+          },
+          "position": [
+            3.5,
+            0.0
+          ],
+          "rotation": 0.0,
+          "scale": 1.0,
+          "z_index": 0,
+          "on_screen_at_start": false,
+          "methods": []
+        }
+      ],
+      "steps": [
+        {
+          "kind": "play",
+          "animations": [
+            {
+              "anim": "Write",
+              "target": "3303744098",
+              "params": {},
+              "method": null
+            }
+          ],
+          "run_time": 1.0,
+          "rate_func": "default",
+          "lag_ratio": 0.0,
+          "duration": 1.0
+        },
+        {
+          "kind": "play",
+          "animations": [
+            {
+              "anim": "DrawBorderThenFill",
+              "target": "139353ddbd",
+              "params": {},
+              "method": null
+            },
+            {
+              "anim": "DrawBorderThenFill",
+              "target": "668e0c14e5",
+              "params": {},
+              "method": null
+            },
+            {
+              "anim": "DrawBorderThenFill",
+              "target": "81f37593f4",
+              "params": {},
+              "method": null
+            }
+          ],
+          "run_time": 2.0,
+          "rate_func": "default",
+          "lag_ratio": 0.3,
+          "duration": 1.0
+        },
+        {
+          "kind": "play",
+          "animations": [
+            {
+              "anim": "Animate",
+              "target": "668e0c14e5",
+              "params": {
+                "angle": 180.0
+              },
+              "method": "rotate"
+            },
+            {
+              "anim": "Indicate",
+              "target": "139353ddbd",
+              "params": {
+                "scale_factor": 1.2,
+                "color": "#FFFF00"
+              },
+              "method": null
+            }
+          ],
+          "run_time": 1.0,
+          "rate_func": "default",
+          "lag_ratio": 0.0,
+          "duration": 1.0
+        },
+        {
+          "kind": "play",
+          "animations": [
+            {
+              "anim": "FadeIn",
+              "target": "edb64cc03f",
+              "params": {
+                "shift": "UP",
+                "scale": 1.0
+              },
+              "method": null
+            }
+          ],
+          "run_time": 1.0,
+          "rate_func": "default",
+          "lag_ratio": 0.0,
+          "duration": 1.0
+        },
+        {
+          "kind": "play",
+          "animations": [
+            {
+              "anim": "Create",
+              "target": "73fcfc0055",
+              "params": {},
+              "method": null
+            }
+          ],
+          "run_time": 1.0,
+          "rate_func": "default",
+          "lag_ratio": 0.0,
+          "duration": 1.0
+        },
+        {
+          "kind": "wait",
+          "animations": [],
+          "run_time": 1.0,
+          "rate_func": "default",
+          "lag_ratio": 0.0,
+          "duration": 1.0
+        },
+        {
+          "kind": "play",
+          "animations": [
+            {
+              "anim": "ReplacementTransform",
+              "target": "81f37593f4",
+              "params": {
+                "target_mobject": "4ca71fdf96",
+                "path_arc": 0.0
+              },
+              "method": null
+            }
+          ],
+          "run_time": 1.0,
+          "rate_func": "rate_functions.ease_in_out_sine",
+          "lag_ratio": 0.0,
+          "duration": 1.0
+        }
+      ]
+    },
+    {
+      "id": "d312f5fa99",
+      "name": "Plotting",
+      "mobjects": [
+        {
+          "id": "c6a1ed66ad",
+          "type": "Axes",
+          "name": "axes",
+          "params": {
+            "x_range": [
+              -5.0,
+              5.0,
+              1.0
+            ],
+            "y_range": [
+              -3.0,
+              3.0,
+              1.0
+            ],
+            "x_length": 10.0,
+            "y_length": 6.0,
+            "tips": true,
+            "include_numbers": true
+          },
+          "style": {
+            "color": null
+          },
+          "position": [
+            0.0,
+            0.0
+          ],
+          "rotation": 0.0,
+          "scale": 1.0,
+          "z_index": 0,
+          "on_screen_at_start": false,
+          "methods": []
+        },
+        {
+          "id": "58107f799d",
+          "type": "Dot",
+          "name": "dot",
+          "params": {
+            "radius": 0.1
+          },
+          "style": {
+            "stroke_color": "#FFFFFF",
+            "stroke_width": 0.0,
+            "stroke_opacity": 1.0,
+            "fill_color": "#FFFF00",
+            "fill_opacity": 1.0
+          },
+          "position": [
+            -4.0,
+            -2.0
+          ],
+          "rotation": 0.0,
+          "scale": 1.0,
+          "z_index": 0,
+          "on_screen_at_start": false,
+          "methods": []
+        }
+      ],
+      "steps": [
+        {
+          "kind": "play",
+          "animations": [
+            {
+              "anim": "Create",
+              "target": "c6a1ed66ad",
+              "params": {},
+              "method": null
+            }
+          ],
+          "run_time": 1.0,
+          "rate_func": "default",
+          "lag_ratio": 0.0,
+          "duration": 1.0
+        },
+        {
+          "kind": "play",
+          "animations": [
+            {
+              "anim": "GrowFromCenter",
+              "target": "58107f799d",
+              "params": {},
+              "method": null
+            }
+          ],
+          "run_time": 1.0,
+          "rate_func": "default",
+          "lag_ratio": 0.0,
+          "duration": 1.0
+        },
+        {
+          "kind": "play",
+          "animations": [
+            {
+              "anim": "Animate",
+              "target": "58107f799d",
+              "params": {
+                "vector": [
+                  8.0,
+                  4.0
+                ]
+              },
+              "method": "shift"
+            },
+            {
+              "anim": "Flash",
+              "target": "58107f799d",
+              "params": {
+                "color": "#FFFF00",
+                "flash_radius": 0.5,
+                "num_lines": 12
+              },
+              "method": null
+            }
+          ],
+          "run_time": 2.0,
+          "rate_func": "default",
+          "lag_ratio": 0.0,
+          "duration": 1.0
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "background": "#000000",
+    "quality": "m"
+  },
+  "version": 1
+}

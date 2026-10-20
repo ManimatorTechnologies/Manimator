@@ -1,0 +1,525 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#circle"
+     },
+     {
+      "ref": "#dot"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 28.0,
+ "layout": {
+  "fixed": {},
+  "hidden": [],
+  "order": [
+   "#circle",
+   "#dot"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle"
+  },
+  {
+   "call": {
+    "call": "Dot",
+    "kwargs": {
+     "radius": 0.1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dot",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dot"
+     }
+    }
+   ],
+   "type": "Dot",
+   "var": "dot"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "SpecialThreeDScene",
+  "moving_camera": false,
+  "name": "ChangedSpecialThreeDScene",
+  "three_d": true
+ },
+ "screen_orders": [
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ]
+ ],
+ "setup": [
+  {
+   "do": {
+    "call": "set_camera_to_default_position",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "steps": [
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "call": "move_camera",
+      "kwargs": {
+       "gamma": 0.008726646259971648,
+       "phi": 1.8413223608540177,
+       "run_time": 2,
+       "theta": 0.27052603405912107,
+       "zoom": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "call": "move_camera",
+      "kwargs": {
+       "frame_center": {
+        "ref": "#dot"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "call": "move_camera",
+      "kwargs": {
+       "frame_center": [
+        1,
+        2,
+        0.5
+       ],
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 4.0,
+   "statements": [
+    {
+     "do": {
+      "call": "begin_ambient_camera_rotation",
+      "kwargs": {
+       "about": "phi",
+       "rate": 0.5323254218582705
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       4
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "call": "stop_ambient_camera_rotation",
+      "kwargs": {
+       "about": "phi"
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 4.0,
+   "statements": [
+    {
+     "do": {
+      "call": "begin_3dillusion_camera_rotation",
+      "kwargs": {
+       "rate": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       4
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "call": "stop_3dillusion_camera_rotation",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "call": "move_camera",
+      "kwargs": {
+       "gamma": 0.008726646259971648,
+       "phi": 1.8413223608540177,
+       "run_time": 2,
+       "theta": 0.27052603405912107,
+       "zoom": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "call": "move_camera",
+      "kwargs": {
+       "frame_center": {
+        "ref": "#dot"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "call": "move_camera",
+      "kwargs": {
+       "frame_center": [
+        1,
+        2,
+        0.5
+       ],
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 4.0,
+   "statements": [
+    {
+     "do": {
+      "call": "begin_ambient_camera_rotation",
+      "kwargs": {
+       "about": "phi",
+       "rate": 0.5323254218582705
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       4
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "call": "stop_ambient_camera_rotation",
+      "kwargs": {
+       "about": "phi"
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 4.0,
+   "statements": [
+    {
+     "do": {
+      "call": "begin_3dillusion_camera_rotation",
+      "kwargs": {
+       "rate": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       4
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "call": "stop_3dillusion_camera_rotation",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "version": 1
+}

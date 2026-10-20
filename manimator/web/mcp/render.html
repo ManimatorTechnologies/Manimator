@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Manimator renderer</title>
+<!-- Server only: a headless Chromium (server/renderer.py) opens this page and calls renderPlan() to draw frames of
+     a scene plan with the browser engine, so an AI chat can look at its animation before showing it. -->
+</head>
+<body>
+<script type="module">
+import { createEngine } from "../js/engine/index.js";
+import { ANIMATIONS } from "../js/engine/anim/index.js";
+import { registerKitClass } from "../js/engine/kits.js";
+import { CLASSES } from "../js/engine/plan/names.js";
+
+// Customizations' code (server/kits.py) never runs on the server: each package's class name gets a stand-in of our
+// own, an object that draws nothing or an animation that changes nothing (server/mcp_preview.py says so).
+function standIns(kits = []) {
+  for (const kit of kits) {
+    const Cls = kit.kind === "object"
+      ? class extends CLASSES.VGroup {
+        static SIG = ["*args"];
+        __init__() { super.__init__({}); return this; }
+      }
+      : class extends ANIMATIONS.Animation {
+        __init__({ mobject = null } = {}) { return super.__init__({ mobject }); }
+        interpolate_mobject() {}
+      };
+    registerKitClass({ ...kit, js_sha256: "stand-in" }, Cls);
+  }
+}
+
+const canvas = document.createElement("canvas");
+const engine = await createEngine({
+  canvas,
+  fontsUrl: "/static/fonts",
+  fetchAsset: (name) => fetch(`/assets/${encodeURIComponent(name)}`), // the renderer serves the account's files
+});
+
+/** Frames of `plan` at `times` (seconds): each a JPEG data URL, with every object on screen and its box. */
+window.renderPlan = async (plan, { times, width = 800, height = 450, quality = 0.85 }) => {
+  canvas.width = width;
+  canvas.height = height;
+  standIns(plan.kits);
+  const shown = await engine.show(plan);
+  await engine.prepare(); // formulas made during the video
+  engine.resize(width, height);
+  const frames = [];
+  for (const t of times) {
+    const at = Math.min(Math.max(0, t), engine.duration);
+    const screen = engine.onScreen(at);
+    frames.push({ t: at, image: canvas.toDataURL("image/jpeg", quality), ...screen });
+  }
+  return { duration: engine.duration, errors: shown?.errors ?? {}, scene_error: shown?.scene_error ?? null, frames };
+};
+window.renderReady = true;
+</script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#202040",
+ "duration": 0,
+ "layout": {
+  "fixed": {},
+  "hidden": [],
+  "order": [
+   "#square"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Square",
+    "kwargs": {
+     "side_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#square",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      [
+       1,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#square"
+     }
+    }
+   ],
+   "type": "Square",
+   "var": "square"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "SpecialThreeDScene",
+  "moving_camera": false,
+  "name": "SettingsSpecialThreeDScene",
+  "three_d": true
+ },
+ "screen_orders": [
+  [
+   "#square"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#square"
+  ]
+ ],
+ "setup": [
+  {
+   "do": {
+    "call": "set_camera_orientation",
+    "kwargs": {
+     "gamma": 0.008726646259971648,
+     "phi": 1.8413223608540177,
+     "theta": -2.871066619530672,
+     "zoom": 2
+    },
+    "on": {
+     "attr": "self"
+    }
+   }
+  },
+  {
+   "set": "self.camera.background_color",
+   "value": "#202040"
+  }
+ ],
+ "steps": [],
+ "version": 1
+}

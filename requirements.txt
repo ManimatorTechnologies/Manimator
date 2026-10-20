@@ -1,0 +1,2 @@
+# The app (what Manimator.bat runs). It makes videos in your browser and needs no Manim.
+-r requirements-web.txt

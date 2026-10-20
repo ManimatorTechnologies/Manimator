@@ -1,0 +1,618 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#square"
+     },
+     {
+      "ref": "#circle"
+     },
+     {
+      "ref": "#star"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 0,
+ "layout": {
+  "fixed": {},
+  "hidden": [],
+  "order": [
+   "#square",
+   "#circle",
+   "#star"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Square",
+    "kwargs": {
+     "side_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#square",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      [
+       -3,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#square"
+     }
+    }
+   ],
+   "type": "Square",
+   "var": "square"
+  },
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#circle",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ],
+     "call": "shift",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      {
+       "ref": "#square"
+      },
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ],
+     "call": "next_to",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      {
+       "ref": "#square"
+      },
+      [
+       -1.0,
+       0.0,
+       0.0
+      ]
+     ],
+     "call": "align_to",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "call": "to_edge",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       -1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "call": "to_corner",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "call": "center",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ],
+     "call": "arrange",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      1.5
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      1.5707963267948966
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       0.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "call": "flip",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      2,
+      0
+     ],
+     "call": "stretch",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "scale_to_fit_width",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "scale_to_fit_height",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#F7D96F"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "call": "set_fill",
+     "kwargs": {
+      "color": "#58C4DD",
+      "opacity": 1
+     },
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "color": "#FFFFFF",
+      "width": 4
+     },
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#circle"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle"
+  },
+  {
+   "call": {
+    "call": "Star",
+    "kwargs": {
+     "inner_radius": 0.4,
+     "n": 5,
+     "outer_radius": 1
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#star",
+   "post": [
+    {
+     "args": [
+      "#F0AC5F"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      "#F0AC5F"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      [
+       -1.0,
+       2.0,
+       0.0
+      ]
+     ],
+     "call": "shift",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      [
+       1.5,
+       -0.5,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      {
+       "ref": "#square"
+      },
+      [
+       -1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "call": "next_to",
+     "kwargs": {
+      "buff": 0.88
+     },
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      {
+       "ref": "#square"
+      },
+      [
+       -1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "call": "align_to",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      [
+       0.0,
+       -1.0,
+       0.0
+      ]
+     ],
+     "call": "to_edge",
+     "kwargs": {
+      "buff": 1.25
+     },
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      [
+       1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "call": "to_corner",
+     "kwargs": {
+      "buff": 1.25
+     },
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "call": "center",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      [
+       -1.0,
+       1.0,
+       0.0
+      ]
+     ],
+     "call": "arrange",
+     "kwargs": {
+      "buff": 0.88
+     },
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      2.75
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      0.7853981633974483
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      [
+       1.0,
+       0.0,
+       0.0
+      ]
+     ],
+     "call": "flip",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      3.5,
+      1
+     ],
+     "call": "stretch",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      3.5
+     ],
+     "call": "scale_to_fit_width",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      3.5
+     ],
+     "call": "scale_to_fit_height",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      "#123456"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "call": "set_fill",
+     "kwargs": {
+      "color": "#123456",
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "color": "#123456",
+      "opacity": 0.5,
+      "width": 6.5
+     },
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#star"
+     }
+    }
+   ],
+   "type": "Star",
+   "var": "star"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "Scene",
+  "moving_camera": false,
+  "name": "Methods",
+  "three_d": false
+ },
+ "screen_orders": [
+  [
+   "#square",
+   "#circle",
+   "#star"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#square",
+   "#circle",
+   "#star"
+  ]
+ ],
+ "setup": [],
+ "steps": [],
+ "version": 1
+}

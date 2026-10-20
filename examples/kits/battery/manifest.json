@@ -1,0 +1,14 @@
+{
+  "manimkit": 1,
+  "name": "Battery",
+  "kind": "object",
+  "class": "Battery",
+  "version": "1.0",
+  "description": "A battery whose fill shows its charge: green, then yellow, then red as it runs down",
+  "license": "MIT",
+  "style": "none",
+  "params": [
+    {"name": "charge", "kind": "float", "default": 0.7, "min": 0, "max": 1, "step": 0.05, "slider": true,
+     "label": "Charge", "tooltip": "0 is empty, 1 is full"}
+  ]
+}

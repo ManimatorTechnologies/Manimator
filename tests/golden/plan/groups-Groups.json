@@ -1,0 +1,690 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#group"
+     },
+     {
+      "ref": "#mixed_group"
+     },
+     {
+      "ref": "#rect"
+     },
+     {
+      "ref": "#circle_2"
+     },
+     {
+      "ref": "#cutout"
+     },
+     {
+      "ref": "#box"
+     },
+     {
+      "ref": "#brace"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#1C758A",
+ "duration": 3.0,
+ "layout": {
+  "fixed": {},
+  "hidden": [
+   "#star"
+  ],
+  "order": [
+   "#circle",
+   "#square",
+   "#triangle",
+   "#rect",
+   "#circle_2",
+   "#cutout",
+   "#box",
+   "#brace",
+   "#star"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle"
+  },
+  {
+   "call": {
+    "call": "Square",
+    "kwargs": {
+     "side_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#square",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#square"
+     }
+    }
+   ],
+   "type": "Square",
+   "var": "square"
+  },
+  {
+   "call": {
+    "call": "Triangle"
+   },
+   "deps": [],
+   "error": null,
+   "id": "#triangle",
+   "post": [
+    {
+     "args": [
+      "#F7D96F"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#triangle"
+     }
+    },
+    {
+     "args": [
+      "#F7D96F"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#triangle"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#triangle"
+     }
+    }
+   ],
+   "type": "Triangle",
+   "var": "triangle"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#circle"
+     },
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "VGroup"
+   },
+   "deps": [
+    "#circle",
+    "#square"
+   ],
+   "error": null,
+   "id": "#group",
+   "post": [],
+   "type": "VGroup",
+   "var": "group"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#triangle"
+     }
+    ],
+    "call": "Group"
+   },
+   "deps": [
+    "#triangle"
+   ],
+   "error": null,
+   "id": "#mixed_group",
+   "post": [],
+   "type": "Group",
+   "var": "mixed_group"
+  },
+  {
+   "call": {
+    "call": "Rectangle",
+    "kwargs": {
+     "height": 2,
+     "width": 4
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#rect",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#rect"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#rect"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#rect"
+     }
+    }
+   ],
+   "type": "Rectangle",
+   "var": "rect"
+  },
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 0.4
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle_2",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle_2"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle_2"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle_2"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle_2"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#rect"
+     },
+     {
+      "ref": "#circle_2"
+     }
+    ],
+    "call": "Cutout"
+   },
+   "deps": [
+    "#rect",
+    "#circle_2"
+   ],
+   "error": null,
+   "id": "#cutout",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 1,
+      "width": 4
+     },
+     "on": {
+      "ref": "#cutout"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 1
+     },
+     "on": {
+      "ref": "#cutout"
+     }
+    }
+   ],
+   "type": "Cutout",
+   "var": "cutout"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#group"
+     }
+    ],
+    "call": "SurroundingRectangle"
+   },
+   "deps": [
+    "#group"
+   ],
+   "error": null,
+   "id": "#box",
+   "post": [
+    {
+     "args": [
+      "#F7D96F"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#box"
+     }
+    },
+    {
+     "args": [
+      "#F7D96F"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#box"
+     }
+    }
+   ],
+   "type": "SurroundingRectangle",
+   "var": "box"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#mixed_group"
+     }
+    ],
+    "call": "Brace",
+    "kwargs": {
+     "direction": [
+      0.0,
+      -1.0,
+      0.0
+     ]
+    }
+   },
+   "deps": [
+    "#mixed_group"
+   ],
+   "error": null,
+   "id": "#brace",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#brace"
+     }
+    }
+   ],
+   "type": "Brace",
+   "var": "brace"
+  },
+  {
+   "call": {
+    "call": "Star",
+    "kwargs": {
+     "inner_radius": 0.4,
+     "n": 5,
+     "outer_radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#star",
+   "post": [
+    {
+     "args": [
+      "#F0AC5F"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      "#F0AC5F"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      [
+       4,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      -1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#star"
+     }
+    }
+   ],
+   "type": "Star",
+   "var": "star"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "Scene",
+  "moving_camera": false,
+  "name": "Groups",
+  "three_d": false
+ },
+ "screen_orders": [
+  [
+   "#group",
+   "#mixed_group",
+   "#rect",
+   "#circle_2",
+   "#cutout",
+   "#box",
+   "#brace"
+  ],
+  [
+   "#group",
+   "#mixed_group",
+   "#rect",
+   "#circle_2",
+   "#cutout",
+   "#box",
+   "#brace",
+   "#star"
+  ],
+  [
+   "#group",
+   "#mixed_group",
+   "#rect",
+   "#circle_2",
+   "#cutout",
+   "#box",
+   "#brace",
+   "#star"
+  ],
+  [
+   "#group",
+   "#mixed_group",
+   "#star",
+   "#rect",
+   "#circle_2",
+   "#cutout",
+   "#box",
+   "#brace"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#group",
+   "#mixed_group",
+   "#rect",
+   "#circle_2",
+   "#cutout",
+   "#box",
+   "#brace"
+  ],
+  [
+   "#group",
+   "#mixed_group",
+   "#rect",
+   "#circle_2",
+   "#cutout",
+   "#box",
+   "#brace",
+   "#star"
+  ],
+  [
+   "#group",
+   "#mixed_group",
+   "#rect",
+   "#circle_2",
+   "#cutout",
+   "#box",
+   "#brace",
+   "#star"
+  ],
+  [
+   "#group",
+   "#mixed_group",
+   "#rect",
+   "#circle_2",
+   "#cutout",
+   "#box",
+   "#brace",
+   "#star"
+  ]
+ ],
+ "setup": [
+  {
+   "set": "self.camera.background_color",
+   "value": "#1C758A"
+  }
+ ],
+ "steps": [
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#star"
+         }
+        ],
+        "call": "FadeIn"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#group"
+         },
+         {
+          "ref": "#star"
+         }
+        ],
+        "call": "Transform"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#triangle"
+         },
+         {
+          "ref": "#star"
+         }
+        ],
+        "call": "ReplacementTransform"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "version": 1
+}

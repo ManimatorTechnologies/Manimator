@@ -1,0 +1,221 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#circle"
+     },
+     {
+      "ref": "#dot"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 12.0,
+ "layout": {
+  "fixed": {},
+  "hidden": [],
+  "order": [
+   "#circle",
+   "#dot"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle"
+  },
+  {
+   "call": {
+    "call": "Dot",
+    "kwargs": {
+     "radius": 0.1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dot",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dot"
+     }
+    }
+   ],
+   "type": "Dot",
+   "var": "dot"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "VectorScene",
+  "moving_camera": false,
+  "name": "ChangedVectorScene",
+  "three_d": false
+ },
+ "screen_orders": [
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ]
+ ],
+ "setup": [
+  {
+   "do": {
+    "call": "add_plane",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "steps": [
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 6.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       [
+        1.5,
+        -0.5
+       ]
+      ],
+      "call": "vector_to_coords",
+      "kwargs": {
+       "integer_labels": false
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 6.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       [
+        1.5,
+        -0.5
+       ]
+      ],
+      "call": "vector_to_coords",
+      "kwargs": {
+       "integer_labels": false
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "version": 1
+}

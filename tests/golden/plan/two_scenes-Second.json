@@ -1,0 +1,145 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 1.0,
+ "layout": {
+  "fixed": {},
+  "hidden": [],
+  "order": [
+   "#square"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Square",
+    "kwargs": {
+     "side_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#square",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      [
+       -1,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#square"
+     }
+    }
+   ],
+   "type": "Square",
+   "var": "square"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "MovingCameraScene",
+  "moving_camera": true,
+  "name": "Second",
+  "three_d": false
+ },
+ "screen_orders": [
+  [
+   "#square"
+  ],
+  [
+   "#square"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#square"
+  ],
+  [
+   "#square"
+  ]
+ ],
+ "setup": [],
+ "steps": [
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "attr": "self.camera.frame"
+        },
+        "calls": [
+         {
+          "args": [
+           {
+            "ref": "#square"
+           }
+          ],
+          "call": "move_to"
+         },
+         {
+          "call": "set",
+          "kwargs": {
+           "width": {
+            "frame_width": 2.0
+           }
+          }
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "version": 1
+}

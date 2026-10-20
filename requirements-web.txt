@@ -1,0 +1,6 @@
+fastapi>=0.110
+uvicorn>=0.29
+httpx>=0.27
+pillow>=10
+pygments>=2.17
+playwright==1.63.0  # previews for AI chats: a headless Chromium draws frames (server/renderer.py)

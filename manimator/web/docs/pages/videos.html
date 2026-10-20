@@ -1,0 +1,33 @@
+        <h2 id="playing">Playing in the editor</h2>
+        <p>Press <kbd>Space</kbd> or <kbd>F5</kbd> to play the scene on the canvas. Press it again, or <kbd>Esc</kbd>,
+          to stop.</p>
+
+        <h2 id="rendering">Making videos</h2>
+        <p><strong>Render scene</strong> (<kbd>F6</kbd>) makes the current scene's video. <strong>Render all</strong>
+          (<kbd>F7</kbd>) makes one video for each scene. Then play or download them from the window that shows
+          them.</p>
+        <p class="d-note">Videos are made in your browser, so keep the tab open until they finish. Downloads are MP4
+          files, or WebM where a browser can't make MP4.</p>
+
+        <h3 id="quality">Quality</h3>
+        <p>Choose the size under <strong>Render → Quality</strong>. <strong>Render → Quick preview</strong> makes a fast
+          480p version of the current scene.</p>
+        <table>
+          <tr><th>Quality</th><th>Size</th><th>Frames a second</th></tr>
+          <tr><td>Low</td><td>480p</td><td>15</td></tr>
+          <tr><td>Medium</td><td>720p</td><td>30</td></tr>
+          <tr><td>High</td><td>1080p</td><td>60</td></tr>
+          <tr><td>2K</td><td>1440p</td><td>60</td></tr>
+          <tr><td>4K</td><td>2160p</td><td>60</td></tr>
+        </table>
+
+        <h2 id="project-file">Project file</h2>
+        <p><strong>Download</strong> (<kbd>Ctrl+S</kbd>) saves a copy of the project as a <code>.manimator</code>
+          file.</p>
+
+        <h2 id="python">Python for Manim</h2>
+        <p><strong>Python</strong> (<kbd>Ctrl+E</kbd>) downloads a zip with <code>scene.py</code>, the pictures and fonts
+          it uses, and a README. It renders with Manim on your own computer, and you can keep editing the code by
+          hand:</p>
+<pre data-label="Terminal">manim -pqh scene.py MyScene</pre>
+        <p>Replace <code>MyScene</code> with the name of a scene.</p>

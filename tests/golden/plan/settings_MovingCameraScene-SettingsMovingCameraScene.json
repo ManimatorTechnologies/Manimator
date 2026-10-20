@@ -1,0 +1,128 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#202040",
+ "duration": 0,
+ "layout": {
+  "fixed": {},
+  "hidden": [],
+  "order": [
+   "#square"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Square",
+    "kwargs": {
+     "side_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#square",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      [
+       1,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#square"
+     }
+    }
+   ],
+   "type": "Square",
+   "var": "square"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "MovingCameraScene",
+  "moving_camera": true,
+  "name": "SettingsMovingCameraScene",
+  "three_d": false
+ },
+ "screen_orders": [
+  [
+   "#square"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#square"
+  ]
+ ],
+ "setup": [
+  {
+   "do": {
+    "args": [
+     [
+      1.5,
+      -0.5,
+      0
+     ]
+    ],
+    "call": "move_to",
+    "on": {
+     "attr": "self.camera.frame"
+    }
+   }
+  },
+  {
+   "do": {
+    "call": "set",
+    "kwargs": {
+     "width": {
+      "frame_width": 2.0
+     }
+    },
+    "on": {
+     "attr": "self.camera.frame"
+    }
+   }
+  },
+  {
+   "set": "self.camera.background_color",
+   "value": "#202040"
+  }
+ ],
+ "steps": [],
+ "version": 1
+}

@@ -1,0 +1,14 @@
+.venv/
+.cache/
+.claude/
+**/.git
+.pytest_cache/
+**/__pycache__
+**/*.pyc
+**/.temp
+media/
+*_render/
+**/tests/
+examples/
+*.bat
+.env

@@ -1,0 +1,4021 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#circle"
+     },
+     {
+      "ref": "#circle_2"
+     },
+     {
+      "ref": "#square_2"
+     },
+     {
+      "ref": "#rect"
+     },
+     {
+      "ref": "#rrect"
+     },
+     {
+      "ref": "#triangle"
+     },
+     {
+      "ref": "#poly"
+     },
+     {
+      "ref": "#polygon"
+     },
+     {
+      "ref": "#polygram"
+     },
+     {
+      "ref": "#ellipse"
+     },
+     {
+      "ref": "#star"
+     },
+     {
+      "ref": "#dot"
+     },
+     {
+      "ref": "#mark"
+     },
+     {
+      "ref": "#label_dot"
+     },
+     {
+      "ref": "#ring"
+     },
+     {
+      "ref": "#sector"
+     },
+     {
+      "ref": "#ring_slice"
+     },
+     {
+      "ref": "#arc_poly"
+     },
+     {
+      "ref": "#arc"
+     },
+     {
+      "ref": "#arc_between"
+     },
+     {
+      "ref": "#curved_arrow"
+     },
+     {
+      "ref": "#curved_darrow"
+     },
+     {
+      "ref": "#elbow"
+     },
+     {
+      "ref": "#angle"
+     },
+     {
+      "ref": "#right_angle"
+     },
+     {
+      "ref": "#line"
+     },
+     {
+      "ref": "#arrow"
+     },
+     {
+      "ref": "#darrow"
+     },
+     {
+      "ref": "#dashed"
+     },
+     {
+      "ref": "#vector"
+     },
+     {
+      "ref": "#labeled_line"
+     },
+     {
+      "ref": "#labeled_arrow"
+     },
+     {
+      "ref": "#text"
+     },
+     {
+      "ref": "#markup"
+     },
+     {
+      "ref": "#eq"
+     },
+     {
+      "ref": "#tex"
+     },
+     {
+      "ref": "#title"
+     },
+     {
+      "ref": "#paragraph"
+     },
+     {
+      "ref": "#bullets"
+     },
+     {
+      "ref": "#code"
+     },
+     {
+      "ref": "#number"
+     },
+     {
+      "ref": "#integer"
+     },
+     {
+      "ref": "#variable"
+     },
+     {
+      "ref": "#matrix"
+     },
+     {
+      "ref": "#int_matrix"
+     },
+     {
+      "ref": "#dec_matrix"
+     },
+     {
+      "ref": "#table"
+     },
+     {
+      "ref": "#int_table"
+     },
+     {
+      "ref": "#dec_table"
+     },
+     {
+      "ref": "#number_line"
+     },
+     {
+      "ref": "#plane"
+     },
+     {
+      "ref": "#complex_plane"
+     },
+     {
+      "ref": "#polar_plane"
+     },
+     {
+      "ref": "#axes"
+     },
+     {
+      "ref": "#graph"
+     },
+     {
+      "ref": "#curve"
+     },
+     {
+      "ref": "#implicit"
+     },
+     {
+      "ref": "#chart"
+     },
+     {
+      "ref": "#field"
+     },
+     {
+      "ref": "#graph_net"
+     },
+     {
+      "ref": "#digraph"
+     },
+     {
+      "ref": "#image"
+     },
+     {
+      "ref": "#svg"
+     },
+     {
+      "ref": "#brace"
+     },
+     {
+      "ref": "#brace_label"
+     },
+     {
+      "ref": "#brace_pts"
+     },
+     {
+      "ref": "#box"
+     },
+     {
+      "ref": "#backdrop"
+     },
+     {
+      "ref": "#underline"
+     },
+     {
+      "ref": "#cross"
+     },
+     {
+      "ref": "#dashed_copy"
+     },
+     {
+      "ref": "#tangent"
+     },
+     {
+      "ref": "#group"
+     },
+     {
+      "ref": "#mixed_group"
+     },
+     {
+      "ref": "#cutout"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 0,
+ "layout": {
+  "fixed": {},
+  "hidden": [],
+  "order": [
+   "#square",
+   "#circle",
+   "#circle_2",
+   "#square_2",
+   "#rect",
+   "#rrect",
+   "#triangle",
+   "#poly",
+   "#polygon",
+   "#polygram",
+   "#ellipse",
+   "#star",
+   "#dot",
+   "#mark",
+   "#label_dot",
+   "#ring",
+   "#sector",
+   "#ring_slice",
+   "#arc_poly",
+   "#arc",
+   "#arc_between",
+   "#curved_arrow",
+   "#curved_darrow",
+   "#elbow",
+   "#angle",
+   "#right_angle",
+   "#line",
+   "#arrow",
+   "#darrow",
+   "#dashed",
+   "#vector",
+   "#labeled_line",
+   "#labeled_arrow",
+   "#text",
+   "#markup",
+   "#eq",
+   "#tex",
+   "#title",
+   "#paragraph",
+   "#bullets",
+   "#code",
+   "#number",
+   "#integer",
+   "#variable",
+   "#matrix",
+   "#int_matrix",
+   "#dec_matrix",
+   "#table",
+   "#int_table",
+   "#dec_table",
+   "#number_line",
+   "#plane",
+   "#complex_plane",
+   "#polar_plane",
+   "#axes",
+   "#graph",
+   "#curve",
+   "#implicit",
+   "#chart",
+   "#field",
+   "#graph_net",
+   "#digraph",
+   "#image",
+   "#svg",
+   "#brace",
+   "#brace_label",
+   "#brace_pts",
+   "#box",
+   "#backdrop",
+   "#underline",
+   "#cross",
+   "#dashed_copy",
+   "#tangent",
+   "#cutout"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Square",
+    "kwargs": {
+     "side_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#square",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#square"
+     }
+    }
+   ],
+   "type": "Square",
+   "var": "square"
+  },
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       3,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle"
+  },
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle_2",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle_2"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle_2"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle_2"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle_2"
+  },
+  {
+   "call": {
+    "call": "Square",
+    "kwargs": {
+     "side_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#square_2",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#square_2"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#square_2"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#square_2"
+     }
+    }
+   ],
+   "type": "Square",
+   "var": "square_2"
+  },
+  {
+   "call": {
+    "call": "Rectangle",
+    "kwargs": {
+     "height": 2,
+     "width": 4
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#rect",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#rect"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#rect"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#rect"
+     }
+    }
+   ],
+   "type": "Rectangle",
+   "var": "rect"
+  },
+  {
+   "call": {
+    "call": "RoundedRectangle",
+    "kwargs": {
+     "corner_radius": 0.5,
+     "height": 2,
+     "width": 4
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#rrect",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#rrect"
+     }
+    },
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#rrect"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#rrect"
+     }
+    }
+   ],
+   "type": "RoundedRectangle",
+   "var": "rrect"
+  },
+  {
+   "call": {
+    "call": "Triangle"
+   },
+   "deps": [],
+   "error": null,
+   "id": "#triangle",
+   "post": [
+    {
+     "args": [
+      "#F7D96F"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#triangle"
+     }
+    },
+    {
+     "args": [
+      "#F7D96F"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#triangle"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#triangle"
+     }
+    }
+   ],
+   "type": "Triangle",
+   "var": "triangle"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      -1.4,
+      -0.9,
+      0
+     ],
+     [
+      1.4,
+      -0.9,
+      0
+     ],
+     [
+      1.9,
+      0.4,
+      0
+     ],
+     [
+      0,
+      1.5,
+      0
+     ],
+     [
+      -1.9,
+      0.4,
+      0
+     ]
+    ],
+    "call": "Polygon"
+   },
+   "deps": [],
+   "error": null,
+   "id": "#poly",
+   "post": [
+    {
+     "args": [
+      "#FF862F"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#poly"
+     }
+    },
+    {
+     "args": [
+      "#FF862F"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#poly"
+     }
+    },
+    {
+     "args": [
+      [
+       4,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#poly"
+     }
+    }
+   ],
+   "type": "Polygon",
+   "var": "poly"
+  },
+  {
+   "call": {
+    "call": "RegularPolygon",
+    "kwargs": {
+     "n": 6
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#polygon",
+   "post": [
+    {
+     "args": [
+      "#5CD0B3"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#polygon"
+     }
+    },
+    {
+     "args": [
+      "#5CD0B3"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#polygon"
+     }
+    },
+    {
+     "args": [
+      [
+       6,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#polygon"
+     }
+    }
+   ],
+   "type": "RegularPolygon",
+   "var": "polygon"
+  },
+  {
+   "call": {
+    "args": [
+     5
+    ],
+    "call": "RegularPolygram",
+    "kwargs": {
+     "density": 2,
+     "radius": 1.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#polygram",
+   "post": [
+    {
+     "args": [
+      "#C55F73"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#polygram"
+     }
+    },
+    {
+     "args": [
+      "#C55F73"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#polygram"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#polygram"
+     }
+    }
+   ],
+   "type": "RegularPolygram",
+   "var": "polygram"
+  },
+  {
+   "call": {
+    "call": "Ellipse",
+    "kwargs": {
+     "height": 1,
+     "width": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#ellipse",
+   "post": [
+    {
+     "args": [
+      "#9A72AC"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#ellipse"
+     }
+    },
+    {
+     "args": [
+      "#9A72AC"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#ellipse"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#ellipse"
+     }
+    }
+   ],
+   "type": "Ellipse",
+   "var": "ellipse"
+  },
+  {
+   "call": {
+    "call": "Star",
+    "kwargs": {
+     "inner_radius": 0.4,
+     "n": 5,
+     "outer_radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#star",
+   "post": [
+    {
+     "args": [
+      "#F0AC5F"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      "#F0AC5F"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#star"
+     }
+    }
+   ],
+   "type": "Star",
+   "var": "star"
+  },
+  {
+   "call": {
+    "call": "Dot",
+    "kwargs": {
+     "radius": 0.1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dot",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dot"
+     }
+    }
+   ],
+   "type": "Dot",
+   "var": "dot"
+  },
+  {
+   "call": {
+    "call": "AnnotationDot",
+    "kwargs": {
+     "radius": 0.1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#mark",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#mark"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#mark"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#mark"
+     }
+    }
+   ],
+   "type": "AnnotationDot",
+   "var": "mark"
+  },
+  {
+   "call": {
+    "args": [
+     "A"
+    ],
+    "call": "LabeledDot"
+   },
+   "deps": [],
+   "error": null,
+   "id": "#label_dot",
+   "post": [
+    {
+     "args": [
+      [
+       4,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#label_dot"
+     }
+    }
+   ],
+   "type": "LabeledDot",
+   "var": "label_dot"
+  },
+  {
+   "call": {
+    "call": "Annulus",
+    "kwargs": {
+     "inner_radius": 0.5,
+     "outer_radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#ring",
+   "post": [
+    {
+     "args": [
+      "#C55F73"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#ring"
+     }
+    },
+    {
+     "args": [
+      "#C55F73"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#ring"
+     }
+    },
+    {
+     "args": [
+      [
+       6,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#ring"
+     }
+    }
+   ],
+   "type": "Annulus",
+   "var": "ring"
+  },
+  {
+   "call": {
+    "call": "Sector",
+    "kwargs": {
+     "angle": 1.0471975511965976,
+     "radius": 1.5,
+     "start_angle": 0
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#sector",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#sector"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#sector"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#sector"
+     }
+    }
+   ],
+   "type": "Sector",
+   "var": "sector"
+  },
+  {
+   "call": {
+    "call": "AnnularSector",
+    "kwargs": {
+     "angle": 1.5707963267948966,
+     "inner_radius": 0.7,
+     "outer_radius": 1.5,
+     "start_angle": 0
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#ring_slice",
+   "post": [
+    {
+     "args": [
+      "#F0AC5F"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#ring_slice"
+     }
+    },
+    {
+     "args": [
+      "#F0AC5F"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#ring_slice"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#ring_slice"
+     }
+    }
+   ],
+   "type": "AnnularSector",
+   "var": "ring_slice"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      -1.5,
+      -1,
+      0
+     ],
+     [
+      1.5,
+      -1,
+      0
+     ],
+     [
+      0,
+      1.5,
+      0
+     ]
+    ],
+    "call": "ArcPolygon",
+    "kwargs": {
+     "angle": 0.5235987755982988
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#arc_poly",
+   "post": [
+    {
+     "args": [
+      "#5CD0B3"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#arc_poly"
+     }
+    },
+    {
+     "args": [
+      "#5CD0B3"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#arc_poly"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#arc_poly"
+     }
+    }
+   ],
+   "type": "ArcPolygon",
+   "var": "arc_poly"
+  },
+  {
+   "call": {
+    "call": "Arc",
+    "kwargs": {
+     "angle": 1.5707963267948966,
+     "radius": 1,
+     "start_angle": 0
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#arc",
+   "post": [
+    {
+     "args": [
+      "#FF862F"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#arc"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#arc"
+     }
+    }
+   ],
+   "type": "Arc",
+   "var": "arc"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      1,
+      1,
+      0
+     ],
+     [
+      3,
+      1,
+      0
+     ]
+    ],
+    "call": "ArcBetweenPoints",
+    "kwargs": {
+     "angle": 1.5707963267948966
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#arc_between",
+   "post": [
+    {
+     "args": [
+      "#FF862F"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#arc_between"
+     }
+    }
+   ],
+   "type": "ArcBetweenPoints",
+   "var": "arc_between"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      3,
+      1,
+      0
+     ],
+     [
+      5,
+      1,
+      0
+     ]
+    ],
+    "call": "CurvedArrow",
+    "kwargs": {
+     "angle": 1.5707963267948966
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#curved_arrow",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#curved_arrow"
+     }
+    }
+   ],
+   "type": "CurvedArrow",
+   "var": "curved_arrow"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      5,
+      1,
+      0
+     ],
+     [
+      7,
+      1,
+      0
+     ]
+    ],
+    "call": "CurvedDoubleArrow",
+    "kwargs": {
+     "angle": 1.5707963267948966
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#curved_darrow",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#curved_darrow"
+     }
+    }
+   ],
+   "type": "CurvedDoubleArrow",
+   "var": "curved_darrow"
+  },
+  {
+   "call": {
+    "call": "Elbow",
+    "kwargs": {
+     "angle": 0,
+     "width": 0.8
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#elbow",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#elbow"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#elbow"
+     }
+    }
+   ],
+   "type": "Elbow",
+   "var": "elbow"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "args": [
+       [
+        -4,
+        0,
+        0
+       ],
+       [
+        -2,
+        0,
+        0
+       ]
+      ],
+      "call": "Line"
+     },
+     {
+      "args": [
+       [
+        -4,
+        0,
+        0
+       ],
+       [
+        -2.8,
+        1.6,
+        0
+       ]
+      ],
+      "call": "Line"
+     },
+     {
+      "args": [
+       {
+        "args": [
+         [
+          -4,
+          0,
+          0
+         ],
+         [
+          -2,
+          0,
+          0
+         ]
+        ],
+        "call": "Line"
+       },
+       {
+        "args": [
+         [
+          -4,
+          0,
+          0
+         ],
+         [
+          -2.8,
+          1.6,
+          0
+         ]
+        ],
+        "call": "Line"
+       }
+      ],
+      "call": "Angle",
+      "kwargs": {
+       "other_angle": false,
+       "radius": 0.7
+      }
+     }
+    ],
+    "call": "VGroup"
+   },
+   "deps": [],
+   "error": null,
+   "id": "#angle",
+   "post": [
+    {
+     "args": [
+      "#F7D96F"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#angle"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 1,
+      "width": 4
+     },
+     "on": {
+      "ref": "#angle"
+     }
+    }
+   ],
+   "type": "Angle",
+   "var": "angle"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "args": [
+       [
+        -2,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        0
+       ]
+      ],
+      "call": "Line"
+     },
+     {
+      "args": [
+       [
+        -2,
+        0,
+        0
+       ],
+       [
+        -2,
+        1.6,
+        0
+       ]
+      ],
+      "call": "Line"
+     },
+     {
+      "args": [
+       {
+        "args": [
+         [
+          -2,
+          0,
+          0
+         ],
+         [
+          0,
+          0,
+          0
+         ]
+        ],
+        "call": "Line"
+       },
+       {
+        "args": [
+         [
+          -2,
+          0,
+          0
+         ],
+         [
+          -2,
+          1.6,
+          0
+         ]
+        ],
+        "call": "Line"
+       }
+      ],
+      "call": "RightAngle",
+      "kwargs": {
+       "length": 0.4
+      }
+     }
+    ],
+    "call": "VGroup"
+   },
+   "deps": [],
+   "error": null,
+   "id": "#right_angle",
+   "post": [
+    {
+     "args": [
+      "#F7D96F"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#right_angle"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 1,
+      "width": 4
+     },
+     "on": {
+      "ref": "#right_angle"
+     }
+    }
+   ],
+   "type": "RightAngle",
+   "var": "right_angle"
+  },
+  {
+   "call": {
+    "call": "Line",
+    "kwargs": {
+     "end": [
+      1,
+      0,
+      0
+     ],
+     "start": [
+      -1,
+      0,
+      0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#line",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#line"
+     }
+    }
+   ],
+   "type": "Line",
+   "var": "line"
+  },
+  {
+   "call": {
+    "call": "Arrow",
+    "kwargs": {
+     "buff": 0,
+     "end": [
+      3,
+      0,
+      0
+     ],
+     "start": [
+      1,
+      0,
+      0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#arrow",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#arrow"
+     }
+    }
+   ],
+   "type": "Arrow",
+   "var": "arrow"
+  },
+  {
+   "call": {
+    "call": "DoubleArrow",
+    "kwargs": {
+     "buff": 0,
+     "end": [
+      5,
+      0,
+      0
+     ],
+     "start": [
+      3,
+      0,
+      0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#darrow",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#darrow"
+     }
+    }
+   ],
+   "type": "DoubleArrow",
+   "var": "darrow"
+  },
+  {
+   "call": {
+    "call": "DashedLine",
+    "kwargs": {
+     "end": [
+      7,
+      0,
+      0
+     ],
+     "start": [
+      5,
+      0,
+      0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dashed",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#dashed"
+     }
+    }
+   ],
+   "type": "DashedLine",
+   "var": "dashed"
+  },
+  {
+   "call": {
+    "call": "Vector",
+    "kwargs": {
+     "direction": [
+      2.0,
+      1.0,
+      0.0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#vector",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#vector"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#vector"
+     }
+    }
+   ],
+   "type": "Vector",
+   "var": "vector"
+  },
+  {
+   "call": {
+    "args": [
+     "label"
+    ],
+    "call": "LabeledLine",
+    "kwargs": {
+     "end": [
+      -3,
+      -1,
+      0
+     ],
+     "label_position": 0.5,
+     "start": [
+      -5,
+      -1,
+      0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#labeled_line",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#labeled_line"
+     }
+    }
+   ],
+   "type": "LabeledLine",
+   "var": "labeled_line"
+  },
+  {
+   "call": {
+    "args": [
+     "label"
+    ],
+    "call": "LabeledArrow",
+    "kwargs": {
+     "end": [
+      -1,
+      -1,
+      0
+     ],
+     "label_position": 0.5,
+     "start": [
+      -3,
+      -1,
+      0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#labeled_arrow",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#labeled_arrow"
+     }
+    }
+   ],
+   "type": "LabeledArrow",
+   "var": "labeled_arrow"
+  },
+  {
+   "call": {
+    "args": [
+     "Hello"
+    ],
+    "call": "Text",
+    "kwargs": {
+     "font_size": 48
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#text",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#text"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#text"
+     }
+    }
+   ],
+   "type": "Text",
+   "var": "text"
+  },
+  {
+   "call": {
+    "args": [
+     "Hello <b>bold</b> <span fgcolor='#58C4DD'>blue</span>"
+    ],
+    "call": "MarkupText",
+    "kwargs": {
+     "font_size": 48
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#markup",
+   "post": [
+    {
+     "args": [
+      [
+       2,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#markup"
+     }
+    }
+   ],
+   "type": "MarkupText",
+   "var": "markup"
+  },
+  {
+   "call": {
+    "args": [
+     "e^{i\\pi} + 1 = 0"
+    ],
+    "call": "MathTex",
+    "kwargs": {
+     "font_size": 48
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#eq",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#eq"
+     }
+    },
+    {
+     "args": [
+      [
+       4,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#eq"
+     }
+    }
+   ],
+   "type": "MathTex",
+   "var": "eq"
+  },
+  {
+   "call": {
+    "args": [
+     "Hello \\LaTeX"
+    ],
+    "call": "Tex",
+    "kwargs": {
+     "font_size": 48
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#tex",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#tex"
+     }
+    },
+    {
+     "args": [
+      [
+       6,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#tex"
+     }
+    }
+   ],
+   "type": "Tex",
+   "var": "tex"
+  },
+  {
+   "call": {
+    "args": [
+     "A Great Title"
+    ],
+    "call": "Title",
+    "kwargs": {
+     "font_size": 60,
+     "include_underline": true
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#title",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#title"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#title"
+     }
+    }
+   ],
+   "type": "Title",
+   "var": "title"
+  },
+  {
+   "call": {
+    "args": [
+     "First line",
+     "Second line",
+     "Third line"
+    ],
+    "call": "Paragraph",
+    "kwargs": {
+     "alignment": "center",
+     "font_size": 36,
+     "line_spacing": 0.75
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#paragraph",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#paragraph"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#paragraph"
+     }
+    }
+   ],
+   "type": "Paragraph",
+   "var": "paragraph"
+  },
+  {
+   "call": {
+    "args": [
+     "First point",
+     "Second point",
+     "Third point"
+    ],
+    "call": "BulletedList",
+    "kwargs": {
+     "font_size": 40
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#bullets",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#bullets"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#bullets"
+     }
+    }
+   ],
+   "type": "BulletedList",
+   "var": "bullets"
+  },
+  {
+   "call": {
+    "call": "Code",
+    "kwargs": {
+     "add_line_numbers": true,
+     "background": "rectangle",
+     "code_string": "print(\"Hello, Manim!\")\nfor i in range(3):\n    print(i)",
+     "formatter_style": "vim",
+     "language": "python"
+    }
+   },
+   "code": {
+    "background": "#000000",
+    "foreground": "#CCCCCC",
+    "line_number_color": "#CCCCCC",
+    "lines": [
+     "print(\"Hello, Manim!\")",
+     "for i in range(3):",
+     "    print(i)"
+    ],
+    "spans": [
+     [
+      0,
+      0,
+      5,
+      "#CD00CD"
+     ],
+     [
+      0,
+      5,
+      6,
+      "#CCCCCC"
+     ],
+     [
+      0,
+      6,
+      21,
+      "#CD0000"
+     ],
+     [
+      0,
+      21,
+      22,
+      "#CCCCCC"
+     ],
+     [
+      1,
+      0,
+      3,
+      "#CDCD00"
+     ],
+     [
+      1,
+      4,
+      5,
+      "#CCCCCC"
+     ],
+     [
+      1,
+      6,
+      8,
+      "#CDCD00"
+     ],
+     [
+      1,
+      9,
+      14,
+      "#CD00CD"
+     ],
+     [
+      1,
+      14,
+      15,
+      "#CCCCCC"
+     ],
+     [
+      1,
+      15,
+      16,
+      "#CD00CD"
+     ],
+     [
+      1,
+      16,
+      18,
+      "#CCCCCC"
+     ],
+     [
+      2,
+      4,
+      9,
+      "#CD00CD"
+     ],
+     [
+      2,
+      9,
+      12,
+      "#CCCCCC"
+     ]
+    ]
+   },
+   "deps": [],
+   "error": null,
+   "id": "#code",
+   "post": [
+    {
+     "args": [
+      [
+       0,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#code"
+     }
+    },
+    {
+     "args": [
+      1.3
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#code"
+     }
+    }
+   ],
+   "type": "Code",
+   "var": "code"
+  },
+  {
+   "call": {
+    "args": [
+     3.14
+    ],
+    "call": "DecimalNumber",
+    "kwargs": {
+     "font_size": 48,
+     "num_decimal_places": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#number",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#number"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#number"
+     }
+    }
+   ],
+   "type": "DecimalNumber",
+   "var": "number"
+  },
+  {
+   "call": {
+    "args": [
+     7
+    ],
+    "call": "Integer",
+    "kwargs": {
+     "font_size": 48
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#integer",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#integer"
+     }
+    },
+    {
+     "args": [
+      [
+       4,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#integer"
+     }
+    }
+   ],
+   "type": "Integer",
+   "var": "integer"
+  },
+  {
+   "call": {
+    "args": [
+     0.5,
+     "x"
+    ],
+    "call": "Variable",
+    "kwargs": {
+     "num_decimal_places": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#variable",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#variable"
+     }
+    },
+    {
+     "args": [
+      [
+       6,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#variable"
+     }
+    }
+   ],
+   "type": "Variable",
+   "var": "variable"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      [
+       "1",
+       "2"
+      ],
+      [
+       "3",
+       "4"
+      ]
+     ]
+    ],
+    "call": "Matrix"
+   },
+   "deps": [],
+   "error": null,
+   "id": "#matrix",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#matrix"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#matrix"
+     }
+    },
+    {
+     "args": [
+      0.9
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#matrix"
+     }
+    }
+   ],
+   "type": "Matrix",
+   "var": "matrix"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      [
+       1,
+       2
+      ],
+      [
+       3,
+       4
+      ]
+     ]
+    ],
+    "call": "IntegerMatrix"
+   },
+   "deps": [],
+   "error": null,
+   "id": "#int_matrix",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#int_matrix"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#int_matrix"
+     }
+    },
+    {
+     "args": [
+      0.9
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#int_matrix"
+     }
+    }
+   ],
+   "type": "IntegerMatrix",
+   "var": "int_matrix"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      [
+       1.5,
+       2
+      ],
+      [
+       3,
+       4.25
+      ]
+     ]
+    ],
+    "call": "DecimalMatrix",
+    "kwargs": {
+     "element_to_mobject_config": {
+      "dict": {
+       "num_decimal_places": 1
+      }
+     }
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dec_matrix",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#dec_matrix"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dec_matrix"
+     }
+    },
+    {
+     "args": [
+      0.9
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#dec_matrix"
+     }
+    }
+   ],
+   "type": "DecimalMatrix",
+   "var": "dec_matrix"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      [
+       "Ann",
+       "90"
+      ],
+      [
+       "Bob",
+       "85"
+      ],
+      [
+       "Cy",
+       "77"
+      ]
+     ]
+    ],
+    "call": "Table",
+    "kwargs": {
+     "col_labels": [
+      {
+       "args": [
+        "Name"
+       ],
+       "call": "Text"
+      },
+      {
+       "args": [
+        "Score"
+       ],
+       "call": "Text"
+      }
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#table",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#table"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#table"
+     }
+    },
+    {
+     "args": [
+      0.6
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#table"
+     }
+    }
+   ],
+   "type": "Table",
+   "var": "table"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      [
+       1,
+       2,
+       3
+      ],
+      [
+       4,
+       5,
+       6
+      ]
+     ]
+    ],
+    "call": "IntegerTable"
+   },
+   "deps": [],
+   "error": null,
+   "id": "#int_table",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#int_table"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#int_table"
+     }
+    },
+    {
+     "args": [
+      0.8
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#int_table"
+     }
+    }
+   ],
+   "type": "IntegerTable",
+   "var": "int_table"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      [
+       1.5,
+       2.25
+      ],
+      [
+       3,
+       4.5
+      ]
+     ]
+    ],
+    "call": "DecimalTable",
+    "kwargs": {
+     "element_to_mobject_config": {
+      "dict": {
+       "num_decimal_places": 2
+      }
+     }
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dec_table",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#dec_table"
+     }
+    },
+    {
+     "args": [
+      [
+       4,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dec_table"
+     }
+    },
+    {
+     "args": [
+      0.8
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#dec_table"
+     }
+    }
+   ],
+   "type": "DecimalTable",
+   "var": "dec_table"
+  },
+  {
+   "call": {
+    "call": "NumberLine",
+    "kwargs": {
+     "length": 10,
+     "x_range": [
+      -5,
+      5,
+      1
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#number_line",
+   "post": [
+    {
+     "args": [
+      [
+       6,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#number_line"
+     }
+    }
+   ],
+   "type": "NumberLine",
+   "var": "number_line"
+  },
+  {
+   "call": {
+    "call": "NumberPlane",
+    "kwargs": {
+     "x_range": [
+      -7,
+      7,
+      1
+     ],
+     "y_range": [
+      -4,
+      4,
+      1
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#plane",
+   "post": [
+    {
+     "args": [
+      [
+       -6,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#plane"
+     }
+    }
+   ],
+   "type": "NumberPlane",
+   "var": "plane"
+  },
+  {
+   "call": {
+    "call": "ComplexPlane",
+    "kwargs": {
+     "x_range": [
+      -5,
+      5,
+      1
+     ],
+     "y_range": [
+      -3,
+      3,
+      1
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#complex_plane",
+   "post": [
+    {
+     "args": [
+      [
+       -4,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#complex_plane"
+     }
+    }
+   ],
+   "type": "ComplexPlane",
+   "var": "complex_plane"
+  },
+  {
+   "call": {
+    "call": "PolarPlane",
+    "kwargs": {
+     "radius_max": 3,
+     "radius_step": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#polar_plane",
+   "post": [
+    {
+     "args": [
+      [
+       -2,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#polar_plane"
+     }
+    }
+   ],
+   "type": "PolarPlane",
+   "var": "polar_plane"
+  },
+  {
+   "call": {
+    "call": "Axes",
+    "kwargs": {
+     "x_length": 10,
+     "x_range": [
+      -5,
+      5,
+      1
+     ],
+     "y_length": 6,
+     "y_range": [
+      -3,
+      3,
+      1
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#axes",
+   "post": [
+    {
+     "args": [
+      [
+       0,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#axes"
+     }
+    }
+   ],
+   "type": "Axes",
+   "var": "axes"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "body": {
+       "expr": {
+        "args": [
+         {
+          "v": "x"
+         }
+        ],
+        "f": "sin"
+       }
+      },
+      "lambda": [
+       "x"
+      ]
+     }
+    ],
+    "call": "FunctionGraph",
+    "kwargs": {
+     "x_range": [
+      -5,
+      5,
+      0.05
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#graph",
+   "post": [
+    {
+     "args": [
+      "#FFFF00"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#graph"
+     }
+    }
+   ],
+   "type": "FunctionGraph",
+   "var": "graph"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "body": {
+       "args": [
+        [
+         {
+          "expr": {
+           "a": 2.0,
+           "b": {
+            "args": [
+             {
+              "a": 3.0,
+              "b": {
+               "v": "t"
+              },
+              "op": "*"
+             }
+            ],
+            "f": "sin"
+           },
+           "op": "*"
+          }
+         },
+         {
+          "expr": {
+           "a": 2.0,
+           "b": {
+            "args": [
+             {
+              "a": 2.0,
+              "b": {
+               "v": "t"
+              },
+              "op": "*"
+             }
+            ],
+            "f": "sin"
+           },
+           "op": "*"
+          }
+         },
+         0
+        ]
+       ],
+       "call": "np.array"
+      },
+      "lambda": [
+       "t"
+      ]
+     }
+    ],
+    "call": "ParametricFunction",
+    "kwargs": {
+     "t_range": [
+      0,
+      6.2832,
+      0.02
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#curve",
+   "post": [
+    {
+     "args": [
+      "#F0AC5F"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#curve"
+     }
+    }
+   ],
+   "type": "ParametricFunction",
+   "var": "curve"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "body": {
+       "expr": {
+        "a": {
+         "a": {
+          "a": {
+           "v": "x"
+          },
+          "b": 2.0,
+          "op": "**"
+         },
+         "b": {
+          "a": {
+           "v": "y"
+          },
+          "b": 2.0,
+          "op": "**"
+         },
+         "op": "+"
+        },
+        "b": 4.0,
+        "op": "-"
+       }
+      },
+      "lambda": [
+       "x",
+       "y"
+      ]
+     }
+    ],
+    "call": "ImplicitFunction",
+    "kwargs": {
+     "x_range": [
+      -4,
+      4
+     ],
+     "y_range": [
+      -3,
+      3
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#implicit",
+   "post": [
+    {
+     "args": [
+      "#5CD0B3"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#implicit"
+     }
+    }
+   ],
+   "type": "ImplicitFunction",
+   "var": "implicit"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      3,
+      5,
+      2,
+      6,
+      4
+     ]
+    ],
+    "call": "BarChart",
+    "kwargs": {
+     "bar_names": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+     ],
+     "x_length": 7,
+     "y_length": 4,
+     "y_range": [
+      0,
+      8,
+      2
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#chart",
+   "post": [
+    {
+     "args": [
+      [
+       -6,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#chart"
+     }
+    }
+   ],
+   "type": "BarChart",
+   "var": "chart"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "bind": {
+       "x": [
+        "p",
+        0
+       ],
+       "y": [
+        "p",
+        1
+       ]
+      },
+      "body": {
+       "args": [
+        [
+         {
+          "expr": {
+           "a": {
+            "v": "y"
+           },
+           "op": "neg"
+          }
+         },
+         {
+          "expr": {
+           "v": "x"
+          }
+         },
+         0
+        ]
+       ],
+       "call": "np.array"
+      },
+      "lambda": [
+       "p"
+      ]
+     }
+    ],
+    "call": "ArrowVectorField",
+    "kwargs": {
+     "x_range": [
+      -5,
+      5,
+      1
+     ],
+     "y_range": [
+      -3,
+      3,
+      1
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#field",
+   "post": [],
+   "type": "ArrowVectorField",
+   "var": "field"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       3
+      ],
+      [
+       3,
+       4
+      ],
+      [
+       4,
+       0
+      ],
+      [
+       0,
+       2
+      ]
+     ]
+    ],
+    "call": "Graph",
+    "kwargs": {
+     "labels": true,
+     "layout": "circular",
+     "layout_scale": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#graph_net",
+   "post": [
+    {
+     "args": [
+      [
+       -2,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#graph_net"
+     }
+    }
+   ],
+   "type": "Graph",
+   "var": "graph_net"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       3
+      ],
+      [
+       3,
+       4
+      ],
+      [
+       4,
+       0
+      ]
+     ]
+    ],
+    "call": "DiGraph",
+    "kwargs": {
+     "labels": true,
+     "layout": "circular",
+     "layout_scale": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#digraph",
+   "post": [
+    {
+     "args": [
+      [
+       0,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#digraph"
+     }
+    }
+   ],
+   "type": "DiGraph",
+   "var": "digraph"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "asset": "sample-1a2b3c4d.png"
+     }
+    ],
+    "call": "ImageMobject",
+    "then": [
+     {
+      "args": [
+       3
+      ],
+      "call": "scale_to_fit_height"
+     }
+    ]
+   },
+   "deps": [],
+   "error": null,
+   "id": "#image",
+   "post": [
+    {
+     "args": [
+      [
+       2,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#image"
+     }
+    }
+   ],
+   "type": "ImageMobject",
+   "var": "image"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "asset": "sample-5e6f7a8b.svg"
+     }
+    ],
+    "call": "SVGMobject",
+    "kwargs": {
+     "height": 3
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#svg",
+   "post": [
+    {
+     "args": [
+      [
+       4,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#svg"
+     }
+    }
+   ],
+   "type": "SVGMobject",
+   "var": "svg"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "Brace",
+    "kwargs": {
+     "direction": [
+      0.0,
+      -1.0,
+      0.0
+     ]
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#brace",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#brace"
+     }
+    }
+   ],
+   "type": "Brace",
+   "var": "brace"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     },
+     "label"
+    ],
+    "call": "BraceLabel",
+    "kwargs": {
+     "brace_direction": [
+      0.0,
+      -1.0,
+      0.0
+     ],
+     "font_size": 36
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#brace_label",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#brace_label"
+     }
+    }
+   ],
+   "type": "BraceLabel",
+   "var": "brace_label"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      -5.5,
+      1,
+      0
+     ],
+     [
+      -2.5,
+      1,
+      0
+     ]
+    ],
+    "call": "BraceBetweenPoints",
+    "kwargs": {
+     "direction": [
+      0.0,
+      -1.0,
+      0.0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#brace_pts",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#brace_pts"
+     }
+    }
+   ],
+   "type": "BraceBetweenPoints",
+   "var": "brace_pts"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "SurroundingRectangle"
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#box",
+   "post": [
+    {
+     "args": [
+      "#F7D96F"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#box"
+     }
+    },
+    {
+     "args": [
+      "#F7D96F"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#box"
+     }
+    }
+   ],
+   "type": "SurroundingRectangle",
+   "var": "box"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "BackgroundRectangle",
+    "kwargs": {
+     "buff": 0.15
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#backdrop",
+   "post": [
+    {
+     "args": [
+      "#1C758A"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 1,
+      "width": 0
+     },
+     "on": {
+      "ref": "#backdrop"
+     }
+    },
+    {
+     "args": [
+      "#1C758A"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.75
+     },
+     "on": {
+      "ref": "#backdrop"
+     }
+    }
+   ],
+   "type": "BackgroundRectangle",
+   "var": "backdrop"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "Underline"
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#underline",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#underline"
+     }
+    }
+   ],
+   "type": "Underline",
+   "var": "underline"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "Cross"
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#cross",
+   "post": [
+    {
+     "args": [
+      "#FF0000"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#cross"
+     }
+    }
+   ],
+   "type": "Cross",
+   "var": "cross"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "DashedVMobject",
+    "kwargs": {
+     "dashed_ratio": 0.5,
+     "num_dashes": 15
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#dashed_copy",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#dashed_copy"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 1,
+      "width": 4
+     },
+     "on": {
+      "ref": "#dashed_copy"
+     }
+    }
+   ],
+   "type": "DashedVMobject",
+   "var": "dashed_copy"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "TangentLine",
+    "kwargs": {
+     "alpha": 0.25,
+     "length": 3
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#tangent",
+   "post": [
+    {
+     "args": [
+      "#F7D96F"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#tangent"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 1,
+      "width": 4
+     },
+     "on": {
+      "ref": "#tangent"
+     }
+    }
+   ],
+   "type": "TangentLine",
+   "var": "tangent"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "VGroup"
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#group",
+   "post": [],
+   "type": "VGroup",
+   "var": "group"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "Group"
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#mixed_group",
+   "post": [],
+   "type": "Group",
+   "var": "mixed_group"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "Cutout"
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#cutout",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 1,
+      "width": 4
+     },
+     "on": {
+      "ref": "#cutout"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 1
+     },
+     "on": {
+      "ref": "#cutout"
+     }
+    }
+   ],
+   "type": "Cutout",
+   "var": "cutout"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "Scene",
+  "moving_camera": false,
+  "name": "Objects",
+  "three_d": false
+ },
+ "screen_orders": [
+  [
+   "#circle",
+   "#circle_2",
+   "#square_2",
+   "#rect",
+   "#rrect",
+   "#triangle",
+   "#poly",
+   "#polygon",
+   "#polygram",
+   "#ellipse",
+   "#star",
+   "#dot",
+   "#mark",
+   "#label_dot",
+   "#ring",
+   "#sector",
+   "#ring_slice",
+   "#arc_poly",
+   "#arc",
+   "#arc_between",
+   "#curved_arrow",
+   "#curved_darrow",
+   "#elbow",
+   "#angle",
+   "#right_angle",
+   "#line",
+   "#arrow",
+   "#darrow",
+   "#dashed",
+   "#vector",
+   "#labeled_line",
+   "#labeled_arrow",
+   "#text",
+   "#markup",
+   "#eq",
+   "#tex",
+   "#title",
+   "#paragraph",
+   "#bullets",
+   "#code",
+   "#number",
+   "#integer",
+   "#variable",
+   "#matrix",
+   "#int_matrix",
+   "#dec_matrix",
+   "#table",
+   "#int_table",
+   "#dec_table",
+   "#number_line",
+   "#plane",
+   "#complex_plane",
+   "#polar_plane",
+   "#axes",
+   "#graph",
+   "#curve",
+   "#implicit",
+   "#chart",
+   "#field",
+   "#graph_net",
+   "#digraph",
+   "#image",
+   "#svg",
+   "#brace",
+   "#brace_label",
+   "#brace_pts",
+   "#box",
+   "#backdrop",
+   "#underline",
+   "#cross",
+   "#dashed_copy",
+   "#tangent",
+   "#group",
+   "#mixed_group",
+   "#cutout"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#circle",
+   "#circle_2",
+   "#square_2",
+   "#rect",
+   "#rrect",
+   "#triangle",
+   "#poly",
+   "#polygon",
+   "#polygram",
+   "#ellipse",
+   "#star",
+   "#dot",
+   "#mark",
+   "#label_dot",
+   "#ring",
+   "#sector",
+   "#ring_slice",
+   "#arc_poly",
+   "#arc",
+   "#arc_between",
+   "#curved_arrow",
+   "#curved_darrow",
+   "#elbow",
+   "#angle",
+   "#right_angle",
+   "#line",
+   "#arrow",
+   "#darrow",
+   "#dashed",
+   "#vector",
+   "#labeled_line",
+   "#labeled_arrow",
+   "#text",
+   "#markup",
+   "#eq",
+   "#tex",
+   "#title",
+   "#paragraph",
+   "#bullets",
+   "#code",
+   "#number",
+   "#integer",
+   "#variable",
+   "#matrix",
+   "#int_matrix",
+   "#dec_matrix",
+   "#table",
+   "#int_table",
+   "#dec_table",
+   "#number_line",
+   "#plane",
+   "#complex_plane",
+   "#polar_plane",
+   "#axes",
+   "#graph",
+   "#curve",
+   "#implicit",
+   "#chart",
+   "#field",
+   "#graph_net",
+   "#digraph",
+   "#image",
+   "#svg",
+   "#brace",
+   "#brace_label",
+   "#brace_pts",
+   "#box",
+   "#backdrop",
+   "#underline",
+   "#cross",
+   "#dashed_copy",
+   "#tangent",
+   "#group",
+   "#mixed_group",
+   "#cutout"
+  ]
+ ],
+ "setup": [],
+ "steps": [],
+ "version": 1
+}

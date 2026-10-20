@@ -1,0 +1,1361 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#square"
+     },
+     {
+      "ref": "#circle"
+     },
+     {
+      "ref": "#sphere"
+     },
+     {
+      "ref": "#cube"
+     },
+     {
+      "ref": "#prism"
+     },
+     {
+      "ref": "#cone"
+     },
+     {
+      "ref": "#cylinder"
+     },
+     {
+      "ref": "#torus"
+     },
+     {
+      "ref": "#line3d"
+     },
+     {
+      "ref": "#arrow3d"
+     },
+     {
+      "ref": "#dot3d"
+     },
+     {
+      "ref": "#surface"
+     },
+     {
+      "ref": "#axes3d"
+     },
+     {
+      "ref": "#tetra"
+     },
+     {
+      "ref": "#octa"
+     },
+     {
+      "ref": "#icosa"
+     },
+     {
+      "ref": "#dodeca"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 0,
+ "layout": {
+  "fixed": {},
+  "hidden": [],
+  "order": [
+   "#square",
+   "#circle",
+   "#sphere",
+   "#cube",
+   "#prism",
+   "#cone",
+   "#cylinder",
+   "#torus",
+   "#line3d",
+   "#arrow3d",
+   "#dot3d",
+   "#surface",
+   "#axes3d",
+   "#tetra",
+   "#octa",
+   "#icosa",
+   "#dodeca"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Square",
+    "kwargs": {
+     "side_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#square",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#square"
+     }
+    }
+   ],
+   "type": "Square",
+   "var": "square"
+  },
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       3,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle"
+  },
+  {
+   "call": {
+    "call": "Sphere",
+    "kwargs": {
+     "radius": 2.75,
+     "resolution": [
+      25,
+      50
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#sphere",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#sphere"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#sphere"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       3,
+       0.5
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#sphere"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#sphere"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#sphere"
+     }
+    }
+   ],
+   "type": "Sphere",
+   "var": "sphere"
+  },
+  {
+   "call": {
+    "call": "Cube",
+    "kwargs": {
+     "side_length": 3.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#cube",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#cube"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#cube"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       3,
+       0.5
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#cube"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#cube"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#cube"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#cube"
+     }
+    }
+   ],
+   "type": "Cube",
+   "var": "cube"
+  },
+  {
+   "call": {
+    "call": "Prism",
+    "kwargs": {
+     "dimensions": [
+      5,
+      3.5,
+      2
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#prism",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#prism"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#prism"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       3,
+       0.5
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#prism"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#prism"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#prism"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#prism"
+     }
+    }
+   ],
+   "type": "Prism",
+   "var": "prism"
+  },
+  {
+   "call": {
+    "call": "Cone",
+    "kwargs": {
+     "base_radius": 2,
+     "height": 3.5,
+     "show_base": false
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#cone",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#cone"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#cone"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       3,
+       0.5
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#cone"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#cone"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#cone"
+     }
+    }
+   ],
+   "type": "Cone",
+   "var": "cone"
+  },
+  {
+   "call": {
+    "call": "Cylinder",
+    "kwargs": {
+     "height": 3.5,
+     "radius": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#cylinder",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#cylinder"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#cylinder"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       3,
+       0.5
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#cylinder"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#cylinder"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#cylinder"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#cylinder"
+     }
+    }
+   ],
+   "type": "Cylinder",
+   "var": "cylinder"
+  },
+  {
+   "call": {
+    "call": "Torus",
+    "kwargs": {
+     "major_radius": 3.5,
+     "minor_radius": 1.4,
+     "resolution": [
+      25,
+      25
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#torus",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#torus"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#torus"
+     }
+    },
+    {
+     "args": [
+      [
+       4,
+       3,
+       0.5
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#torus"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#torus"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#torus"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#torus"
+     }
+    }
+   ],
+   "type": "Torus",
+   "var": "torus"
+  },
+  {
+   "call": {
+    "call": "Line3D",
+    "kwargs": {
+     "end": [
+      1,
+      2,
+      0.5
+     ],
+     "start": [
+      1,
+      2,
+      0.5
+     ],
+     "thickness": 0.55
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#line3d",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#line3d"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#line3d"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#line3d"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#line3d"
+     }
+    }
+   ],
+   "type": "Line3D",
+   "var": "line3d"
+  },
+  {
+   "call": {
+    "call": "Arrow3D",
+    "kwargs": {
+     "end": [
+      1,
+      2,
+      0.5
+     ],
+     "start": [
+      1,
+      2,
+      0.5
+     ],
+     "thickness": 0.55
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#arrow3d",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#arrow3d"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#arrow3d"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#arrow3d"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#arrow3d"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#arrow3d"
+     }
+    }
+   ],
+   "type": "Arrow3D",
+   "var": "arrow3d"
+  },
+  {
+   "call": {
+    "call": "Dot3D",
+    "kwargs": {
+     "radius": 0.68
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dot3d",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#dot3d"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#dot3d"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       2,
+       0.5
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dot3d"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#dot3d"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#dot3d"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#dot3d"
+     }
+    }
+   ],
+   "type": "Dot3D",
+   "var": "dot3d"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "body": {
+       "args": [
+        [
+         {
+          "expr": {
+           "a": {
+            "v": "u"
+           },
+           "b": {
+            "v": "v"
+           },
+           "op": "*"
+          }
+         },
+         {
+          "expr": {
+           "a": {
+            "v": "u"
+           },
+           "b": {
+            "v": "v"
+           },
+           "op": "*"
+          }
+         },
+         {
+          "expr": {
+           "a": {
+            "v": "u"
+           },
+           "b": {
+            "v": "v"
+           },
+           "op": "*"
+          }
+         }
+        ]
+       ],
+       "call": "np.array"
+      },
+      "lambda": [
+       "u",
+       "v"
+      ]
+     }
+    ],
+    "call": "Surface",
+    "kwargs": {
+     "resolution": 25,
+     "u_range": [
+      -2,
+      3
+     ],
+     "v_range": [
+      -2,
+      3
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#surface",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#surface"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#surface"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#surface"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#surface"
+     }
+    }
+   ],
+   "type": "Surface",
+   "var": "surface"
+  },
+  {
+   "call": {
+    "call": "ThreeDAxes",
+    "kwargs": {
+     "x_length": 11,
+     "x_range": [
+      -2,
+      3,
+      0.5
+     ],
+     "y_length": 11,
+     "y_range": [
+      -2,
+      3,
+      0.5
+     ],
+     "z_length": 8,
+     "z_range": [
+      -2,
+      3,
+      0.5
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#axes3d",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#axes3d"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       2,
+       0.5
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#axes3d"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#axes3d"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#axes3d"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#axes3d"
+     }
+    }
+   ],
+   "type": "ThreeDAxes",
+   "var": "axes3d"
+  },
+  {
+   "call": {
+    "call": "Tetrahedron",
+    "kwargs": {
+     "edge_length": 3.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#tetra",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#tetra"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#tetra"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       2,
+       0.5
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#tetra"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#tetra"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#tetra"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#tetra"
+     }
+    }
+   ],
+   "type": "Tetrahedron",
+   "var": "tetra"
+  },
+  {
+   "call": {
+    "call": "Octahedron",
+    "kwargs": {
+     "edge_length": 3.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#octa",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#octa"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#octa"
+     }
+    },
+    {
+     "args": [
+      [
+       4,
+       2,
+       0.5
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#octa"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#octa"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#octa"
+     }
+    }
+   ],
+   "type": "Octahedron",
+   "var": "octa"
+  },
+  {
+   "call": {
+    "call": "Icosahedron",
+    "kwargs": {
+     "edge_length": 3.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#icosa",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#icosa"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#icosa"
+     }
+    },
+    {
+     "args": [
+      [
+       6,
+       2,
+       0.5
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#icosa"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#icosa"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#icosa"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#icosa"
+     }
+    }
+   ],
+   "type": "Icosahedron",
+   "var": "icosa"
+  },
+  {
+   "call": {
+    "call": "Dodecahedron",
+    "kwargs": {
+     "edge_length": 2.75
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dodeca",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#dodeca"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#dodeca"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       1,
+       0.5
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dodeca"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#dodeca"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#dodeca"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#dodeca"
+     }
+    }
+   ],
+   "type": "Dodecahedron",
+   "var": "dodeca"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "ThreeDScene",
+  "moving_camera": false,
+  "name": "Objects3D",
+  "three_d": true
+ },
+ "screen_orders": [
+  [
+   "#square",
+   "#circle",
+   "#sphere",
+   "#cube",
+   "#prism",
+   "#cone",
+   "#cylinder",
+   "#torus",
+   "#line3d",
+   "#arrow3d",
+   "#dot3d",
+   "#surface",
+   "#axes3d",
+   "#tetra",
+   "#octa",
+   "#icosa",
+   "#dodeca"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#square",
+   "#circle",
+   "#sphere",
+   "#cube",
+   "#prism",
+   "#cone",
+   "#cylinder",
+   "#torus",
+   "#line3d",
+   "#arrow3d",
+   "#dot3d",
+   "#surface",
+   "#axes3d",
+   "#tetra",
+   "#octa",
+   "#icosa",
+   "#dodeca"
+  ]
+ ],
+ "setup": [
+  {
+   "do": {
+    "call": "set_camera_orientation",
+    "kwargs": {
+     "phi": 1.2217304763960306,
+     "theta": -0.8726646259971648
+    },
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "steps": [],
+ "version": 1
+}

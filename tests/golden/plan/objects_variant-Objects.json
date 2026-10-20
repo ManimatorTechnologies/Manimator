@@ -1,0 +1,6314 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#circle_2"
+     },
+     {
+      "ref": "#square_2"
+     },
+     {
+      "ref": "#rect"
+     },
+     {
+      "ref": "#rrect"
+     },
+     {
+      "ref": "#triangle"
+     },
+     {
+      "ref": "#poly"
+     },
+     {
+      "ref": "#polygon"
+     },
+     {
+      "ref": "#polygram"
+     },
+     {
+      "ref": "#ellipse"
+     },
+     {
+      "ref": "#star"
+     },
+     {
+      "ref": "#dot"
+     },
+     {
+      "ref": "#mark"
+     },
+     {
+      "ref": "#label_dot"
+     },
+     {
+      "ref": "#ring"
+     },
+     {
+      "ref": "#sector"
+     },
+     {
+      "ref": "#ring_slice"
+     },
+     {
+      "ref": "#arc_poly"
+     },
+     {
+      "ref": "#arc"
+     },
+     {
+      "ref": "#arc_between"
+     },
+     {
+      "ref": "#curved_arrow"
+     },
+     {
+      "ref": "#curved_darrow"
+     },
+     {
+      "ref": "#elbow"
+     },
+     {
+      "ref": "#angle"
+     },
+     {
+      "ref": "#right_angle"
+     },
+     {
+      "ref": "#line"
+     },
+     {
+      "ref": "#arrow"
+     },
+     {
+      "ref": "#darrow"
+     },
+     {
+      "ref": "#dashed"
+     },
+     {
+      "ref": "#vector"
+     },
+     {
+      "ref": "#labeled_line"
+     },
+     {
+      "ref": "#labeled_arrow"
+     },
+     {
+      "ref": "#text"
+     },
+     {
+      "ref": "#markup"
+     },
+     {
+      "ref": "#eq"
+     },
+     {
+      "ref": "#tex"
+     },
+     {
+      "ref": "#title"
+     },
+     {
+      "ref": "#paragraph"
+     },
+     {
+      "ref": "#bullets"
+     },
+     {
+      "ref": "#code"
+     },
+     {
+      "ref": "#number"
+     },
+     {
+      "ref": "#integer"
+     },
+     {
+      "ref": "#variable"
+     },
+     {
+      "ref": "#matrix"
+     },
+     {
+      "ref": "#int_matrix"
+     },
+     {
+      "ref": "#dec_matrix"
+     },
+     {
+      "ref": "#table"
+     },
+     {
+      "ref": "#int_table"
+     },
+     {
+      "ref": "#dec_table"
+     },
+     {
+      "ref": "#number_line"
+     },
+     {
+      "ref": "#plane"
+     },
+     {
+      "ref": "#complex_plane"
+     },
+     {
+      "ref": "#polar_plane"
+     },
+     {
+      "ref": "#axes"
+     },
+     {
+      "ref": "#graph"
+     },
+     {
+      "ref": "#curve"
+     },
+     {
+      "ref": "#implicit"
+     },
+     {
+      "ref": "#chart"
+     },
+     {
+      "ref": "#field"
+     },
+     {
+      "ref": "#graph_net"
+     },
+     {
+      "ref": "#digraph"
+     },
+     {
+      "ref": "#image"
+     },
+     {
+      "ref": "#svg"
+     },
+     {
+      "ref": "#brace"
+     },
+     {
+      "ref": "#brace_label"
+     },
+     {
+      "ref": "#brace_pts"
+     },
+     {
+      "ref": "#box"
+     },
+     {
+      "ref": "#backdrop"
+     },
+     {
+      "ref": "#underline"
+     },
+     {
+      "ref": "#cross"
+     },
+     {
+      "ref": "#dashed_copy"
+     },
+     {
+      "ref": "#tangent"
+     },
+     {
+      "ref": "#group"
+     },
+     {
+      "ref": "#mixed_group"
+     },
+     {
+      "ref": "#cutout"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 0,
+ "layout": {
+  "fixed": {},
+  "hidden": [],
+  "order": [
+   "#square",
+   "#circle",
+   "#circle_2",
+   "#square_2",
+   "#rect",
+   "#rrect",
+   "#triangle",
+   "#poly",
+   "#polygon",
+   "#polygram",
+   "#ellipse",
+   "#star",
+   "#dot",
+   "#mark",
+   "#label_dot",
+   "#ring",
+   "#sector",
+   "#ring_slice",
+   "#arc_poly",
+   "#arc",
+   "#arc_between",
+   "#curved_arrow",
+   "#curved_darrow",
+   "#elbow",
+   "#angle",
+   "#right_angle",
+   "#line",
+   "#arrow",
+   "#darrow",
+   "#dashed",
+   "#vector",
+   "#labeled_line",
+   "#labeled_arrow",
+   "#text",
+   "#markup",
+   "#eq",
+   "#tex",
+   "#title",
+   "#paragraph",
+   "#bullets",
+   "#code",
+   "#number",
+   "#integer",
+   "#variable",
+   "#matrix",
+   "#int_matrix",
+   "#dec_matrix",
+   "#table",
+   "#int_table",
+   "#dec_table",
+   "#number_line",
+   "#plane",
+   "#complex_plane",
+   "#polar_plane",
+   "#axes",
+   "#graph",
+   "#curve",
+   "#implicit",
+   "#chart",
+   "#field",
+   "#graph_net",
+   "#digraph",
+   "#image",
+   "#svg",
+   "#brace",
+   "#brace_label",
+   "#brace_pts",
+   "#box",
+   "#backdrop",
+   "#underline",
+   "#cross",
+   "#dashed_copy",
+   "#tangent",
+   "#cutout"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Square",
+    "kwargs": {
+     "side_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#square",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#square"
+     }
+    }
+   ],
+   "type": "Square",
+   "var": "square"
+  },
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       3,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle"
+  },
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle_2",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#circle_2"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#circle_2"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle_2"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#circle_2"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#circle_2"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle_2"
+  },
+  {
+   "call": {
+    "call": "Square",
+    "kwargs": {
+     "side_length": 3.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#square_2",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#square_2"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#square_2"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#square_2"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#square_2"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#square_2"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#square_2"
+     }
+    }
+   ],
+   "type": "Square",
+   "var": "square_2"
+  },
+  {
+   "call": {
+    "call": "Rectangle",
+    "kwargs": {
+     "height": 3.5,
+     "width": 6.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#rect",
+   "post": [
+    {
+     "args": [
+      "#FFFF00"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#rect"
+     }
+    },
+    {
+     "args": [
+      "#FFFF00"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#rect"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#rect"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#rect"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#rect"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#rect"
+     }
+    }
+   ],
+   "type": "Rectangle",
+   "var": "rect"
+  },
+  {
+   "call": {
+    "call": "RoundedRectangle",
+    "kwargs": {
+     "corner_radius": 1.25,
+     "height": 3.5,
+     "width": 6.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#rrect",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#rrect"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#rrect"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#rrect"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#rrect"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#rrect"
+     }
+    }
+   ],
+   "type": "RoundedRectangle",
+   "var": "rrect"
+  },
+  {
+   "call": {
+    "call": "Triangle"
+   },
+   "deps": [],
+   "error": null,
+   "id": "#triangle",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#triangle"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#triangle"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#triangle"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#triangle"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#triangle"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#triangle"
+     }
+    }
+   ],
+   "type": "Triangle",
+   "var": "triangle"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      1.5,
+      0,
+      0
+     ],
+     [
+      0.5,
+      1,
+      0
+     ],
+     [
+      -0.5,
+      0.5,
+      0
+     ]
+    ],
+    "call": "Polygon"
+   },
+   "deps": [],
+   "error": null,
+   "id": "#poly",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#poly"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#poly"
+     }
+    },
+    {
+     "args": [
+      [
+       4,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#poly"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#poly"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#poly"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#poly"
+     }
+    }
+   ],
+   "type": "Polygon",
+   "var": "poly"
+  },
+  {
+   "call": {
+    "call": "RegularPolygon",
+    "kwargs": {
+     "n": 7
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#polygon",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#polygon"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#polygon"
+     }
+    },
+    {
+     "args": [
+      [
+       6,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#polygon"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#polygon"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#polygon"
+     }
+    }
+   ],
+   "type": "RegularPolygon",
+   "var": "polygon"
+  },
+  {
+   "call": {
+    "args": [
+     6
+    ],
+    "call": "RegularPolygram",
+    "kwargs": {
+     "density": 3,
+     "radius": 2.75
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#polygram",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#polygram"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#polygram"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#polygram"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#polygram"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#polygram"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#polygram"
+     }
+    }
+   ],
+   "type": "RegularPolygram",
+   "var": "polygram"
+  },
+  {
+   "call": {
+    "call": "Ellipse",
+    "kwargs": {
+     "height": 2,
+     "width": 3.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#ellipse",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#ellipse"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#ellipse"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#ellipse"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#ellipse"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#ellipse"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#ellipse"
+     }
+    }
+   ],
+   "type": "Ellipse",
+   "var": "ellipse"
+  },
+  {
+   "call": {
+    "call": "Star",
+    "kwargs": {
+     "inner_radius": 1.1,
+     "n": 6,
+     "outer_radius": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#star",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#star"
+     }
+    }
+   ],
+   "type": "Star",
+   "var": "star"
+  },
+  {
+   "call": {
+    "call": "Dot",
+    "kwargs": {
+     "radius": 0.65
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dot",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 2
+     },
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#dot"
+     }
+    }
+   ],
+   "type": "Dot",
+   "var": "dot"
+  },
+  {
+   "call": {
+    "call": "AnnotationDot",
+    "kwargs": {
+     "radius": 0.65
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#mark",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 7
+     },
+     "on": {
+      "ref": "#mark"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#mark"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#mark"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#mark"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#mark"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#mark"
+     }
+    }
+   ],
+   "type": "AnnotationDot",
+   "var": "mark"
+  },
+  {
+   "call": {
+    "args": [
+     "B"
+    ],
+    "call": "LabeledDot",
+    "kwargs": {
+     "color": "#123456"
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#label_dot",
+   "post": [
+    {
+     "args": [
+      [
+       4,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#label_dot"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#label_dot"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#label_dot"
+     }
+    }
+   ],
+   "type": "LabeledDot",
+   "var": "label_dot"
+  },
+  {
+   "call": {
+    "call": "Annulus",
+    "kwargs": {
+     "inner_radius": 1.25,
+     "outer_radius": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#ring",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 2
+     },
+     "on": {
+      "ref": "#ring"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#ring"
+     }
+    },
+    {
+     "args": [
+      [
+       6,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#ring"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#ring"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#ring"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#ring"
+     }
+    }
+   ],
+   "type": "Annulus",
+   "var": "ring"
+  },
+  {
+   "call": {
+    "call": "Sector",
+    "kwargs": {
+     "angle": 0.7853981633974483,
+     "radius": 2.75,
+     "start_angle": 0.7853981633974483
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#sector",
+   "post": [
+    {
+     "args": [
+      "#FFFF00"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 2
+     },
+     "on": {
+      "ref": "#sector"
+     }
+    },
+    {
+     "args": [
+      "#FFFF00"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#sector"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#sector"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#sector"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#sector"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#sector"
+     }
+    }
+   ],
+   "type": "Sector",
+   "var": "sector"
+  },
+  {
+   "call": {
+    "call": "AnnularSector",
+    "kwargs": {
+     "angle": 0.7853981633974483,
+     "inner_radius": 1.55,
+     "outer_radius": 2.75,
+     "start_angle": 0.7853981633974483
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#ring_slice",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 2
+     },
+     "on": {
+      "ref": "#ring_slice"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#ring_slice"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#ring_slice"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#ring_slice"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#ring_slice"
+     }
+    }
+   ],
+   "type": "AnnularSector",
+   "var": "ring_slice"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      1.5,
+      0,
+      0
+     ],
+     [
+      0.5,
+      1,
+      0
+     ],
+     [
+      -0.5,
+      0.5,
+      0
+     ]
+    ],
+    "call": "ArcPolygon",
+    "kwargs": {
+     "angle": 0.7853981633974483
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#arc_poly",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#arc_poly"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#arc_poly"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#arc_poly"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#arc_poly"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#arc_poly"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#arc_poly"
+     }
+    }
+   ],
+   "type": "ArcPolygon",
+   "var": "arc_poly"
+  },
+  {
+   "call": {
+    "call": "Arc",
+    "kwargs": {
+     "angle": 0.7853981633974483,
+     "radius": 2,
+     "start_angle": 0.7853981633974483
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#arc",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#arc"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#arc"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#arc"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#arc"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#arc"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#arc"
+     }
+    }
+   ],
+   "type": "Arc",
+   "var": "arc"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      1.5,
+      -0.5,
+      0
+     ],
+     [
+      1.5,
+      -0.5,
+      0
+     ]
+    ],
+    "call": "ArcBetweenPoints",
+    "kwargs": {
+     "angle": 0.7853981633974483
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#arc_between",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#arc_between"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#arc_between"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#arc_between"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#arc_between"
+     }
+    }
+   ],
+   "type": "ArcBetweenPoints",
+   "var": "arc_between"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      1.5,
+      -0.5,
+      0
+     ],
+     [
+      1.5,
+      -0.5,
+      0
+     ]
+    ],
+    "call": "CurvedArrow",
+    "kwargs": {
+     "angle": 0.7853981633974483
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#curved_arrow",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#curved_arrow"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#curved_arrow"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#curved_arrow"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#curved_arrow"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#curved_arrow"
+     }
+    }
+   ],
+   "type": "CurvedArrow",
+   "var": "curved_arrow"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      1.5,
+      -0.5,
+      0
+     ],
+     [
+      1.5,
+      -0.5,
+      0
+     ]
+    ],
+    "call": "CurvedDoubleArrow",
+    "kwargs": {
+     "angle": 0.7853981633974483
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#curved_darrow",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#curved_darrow"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#curved_darrow"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#curved_darrow"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#curved_darrow"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#curved_darrow"
+     }
+    }
+   ],
+   "type": "CurvedDoubleArrow",
+   "var": "curved_darrow"
+  },
+  {
+   "call": {
+    "call": "Elbow",
+    "kwargs": {
+     "angle": 0.7853981633974483,
+     "width": 1.7
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#elbow",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#elbow"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#elbow"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#elbow"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#elbow"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#elbow"
+     }
+    }
+   ],
+   "type": "Elbow",
+   "var": "elbow"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "args": [
+       [
+        1.5,
+        -0.5,
+        0
+       ],
+       [
+        1.5,
+        -0.5,
+        0
+       ]
+      ],
+      "call": "Line"
+     },
+     {
+      "args": [
+       [
+        1.5,
+        -0.5,
+        0
+       ],
+       [
+        1.5,
+        -0.5,
+        0
+       ]
+      ],
+      "call": "Line"
+     }
+    ],
+    "call": "Angle",
+    "kwargs": {
+     "other_angle": true,
+     "radius": 1.55
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#angle",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#angle"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#angle"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#angle"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#angle"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#angle"
+     }
+    }
+   ],
+   "type": "Angle",
+   "var": "angle"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "args": [
+       [
+        1.5,
+        -0.5,
+        0
+       ],
+       [
+        1.5,
+        -0.5,
+        0
+       ]
+      ],
+      "call": "Line"
+     },
+     {
+      "args": [
+       [
+        1.5,
+        -0.5,
+        0
+       ],
+       [
+        1.5,
+        -0.5,
+        0
+       ]
+      ],
+      "call": "Line"
+     }
+    ],
+    "call": "RightAngle",
+    "kwargs": {
+     "length": 1.1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#right_angle",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#right_angle"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#right_angle"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#right_angle"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#right_angle"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#right_angle"
+     }
+    }
+   ],
+   "type": "RightAngle",
+   "var": "right_angle"
+  },
+  {
+   "call": {
+    "call": "Line",
+    "kwargs": {
+     "end": [
+      1.5,
+      -0.5,
+      0
+     ],
+     "start": [
+      1.5,
+      -0.5,
+      0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#line",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#line"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#line"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#line"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#line"
+     }
+    }
+   ],
+   "type": "Line",
+   "var": "line"
+  },
+  {
+   "call": {
+    "call": "Arrow",
+    "kwargs": {
+     "buff": 0.5,
+     "end": [
+      1.5,
+      -0.5,
+      0
+     ],
+     "start": [
+      1.5,
+      -0.5,
+      0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#arrow",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#arrow"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 8
+     },
+     "on": {
+      "ref": "#arrow"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#arrow"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#arrow"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#arrow"
+     }
+    }
+   ],
+   "type": "Arrow",
+   "var": "arrow"
+  },
+  {
+   "call": {
+    "call": "DoubleArrow",
+    "kwargs": {
+     "buff": 0.5,
+     "end": [
+      1.5,
+      -0.5,
+      0
+     ],
+     "start": [
+      1.5,
+      -0.5,
+      0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#darrow",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#darrow"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 8
+     },
+     "on": {
+      "ref": "#darrow"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#darrow"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#darrow"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#darrow"
+     }
+    }
+   ],
+   "type": "DoubleArrow",
+   "var": "darrow"
+  },
+  {
+   "call": {
+    "call": "DashedLine",
+    "kwargs": {
+     "dash_length": 0.57,
+     "dashed_ratio": 0.95,
+     "end": [
+      1.5,
+      -0.5,
+      0
+     ],
+     "start": [
+      1.5,
+      -0.5,
+      0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dashed",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#dashed"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#dashed"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#dashed"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#dashed"
+     }
+    }
+   ],
+   "type": "DashedLine",
+   "var": "dashed"
+  },
+  {
+   "call": {
+    "call": "Vector",
+    "kwargs": {
+     "direction": [
+      -1.0,
+      2.0,
+      0.0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#vector",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#vector"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 8
+     },
+     "on": {
+      "ref": "#vector"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#vector"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#vector"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#vector"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#vector"
+     }
+    }
+   ],
+   "type": "Vector",
+   "var": "vector"
+  },
+  {
+   "call": {
+    "args": [
+     "len"
+    ],
+    "call": "LabeledLine",
+    "kwargs": {
+     "end": [
+      1.5,
+      -0.5,
+      0
+     ],
+     "label_position": 0.95,
+     "start": [
+      1.5,
+      -0.5,
+      0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#labeled_line",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#labeled_line"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#labeled_line"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#labeled_line"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#labeled_line"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#labeled_line"
+     }
+    }
+   ],
+   "type": "LabeledLine",
+   "var": "labeled_line"
+  },
+  {
+   "call": {
+    "args": [
+     "v"
+    ],
+    "call": "LabeledArrow",
+    "kwargs": {
+     "end": [
+      1.5,
+      -0.5,
+      0
+     ],
+     "label_position": 0.95,
+     "start": [
+      1.5,
+      -0.5,
+      0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#labeled_arrow",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#labeled_arrow"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 8
+     },
+     "on": {
+      "ref": "#labeled_arrow"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#labeled_arrow"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#labeled_arrow"
+     }
+    }
+   ],
+   "type": "LabeledArrow",
+   "var": "labeled_arrow"
+  },
+  {
+   "call": {
+    "args": [
+     "Changed text"
+    ],
+    "call": "Text",
+    "kwargs": {
+     "font": "DejaVu Sans",
+     "font_size": 72.5,
+     "slant": "ITALIC",
+     "weight": "BOLD"
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#text",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#text"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#text"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#text"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#text"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#text"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#text"
+     }
+    }
+   ],
+   "type": "Text",
+   "var": "text"
+  },
+  {
+   "call": {
+    "args": [
+     "<i>Changed</i> <b>markup</b>"
+    ],
+    "call": "MarkupText",
+    "kwargs": {
+     "font": "DejaVu Sans",
+     "font_size": 72.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#markup",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#markup"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#markup"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#markup"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#markup"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#markup"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#markup"
+     }
+    }
+   ],
+   "type": "MarkupText",
+   "var": "markup"
+  },
+  {
+   "call": {
+    "args": [
+     "\\frac{a}{b} = \\sqrt{c}"
+    ],
+    "call": "MathTex",
+    "kwargs": {
+     "font_size": 72.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#eq",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#eq"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#eq"
+     }
+    },
+    {
+     "args": [
+      [
+       4,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#eq"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#eq"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#eq"
+     }
+    }
+   ],
+   "type": "MathTex",
+   "var": "eq"
+  },
+  {
+   "call": {
+    "args": [
+     "Changed $x^2$"
+    ],
+    "call": "Tex",
+    "kwargs": {
+     "font_size": 72.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#tex",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#tex"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#tex"
+     }
+    },
+    {
+     "args": [
+      [
+       6,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#tex"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#tex"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#tex"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#tex"
+     }
+    }
+   ],
+   "type": "Tex",
+   "var": "tex"
+  },
+  {
+   "call": {
+    "args": [
+     "Another Title"
+    ],
+    "call": "Title",
+    "kwargs": {
+     "font_size": 90.5,
+     "include_underline": false
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#title",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#title"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#title"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#title"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#title"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#title"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#title"
+     }
+    }
+   ],
+   "type": "Title",
+   "var": "title"
+  },
+  {
+   "call": {
+    "args": [
+     "One",
+     "Two"
+    ],
+    "call": "Paragraph",
+    "kwargs": {
+     "alignment": "left",
+     "font": "DejaVu Sans",
+     "font_size": 54.5,
+     "line_spacing": 1.62
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#paragraph",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#paragraph"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#paragraph"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#paragraph"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#paragraph"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#paragraph"
+     }
+    }
+   ],
+   "type": "Paragraph",
+   "var": "paragraph"
+  },
+  {
+   "call": {
+    "args": [
+     "Alpha",
+     "Beta"
+    ],
+    "call": "BulletedList",
+    "kwargs": {
+     "font_size": 60.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#bullets",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#bullets"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#bullets"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#bullets"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#bullets"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#bullets"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#bullets"
+     }
+    }
+   ],
+   "type": "BulletedList",
+   "var": "bullets"
+  },
+  {
+   "call": {
+    "call": "Code",
+    "kwargs": {
+     "add_line_numbers": false,
+     "background": "window",
+     "code_string": "x = 1\nprint(x)",
+     "formatter_style": "monokai",
+     "language": "javascript"
+    }
+   },
+   "code": {
+    "background": "#272822",
+    "foreground": "#F8F8F2",
+    "line_number_color": "#F8F8F2",
+    "lines": [
+     "x = 1",
+     "print(x)"
+    ],
+    "spans": [
+     [
+      0,
+      0,
+      1,
+      "#A6E22E"
+     ],
+     [
+      0,
+      1,
+      2,
+      "#F8F8F2"
+     ],
+     [
+      0,
+      2,
+      3,
+      "#FF4689"
+     ],
+     [
+      0,
+      3,
+      4,
+      "#F8F8F2"
+     ],
+     [
+      0,
+      4,
+      5,
+      "#AE81FF"
+     ],
+     [
+      1,
+      0,
+      5,
+      "#A6E22E"
+     ],
+     [
+      1,
+      5,
+      6,
+      "#F8F8F2"
+     ],
+     [
+      1,
+      6,
+      7,
+      "#A6E22E"
+     ],
+     [
+      1,
+      7,
+      8,
+      "#F8F8F2"
+     ]
+    ]
+   },
+   "deps": [],
+   "error": null,
+   "id": "#code",
+   "post": [
+    {
+     "args": [
+      [
+       0,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#code"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#code"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#code"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#code"
+     }
+    }
+   ],
+   "type": "Code",
+   "var": "code"
+  },
+  {
+   "call": {
+    "args": [
+     5.21
+    ],
+    "call": "DecimalNumber",
+    "kwargs": {
+     "font_size": 72.5,
+     "num_decimal_places": 3
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#number",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#number"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#number"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#number"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#number"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#number"
+     }
+    }
+   ],
+   "type": "DecimalNumber",
+   "var": "number"
+  },
+  {
+   "call": {
+    "args": [
+     8
+    ],
+    "call": "Integer",
+    "kwargs": {
+     "font_size": 72.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#integer",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#integer"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#integer"
+     }
+    },
+    {
+     "args": [
+      [
+       4,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#integer"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#integer"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#integer"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#integer"
+     }
+    }
+   ],
+   "type": "Integer",
+   "var": "integer"
+  },
+  {
+   "call": {
+    "args": [
+     1.25,
+     "t"
+    ],
+    "call": "Variable",
+    "kwargs": {
+     "num_decimal_places": 3
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#variable",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#variable"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#variable"
+     }
+    },
+    {
+     "args": [
+      [
+       6,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#variable"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#variable"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#variable"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#variable"
+     }
+    }
+   ],
+   "type": "Variable",
+   "var": "variable"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      [
+       "a",
+       "b"
+      ],
+      [
+       "c",
+       "\\pi"
+      ]
+     ]
+    ],
+    "call": "Matrix",
+    "kwargs": {
+     "h_buff": 2.45,
+     "v_buff": 1.7
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#matrix",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#matrix"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#matrix"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#matrix"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#matrix"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#matrix"
+     }
+    }
+   ],
+   "type": "Matrix",
+   "var": "matrix"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      [
+       5,
+       6
+      ],
+      [
+       7,
+       8.5
+      ]
+     ]
+    ],
+    "call": "IntegerMatrix",
+    "kwargs": {
+     "h_buff": 2.45,
+     "v_buff": 1.7
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#int_matrix",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#int_matrix"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#int_matrix"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#int_matrix"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#int_matrix"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#int_matrix"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#int_matrix"
+     }
+    }
+   ],
+   "type": "IntegerMatrix",
+   "var": "int_matrix"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      [
+       5,
+       6
+      ],
+      [
+       7,
+       8.5
+      ]
+     ]
+    ],
+    "call": "DecimalMatrix",
+    "kwargs": {
+     "element_to_mobject_config": {
+      "dict": {
+       "num_decimal_places": 2
+      }
+     }
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dec_matrix",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#dec_matrix"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#dec_matrix"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dec_matrix"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#dec_matrix"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#dec_matrix"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#dec_matrix"
+     }
+    }
+   ],
+   "type": "DecimalMatrix",
+   "var": "dec_matrix"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      [
+       "a",
+       "b"
+      ],
+      [
+       "c",
+       "\\pi"
+      ]
+     ]
+    ],
+    "call": "Table",
+    "kwargs": {
+     "col_labels": [
+      {
+       "args": [
+        "A"
+       ],
+       "call": "Text"
+      },
+      {
+       "args": [
+        "B"
+       ],
+       "call": "Text"
+      }
+     ],
+     "include_outer_lines": true,
+     "row_labels": [
+      {
+       "args": [
+        "R1"
+       ],
+       "call": "Text"
+      },
+      {
+       "args": [
+        "R2"
+       ],
+       "call": "Text"
+      }
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#table",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#table"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#table"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#table"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#table"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#table"
+     }
+    }
+   ],
+   "type": "Table",
+   "var": "table"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      [
+       5,
+       6
+      ],
+      [
+       7,
+       8.5
+      ]
+     ]
+    ],
+    "call": "IntegerTable",
+    "kwargs": {
+     "col_labels": [
+      {
+       "args": [
+        "P"
+       ],
+       "call": "Text"
+      },
+      {
+       "args": [
+        "Q"
+       ],
+       "call": "Text"
+      }
+     ],
+     "include_outer_lines": true,
+     "row_labels": [
+      {
+       "args": [
+        "S"
+       ],
+       "call": "Text"
+      },
+      {
+       "args": [
+        "T"
+       ],
+       "call": "Text"
+      }
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#int_table",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#int_table"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#int_table"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#int_table"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#int_table"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#int_table"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#int_table"
+     }
+    }
+   ],
+   "type": "IntegerTable",
+   "var": "int_table"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      [
+       5,
+       6
+      ],
+      [
+       7,
+       8.5
+      ]
+     ]
+    ],
+    "call": "DecimalTable",
+    "kwargs": {
+     "col_labels": [
+      {
+       "args": [
+        "P"
+       ],
+       "call": "Text"
+      },
+      {
+       "args": [
+        "Q"
+       ],
+       "call": "Text"
+      }
+     ],
+     "element_to_mobject_config": {
+      "dict": {
+       "num_decimal_places": 3
+      }
+     },
+     "include_outer_lines": true,
+     "row_labels": [
+      {
+       "args": [
+        "S"
+       ],
+       "call": "Text"
+      },
+      {
+       "args": [
+        "T"
+       ],
+       "call": "Text"
+      }
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dec_table",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#dec_table"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#dec_table"
+     }
+    },
+    {
+     "args": [
+      [
+       4,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dec_table"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#dec_table"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#dec_table"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#dec_table"
+     }
+    }
+   ],
+   "type": "DecimalTable",
+   "var": "dec_table"
+  },
+  {
+   "call": {
+    "call": "NumberLine",
+    "kwargs": {
+     "include_numbers": true,
+     "include_tip": true,
+     "length": 15.5,
+     "x_range": [
+      -2,
+      3,
+      0.5
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#number_line",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#number_line"
+     }
+    },
+    {
+     "args": [
+      [
+       6,
+       -3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#number_line"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#number_line"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#number_line"
+     }
+    }
+   ],
+   "type": "NumberLine",
+   "var": "number_line"
+  },
+  {
+   "call": {
+    "call": "NumberPlane",
+    "kwargs": {
+     "x_range": [
+      -2,
+      3,
+      0.5
+     ],
+     "y_range": [
+      -2,
+      3,
+      0.5
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#plane",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#plane"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#plane"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#plane"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#plane"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#plane"
+     }
+    }
+   ],
+   "type": "NumberPlane",
+   "var": "plane"
+  },
+  {
+   "call": {
+    "call": "ComplexPlane",
+    "kwargs": {
+     "x_range": [
+      -2,
+      3,
+      0.5
+     ],
+     "y_range": [
+      -2,
+      3,
+      0.5
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#complex_plane",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#complex_plane"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#complex_plane"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#complex_plane"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#complex_plane"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#complex_plane"
+     }
+    }
+   ],
+   "type": "ComplexPlane",
+   "var": "complex_plane"
+  },
+  {
+   "call": {
+    "call": "PolarPlane",
+    "kwargs": {
+     "radius_max": 5,
+     "radius_step": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#polar_plane",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#polar_plane"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#polar_plane"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#polar_plane"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#polar_plane"
+     }
+    }
+   ],
+   "type": "PolarPlane",
+   "var": "polar_plane"
+  },
+  {
+   "call": {
+    "call": "Axes",
+    "kwargs": {
+     "axis_config": {
+      "dict": {
+       "include_numbers": true
+      }
+     },
+     "tips": false,
+     "x_length": 15.5,
+     "x_range": [
+      -2,
+      3,
+      0.5
+     ],
+     "y_length": 9.5,
+     "y_range": [
+      -2,
+      3,
+      0.5
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#axes",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#axes"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#axes"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#axes"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#axes"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#axes"
+     }
+    }
+   ],
+   "type": "Axes",
+   "var": "axes"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "body": {
+       "expr": {
+        "a": {
+         "a": {
+          "v": "x"
+         },
+         "b": 2.0,
+         "op": "**"
+        },
+        "b": 1.0,
+        "op": "-"
+       }
+      },
+      "lambda": [
+       "x"
+      ]
+     }
+    ],
+    "call": "FunctionGraph",
+    "kwargs": {
+     "x_range": [
+      -2,
+      3,
+      0.5
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#graph",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#graph"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#graph"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#graph"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#graph"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#graph"
+     }
+    }
+   ],
+   "type": "FunctionGraph",
+   "var": "graph"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "body": {
+       "args": [
+        [
+         {
+          "expr": {
+           "a": {
+            "args": [
+             {
+              "v": "t"
+             }
+            ],
+            "f": "cos"
+           },
+           "b": 0.5,
+           "op": "+"
+          }
+         },
+         {
+          "expr": {
+           "a": {
+            "args": [
+             {
+              "v": "t"
+             }
+            ],
+            "f": "cos"
+           },
+           "b": 0.5,
+           "op": "+"
+          }
+         },
+         0
+        ]
+       ],
+       "call": "np.array"
+      },
+      "lambda": [
+       "t"
+      ]
+     }
+    ],
+    "call": "ParametricFunction",
+    "kwargs": {
+     "t_range": [
+      -2,
+      3,
+      0.5
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#curve",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#curve"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#curve"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#curve"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#curve"
+     }
+    }
+   ],
+   "type": "ParametricFunction",
+   "var": "curve"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "body": {
+       "expr": {
+        "a": {
+         "a": {
+          "v": "x"
+         },
+         "b": {
+          "v": "y"
+         },
+         "op": "*"
+        },
+        "b": 1.0,
+        "op": "-"
+       }
+      },
+      "lambda": [
+       "x",
+       "y"
+      ]
+     }
+    ],
+    "call": "ImplicitFunction",
+    "kwargs": {
+     "x_range": [
+      -2,
+      3
+     ],
+     "y_range": [
+      -2,
+      3
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#implicit",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#implicit"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#implicit"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#implicit"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#implicit"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#implicit"
+     }
+    }
+   ],
+   "type": "ImplicitFunction",
+   "var": "implicit"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      1,
+      4,
+      2.5
+     ]
+    ],
+    "call": "BarChart",
+    "kwargs": {
+     "bar_names": [
+      "V",
+      "W",
+      "X"
+     ],
+     "x_length": 11,
+     "y_length": 6.5,
+     "y_range": [
+      -2,
+      3,
+      0.5
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#chart",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#chart"
+     }
+    },
+    {
+     "args": [
+      [
+       -6,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#chart"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#chart"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#chart"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#chart"
+     }
+    }
+   ],
+   "type": "BarChart",
+   "var": "chart"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "bind": {
+       "x": [
+        "p",
+        0
+       ],
+       "y": [
+        "p",
+        1
+       ]
+      },
+      "body": {
+       "args": [
+        [
+         {
+          "expr": {
+           "a": {
+            "a": {
+             "v": "x"
+            },
+            "b": {
+             "v": "y"
+            },
+            "op": "*"
+           },
+           "b": 1.0,
+           "op": "-"
+          }
+         },
+         {
+          "expr": {
+           "a": {
+            "a": {
+             "v": "x"
+            },
+            "b": {
+             "v": "y"
+            },
+            "op": "*"
+           },
+           "b": 1.0,
+           "op": "-"
+          }
+         },
+         0
+        ]
+       ],
+       "call": "np.array"
+      },
+      "lambda": [
+       "p"
+      ]
+     }
+    ],
+    "call": "ArrowVectorField",
+    "kwargs": {
+     "x_range": [
+      -2,
+      3,
+      0.5
+     ],
+     "y_range": [
+      -2,
+      3,
+      0.5
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#field",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#field"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#field"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#field"
+     }
+    }
+   ],
+   "type": "ArrowVectorField",
+   "var": "field"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ]
+    ],
+    "call": "Graph",
+    "kwargs": {
+     "labels": false,
+     "layout": "spring",
+     "layout_config": {
+      "dict": {
+       "seed": 2
+      }
+     },
+     "layout_scale": 3.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#graph_net",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#graph_net"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#graph_net"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#graph_net"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#graph_net"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#graph_net"
+     }
+    }
+   ],
+   "type": "Graph",
+   "var": "graph_net"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     [
+      [
+       0,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ]
+    ],
+    "call": "DiGraph",
+    "kwargs": {
+     "labels": false,
+     "layout": "spring",
+     "layout_config": {
+      "dict": {
+       "seed": 2
+      }
+     },
+     "layout_scale": 3.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#digraph",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#digraph"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#digraph"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#digraph"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#digraph"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#digraph"
+     }
+    }
+   ],
+   "type": "DiGraph",
+   "var": "digraph"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "asset": "sample-1a2b3c4d.png"
+     }
+    ],
+    "call": "ImageMobject",
+    "then": [
+     {
+      "args": [
+       5
+      ],
+      "call": "scale_to_fit_height"
+     }
+    ]
+   },
+   "deps": [],
+   "error": null,
+   "id": "#image",
+   "post": [
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#image"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#image"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#image"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#image"
+     }
+    }
+   ],
+   "type": "ImageMobject",
+   "var": "image"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "asset": "sample-5e6f7a8b.svg"
+     }
+    ],
+    "call": "SVGMobject",
+    "kwargs": {
+     "height": 5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#svg",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#svg"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#svg"
+     }
+    },
+    {
+     "args": [
+      [
+       4,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#svg"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#svg"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#svg"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#svg"
+     }
+    }
+   ],
+   "type": "SVGMobject",
+   "var": "svg"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "Brace",
+    "kwargs": {
+     "buff": 0.8,
+     "direction": [
+      -1.0,
+      1.0,
+      0.0
+     ]
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#brace",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#brace"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#brace"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#brace"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#brace"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#brace"
+     }
+    }
+   ],
+   "type": "Brace",
+   "var": "brace"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     },
+     "x"
+    ],
+    "call": "BraceLabel",
+    "kwargs": {
+     "brace_direction": [
+      -1.0,
+      1.0,
+      0.0
+     ],
+     "font_size": 54.5
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#brace_label",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#brace_label"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#brace_label"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#brace_label"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#brace_label"
+     }
+    }
+   ],
+   "type": "BraceLabel",
+   "var": "brace_label"
+  },
+  {
+   "call": {
+    "args": [
+     [
+      1.5,
+      -0.5,
+      0
+     ],
+     [
+      1.5,
+      -0.5,
+      0
+     ]
+    ],
+    "call": "BraceBetweenPoints",
+    "kwargs": {
+     "direction": [
+      -1.0,
+      1.0,
+      0.0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#brace_pts",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#brace_pts"
+     }
+    },
+    {
+     "args": [
+      0.5
+     ],
+     "call": "set_opacity",
+     "on": {
+      "ref": "#brace_pts"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#brace_pts"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#brace_pts"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#brace_pts"
+     }
+    }
+   ],
+   "type": "BraceBetweenPoints",
+   "var": "brace_pts"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "SurroundingRectangle",
+    "kwargs": {
+     "buff": 0.65,
+     "corner_radius": 0.5
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#box",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#box"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#box"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#box"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#box"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#box"
+     }
+    }
+   ],
+   "type": "SurroundingRectangle",
+   "var": "box"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "BackgroundRectangle",
+    "kwargs": {
+     "buff": 0.72
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#backdrop",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 2
+     },
+     "on": {
+      "ref": "#backdrop"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#backdrop"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#backdrop"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#backdrop"
+     }
+    }
+   ],
+   "type": "BackgroundRectangle",
+   "var": "backdrop"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "Underline",
+    "kwargs": {
+     "buff": 0.65
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#underline",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#underline"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#underline"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#underline"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#underline"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#underline"
+     }
+    }
+   ],
+   "type": "Underline",
+   "var": "underline"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "Cross",
+    "kwargs": {
+     "scale_factor": 2
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#cross",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#cross"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 8
+     },
+     "on": {
+      "ref": "#cross"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#cross"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#cross"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#cross"
+     }
+    }
+   ],
+   "type": "Cross",
+   "var": "cross"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "DashedVMobject",
+    "kwargs": {
+     "dashed_ratio": 0.95,
+     "num_dashes": 16
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#dashed_copy",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#dashed_copy"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#dashed_copy"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#dashed_copy"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#dashed_copy"
+     }
+    }
+   ],
+   "type": "DashedVMobject",
+   "var": "dashed_copy"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "TangentLine",
+    "kwargs": {
+     "alpha": 0.88,
+     "length": 5
+    }
+   },
+   "deps": [
+    "#square"
+   ],
+   "error": null,
+   "id": "#tangent",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#tangent"
+     }
+    },
+    {
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#tangent"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#tangent"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#tangent"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#tangent"
+     }
+    }
+   ],
+   "type": "TangentLine",
+   "var": "tangent"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     },
+     {
+      "ref": "#circle"
+     }
+    ],
+    "call": "VGroup"
+   },
+   "deps": [
+    "#square",
+    "#circle"
+   ],
+   "error": null,
+   "id": "#group",
+   "post": [
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#group"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#group"
+     }
+    },
+    {
+     "args": [
+      2
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#group"
+     }
+    }
+   ],
+   "type": "VGroup",
+   "var": "group"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     },
+     {
+      "ref": "#circle"
+     }
+    ],
+    "call": "Group"
+   },
+   "deps": [
+    "#square",
+    "#circle"
+   ],
+   "error": null,
+   "id": "#mixed_group",
+   "post": [
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#mixed_group"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#mixed_group"
+     }
+    }
+   ],
+   "type": "Group",
+   "var": "mixed_group"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#square"
+     },
+     {
+      "ref": "#square"
+     },
+     {
+      "ref": "#circle"
+     }
+    ],
+    "call": "Cutout"
+   },
+   "deps": [
+    "#square",
+    "#circle"
+   ],
+   "error": null,
+   "id": "#cutout",
+   "post": [
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_stroke",
+     "kwargs": {
+      "opacity": 0.5,
+      "width": 6
+     },
+     "on": {
+      "ref": "#cutout"
+     }
+    },
+    {
+     "args": [
+      "#83C167"
+     ],
+     "call": "set_fill",
+     "kwargs": {
+      "opacity": 0.5
+     },
+     "on": {
+      "ref": "#cutout"
+     }
+    },
+    {
+     "args": [
+      0.5235987755982988
+     ],
+     "call": "rotate",
+     "on": {
+      "ref": "#cutout"
+     }
+    },
+    {
+     "args": [
+      1.25
+     ],
+     "call": "scale",
+     "on": {
+      "ref": "#cutout"
+     }
+    },
+    {
+     "args": [
+      1
+     ],
+     "call": "set_z_index",
+     "on": {
+      "ref": "#cutout"
+     }
+    }
+   ],
+   "type": "Cutout",
+   "var": "cutout"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "Scene",
+  "moving_camera": false,
+  "name": "Objects",
+  "three_d": false
+ },
+ "screen_orders": [
+  [
+   "#circle_2",
+   "#square_2",
+   "#rect",
+   "#rrect",
+   "#triangle",
+   "#poly",
+   "#polygon",
+   "#polygram",
+   "#ellipse",
+   "#star",
+   "#dot",
+   "#mark",
+   "#label_dot",
+   "#ring",
+   "#sector",
+   "#ring_slice",
+   "#arc_poly",
+   "#arc",
+   "#arc_between",
+   "#curved_arrow",
+   "#curved_darrow",
+   "#elbow",
+   "#angle",
+   "#right_angle",
+   "#line",
+   "#arrow",
+   "#darrow",
+   "#dashed",
+   "#vector",
+   "#labeled_line",
+   "#labeled_arrow",
+   "#text",
+   "#markup",
+   "#eq",
+   "#tex",
+   "#title",
+   "#paragraph",
+   "#bullets",
+   "#code",
+   "#number",
+   "#integer",
+   "#variable",
+   "#matrix",
+   "#int_matrix",
+   "#dec_matrix",
+   "#table",
+   "#int_table",
+   "#dec_table",
+   "#number_line",
+   "#plane",
+   "#complex_plane",
+   "#polar_plane",
+   "#axes",
+   "#graph",
+   "#curve",
+   "#implicit",
+   "#chart",
+   "#field",
+   "#graph_net",
+   "#digraph",
+   "#image",
+   "#svg",
+   "#brace",
+   "#brace_label",
+   "#brace_pts",
+   "#box",
+   "#backdrop",
+   "#underline",
+   "#cross",
+   "#dashed_copy",
+   "#tangent",
+   "#group",
+   "#mixed_group",
+   "#cutout"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#circle_2",
+   "#square_2",
+   "#rect",
+   "#rrect",
+   "#triangle",
+   "#poly",
+   "#polygon",
+   "#polygram",
+   "#ellipse",
+   "#star",
+   "#dot",
+   "#mark",
+   "#label_dot",
+   "#ring",
+   "#sector",
+   "#ring_slice",
+   "#arc_poly",
+   "#arc",
+   "#arc_between",
+   "#curved_arrow",
+   "#curved_darrow",
+   "#elbow",
+   "#angle",
+   "#right_angle",
+   "#line",
+   "#arrow",
+   "#darrow",
+   "#dashed",
+   "#vector",
+   "#labeled_line",
+   "#labeled_arrow",
+   "#text",
+   "#markup",
+   "#eq",
+   "#tex",
+   "#title",
+   "#paragraph",
+   "#bullets",
+   "#code",
+   "#number",
+   "#integer",
+   "#variable",
+   "#matrix",
+   "#int_matrix",
+   "#dec_matrix",
+   "#table",
+   "#int_table",
+   "#dec_table",
+   "#number_line",
+   "#plane",
+   "#complex_plane",
+   "#polar_plane",
+   "#axes",
+   "#graph",
+   "#curve",
+   "#implicit",
+   "#chart",
+   "#field",
+   "#graph_net",
+   "#digraph",
+   "#image",
+   "#svg",
+   "#brace",
+   "#brace_label",
+   "#brace_pts",
+   "#box",
+   "#backdrop",
+   "#underline",
+   "#cross",
+   "#dashed_copy",
+   "#tangent",
+   "#group",
+   "#mixed_group",
+   "#cutout"
+  ]
+ ],
+ "setup": [],
+ "steps": [],
+ "version": 1
+}

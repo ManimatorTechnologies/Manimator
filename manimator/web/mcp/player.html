@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en" data-site="__MANIMATOR_SITE__">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manimator</title>
+<!-- What a customization's kit.js imports (server/kits.py); it runs in this page (see directEngine below). -->
+<script type="importmap">{"imports": {"manimator": "__MANIMATOR_SITE__/static/js/engine/kit-api.js"}}</script>
+<!-- The MCP App page (server/mcp.py): an AI chat shows it in a sandboxed frame and sends it the ShowAnimation
+     tool's result, a scene plan, which the browser engine (loaded from the site) plays. -->
+<style>
+  /* Colors and color scheme follow the chat's theme (data-theme). The chat's page declares its scheme, and a frame
+     whose scheme differs gets an opaque backdrop (white corners and a white bar in Claude's dark theme). */
+  :root {
+    color-scheme: light;
+    --text: var(--color-text-primary, #1f1e1d);
+    --muted: var(--color-text-secondary, #73726c);
+    --line: var(--color-border-primary, rgba(31, 30, 29, 0.15));
+    --hover: rgba(31, 30, 29, 0.07);
+    --track: rgba(31, 30, 29, 0.16);
+    --font: var(--font-sans, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif);
+    /* The explanation above the clip looks like Claude's own answer text. Claude.ai doesn't hand frames its serif, so
+       this is Gelasio (fonts/prose/, SIL OFL), the free serif whose pixels came closest to it, at the size that sets
+       it exactly as wide; the chat's own serif comes first if it ever gives one (applyContext). */
+    --prose-font: "Manimator Prose", Georgia, ui-serif, serif;
+    --prose: var(--color-text-primary, #1f1e1d);
+    --code-bg: rgba(31, 30, 29, 0.06);
+    --radius: 10px;
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --text: var(--color-text-primary, #c3c2b7);
+    --muted: var(--color-text-secondary, #898781);
+    --line: var(--color-border-primary, rgba(255, 255, 255, 0.12));
+    --hover: rgba(255, 255, 255, 0.08);
+    --track: rgba(255, 255, 255, 0.18);
+    --prose: #f0efec; /* Claude's answer text in its dark theme (a little softer than the chat's primary text) */
+    --code-bg: rgba(255, 255, 255, 0.08);
+  }
+  * { box-sizing: border-box; }
+  /* The chat makes the frame as tall as the page says (size-changed), so the page never scrolls: a scrollbar
+     would narrow the picture, change its height, and so on. */
+  html, body { margin: 0; padding: 0; overflow: hidden; background: transparent; color: var(--text);
+               font: 13px/1.4 var(--font); }
+  .app { display: flex; flex-direction: column; align-items: flex-start; width: 100%; }
+  /* The part of the explanation this clip illustrates (ShowAnimation's "text"), above the clip */
+  .prose { width: 100%; margin: 0 0 14px; color: var(--prose); font: 15.66px/22.4px var(--prose-font);
+           -webkit-font-smoothing: antialiased; overflow-wrap: anywhere; user-select: text; cursor: auto; }
+  .prose[hidden], .fullscreen .prose { display: none; }
+  .prose > :first-child { margin-top: 0; }
+  .prose > :last-child { margin-bottom: 0; }
+  .prose p { margin: 0 0 0.65em; }
+  .prose h2, .prose h3, .prose h4, .prose h5 { margin: 1em 0 0.4em; font-weight: 600; line-height: 1.3; }
+  .prose h2 { font-size: 1.5em; }
+  .prose h3 { font-size: 1.3em; }
+  .prose h4 { font-size: 1.12em; } /* ### (the chat's answer headings are a narrower bold than Gelasio's) */
+  .prose h5 { font-size: 1em; }
+  .prose ul, .prose ol { margin: 0 0 0.65em; padding-left: 2.17em; } /* as the chat indents its answer's lists */
+  .prose li { margin: 0.2em 0; }
+  .prose ol li::marker { color: var(--muted); }
+  .prose ul { list-style: none; }
+  .prose ul li { position: relative; }
+  .prose ul li::before { content: "•"; position: absolute; left: -1.85em; color: var(--prose); opacity: .75; } /* the chat's bullet sits near the edge */
+  .prose blockquote { margin: 0 0 0.65em; padding-left: 1em; border-left: 3px solid var(--line); color: var(--muted); }
+  .prose strong { font-weight: 600; }
+  .prose code { font: 0.875em/1 var(--font-mono, ui-monospace, "Cascadia Mono", Consolas, monospace);
+                background: var(--code-bg); padding: 0.12em 0.35em; border-radius: 4px; }
+  .prose pre { margin: 0 0 0.65em; padding: 10px 12px; background: var(--code-bg); border-radius: 8px; overflow: auto; }
+  .prose pre code { background: none; padding: 0; line-height: 1.45; }
+  .prose a { color: inherit; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+  .prose hr { border: 0; border-top: 1px solid var(--line); margin: 1em 0; }
+  .prose .m mjx-container { display: inline; }
+  .prose .m-display { display: block; margin: 0.4em 0 0.75em; text-align: center; overflow-x: auto; overflow-y: hidden; }
+  .prose .m-display mjx-container { display: inline-block; }
+  .prose .m-raw { font-family: var(--font-mono, ui-monospace, Consolas, monospace); font-size: 0.875em; color: var(--muted); }
+  .fullscreen, .fullscreen body { height: 100%; }
+  .fullscreen .app { height: 100%; align-items: center; justify-content: center; padding: 16px; }
+  .stage { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: var(--radius);
+           overflow: hidden; cursor: pointer; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity .25s; }
+  canvas.on { opacity: 1; }
+  .overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
+             justify-content: center; gap: 12px; padding: 24px; color: #b9b8b0; text-align: center; pointer-events: none; }
+  .overlay[hidden] { display: none; }
+  .spinner { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.18);
+             border-top-color: rgba(255, 255, 255, 0.75); animation: spin .9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .overlay .msg { max-width: 46ch; white-space: pre-line; }
+  .overlay.error .msg { text-align: left; font-size: 12px; color: #d6d5cd; max-height: 100%; overflow: auto; }
+  .big { width: 56px; height: 56px; border-radius: 50%; background: rgba(0, 0, 0, 0.55); display: grid;
+         place-items: center; color: #fff; }
+  .big svg { width: 26px; height: 26px; }
+  .bar { display: flex; align-items: center; gap: 4px; width: 100%; height: 40px; padding: 0 2px; }
+  .bar[hidden] { display: none; }
+  .btn { flex: none; width: 32px; height: 32px; border: 0; border-radius: 8px; background: none; color: var(--text);
+         display: grid; place-items: center; cursor: pointer; padding: 0; }
+  .btn:hover { background: var(--hover); }
+  .btn:focus-visible, input[type=range]:focus-visible { outline: 2px solid #3b82f6; outline-offset: 1px; }
+  .btn svg { width: 18px; height: 18px; display: block; }
+  .btn.text { width: auto; padding: 0 10px; font: 500 12.5px var(--font); white-space: nowrap; }
+  .btn[hidden] { display: none; }
+  .time { flex: none; min-width: 74px; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums;
+          font-size: 12px; padding: 0 6px; }
+  input[type=range] { flex: 1; min-width: 40px; height: 32px; margin: 0 6px; background: none; cursor: pointer;
+                      -webkit-appearance: none; appearance: none; --p: 0%; }
+  input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px;
+    background: linear-gradient(to right, var(--text) var(--p), var(--track) var(--p)); }
+  input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; background: var(--track); }
+  input[type=range]::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--text); }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; margin-top: -4px;
+    border-radius: 50%; background: var(--text); border: 0; }
+  input[type=range]::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: var(--text); border: 0; }
+  .notes { width: 100%; padding: 0 8px 4px; color: var(--muted); font-size: 12px; }
+  .notes[hidden] { display: none; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="prose" hidden></div>
+  <div class="stage" role="img" aria-label="Animation">
+    <canvas></canvas>
+    <div class="overlay"><div class="spinner"></div><div class="msg">Loading</div></div>
+  </div>
+  <div class="bar" hidden>
+    <button class="btn play" type="button" aria-label="Play"></button>
+    <input class="seek" type="range" min="0" max="1" step="0.01" value="0" aria-label="Seek">
+    <span class="time">0:00 / 0:00</span>
+    <button class="btn text open" type="button" hidden>Open in Manimator</button>
+    <button class="btn full" type="button" aria-label="Full screen" hidden></button>
+  </div>
+  <div class="notes" hidden></div>
+</div>
+<script type="module">
+const root = document.documentElement;
+const SITE = root.dataset.site.startsWith("http") ? root.dataset.site : location.origin;
+const $ = (s) => document.querySelector(s);
+const stage = $(".stage"), canvas = $("canvas"), overlay = $(".overlay"), bar = $(".bar");
+const playBtn = $(".play"), seek = $(".seek"), timeLabel = $(".time"), fullBtn = $(".full"), notes = $(".notes");
+const openBtn = $(".open"), prose = $(".prose");
+const FRAME = { x: 64 / 9, y: 4 }; // half the frame, in scene units
+
+const ICONS = {
+  play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>',
+  pause: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>',
+  replay: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>',
+  full: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
+  exit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>',
+};
+
+// ------------------------------------------------------------------ talking to the chat (MCP Apps, JSON-RPC)
+let nextId = 1;
+const waiting = new Map();
+function send(msg) { window.parent.postMessage({ jsonrpc: "2.0", ...msg }, "*"); }
+function request(method, params = {}) {
+  const id = nextId++;
+  send({ id, method, params });
+  return new Promise((resolve, reject) => waiting.set(id, { resolve, reject }));
+}
+const notify = (method, params = {}) => send({ method, params });
+
+const handlers = {
+  "ui/notifications/tool-input-partial": ({ arguments: a } = {}) => { showText(a?.text); if (!plan) writing(a); },
+  "ui/notifications/tool-input": ({ arguments: a } = {}) => { input = a || {}; showText(input.text); if (!plan) writing(a); },
+  "ui/notifications/tool-result": (result) => received(result),
+  "ui/notifications/tool-cancelled": () => { if (!plan) message("The animation was cancelled."); },
+  "ui/notifications/host-context-changed": (ctx) => applyContext(ctx),
+};
+const requests = {
+  "ui/resource-teardown": () => { engine?.dispose(); return {}; },
+  "ping": () => ({}),
+};
+
+window.addEventListener("message", (event) => {
+  if (event.source !== window.parent) return;
+  const m = event.data;
+  if (!m || m.jsonrpc !== "2.0") return;
+  if (m.method === undefined) { // an answer
+    const w = waiting.get(m.id);
+    if (!w) return;
+    waiting.delete(m.id);
+    if (m.error) w.reject(new Error(m.error.message)); else w.resolve(m.result);
+    return;
+  }
+  if (m.id !== undefined) { // the chat asks something
+    const fn = requests[m.method];
+    Promise.resolve(fn ? fn(m.params) : Promise.reject(new Error("unknown method")))
+      .then((result) => send({ id: m.id, result }), (e) => send({ id: m.id, error: { code: -32601, message: String(e.message) } }));
+    return;
+  }
+  try { handlers[m.method]?.(m.params); } catch (e) { console.error(e); }
+});
+
+// ------------------------------------------------------------------ the chat's look and the space it gives
+let context = {};
+function applyContext(ctx = {}) {
+  context = { ...context, ...ctx };
+  if (context.theme) root.dataset.theme = context.theme;
+  for (const [name, value] of Object.entries(context.styles?.variables || {})) {
+    if (value) root.style.setProperty(name, value);
+  }
+  const fonts = context.styles?.css?.fonts;
+  if (fonts && !document.getElementById("host-fonts")) {
+    const style = document.createElement("style");
+    style.id = "host-fonts";
+    style.textContent = fonts;
+    document.head.append(style);
+    // the chat's answer text is in its serif, when it has one: the explanation above the clip uses it too
+    const serif = hostFamilies().find((f) => /serif/i.test(f) && !/sans/i.test(f));
+    if (serif) root.style.setProperty("--prose-font", `"${serif}", "Manimator Prose", Georgia, serif`);
+  }
+  const modes = context.availableDisplayModes || [];
+  fullBtn.hidden = !modes.includes("fullscreen");
+  const full = context.displayMode === "fullscreen";
+  root.classList.toggle("fullscreen", full);
+  fullBtn.innerHTML = full ? ICONS.exit : ICONS.full;
+  fullBtn.setAttribute("aria-label", full ? "Exit full screen" : "Full screen");
+  layout();
+}
+
+/** The picture is 16:9: in the chat at most INLINE_WIDTH wide (full screen makes it bigger), in full screen as
+ *  large as the window allows. */
+const INLINE_WIDTH = 560;
+function layout() {
+  const full = root.classList.contains("fullscreen");
+  const dims = context.containerDimensions || {};
+  const room = full ? window.innerHeight - 32 : (dims.height ?? dims.maxHeight ?? Infinity);
+  const below = (bar.hidden ? 0 : 40) + (notes.hidden ? 0 : notes.offsetHeight);
+  const across = full ? document.body.clientWidth - 32 : Math.min(document.body.clientWidth, INLINE_WIDTH);
+  const width = Math.min(across, (room - below) * 16 / 9);
+  stage.style.width = Number.isFinite(width) && width > 0 ? `${Math.floor(width)}px` : "100%";
+  bar.style.width = stage.style.width;
+  notes.style.width = stage.style.width;
+  if (engine && plan) {
+    const r = stage.getBoundingClientRect();
+    const k = Math.min(window.devicePixelRatio || 1, 2, 1920 / Math.max(1, r.width));
+    engine.resize(Math.max(1, Math.round(r.width * k)), Math.max(1, Math.round(r.height * k)));
+    if (!engine.playing) engine.renderAt(position);
+  }
+}
+
+let lastHeight = -1;
+function reportSize() {
+  if (root.classList.contains("fullscreen")) return; // the chat gives the whole window
+  const height = Math.ceil(document.querySelector(".app").getBoundingClientRect().height);
+  if (height !== lastHeight) {
+    lastHeight = height;
+    notify("ui/notifications/size-changed", { width: Math.ceil(window.innerWidth), height });
+  }
+}
+let resizeFrame = 0;
+new ResizeObserver(() => {
+  cancelAnimationFrame(resizeFrame);
+  resizeFrame = requestAnimationFrame(() => { layout(); reportSize(); });
+}).observe(document.body);
+
+// ------------------------------------------------------------------ what the frame shows
+function message(text, { spinner = false, error = false } = {}) {
+  overlay.hidden = false;
+  overlay.classList.toggle("error", error);
+  overlay.innerHTML = "";
+  if (spinner) overlay.append(Object.assign(document.createElement("div"), { className: "spinner" }));
+  overlay.append(Object.assign(document.createElement("div"), { className: "msg", textContent: text }));
+}
+
+function writing(args = {}) {
+  const n = Array.isArray(args?.objects) ? args.objects.length : 0;
+  const s = Array.isArray(args?.steps) ? args.steps.length : 0;
+  const what = n || s ? `${n} object${n === 1 ? "" : "s"}, ${s} step${s === 1 ? "" : "s"}` : "";
+  message(what ? `Writing the animation: ${what}` : "Writing the animation", { spinner: true });
+  if (args?.title) stage.setAttribute("aria-label", String(args.title));
+}
+
+function bigButton(icon) {
+  overlay.hidden = false;
+  overlay.classList.remove("error");
+  overlay.innerHTML = `<div class="big">${ICONS[icon]}</div>`;
+}
+
+// ------------------------------------------------------------------ the explanation above the clip
+// ShowAnimation's "text": Markdown with TeX math, as Claude writes its answers. It streams in while Claude writes
+// the call (tool-input-partial), so it shows before the clip is made. Everything is escaped; only the tags made
+// here and MathJax's SVG (TeX packages base, ams, newcommand, configmacros: no links or HTML) reach the page.
+const escapeHtml = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const MATH = /\$\$([\s\S]+?)\$\$|\\\[([\s\S]+?)\\\]|\\\(([\s\S]+?)\\\)|(?<![\\$\w])\$(?=\S)((?:\\.|[^$\\\n])+?)(?<=\S)\$(?![\w$])/g;
+
+function inline(text, maths) {
+  let t = escapeHtml(text);
+  const codes = [];
+  t = t.replace(/`([^`]+)`/g, (_, c) => `\u0001${codes.push(c) - 1}\u0001`);
+  t = t.replace(/\*\*(?=\S)([\s\S]*?\S)\*\*|__(?=\S)([\s\S]*?\S)__/g, (_, a, b) => `<strong>${a ?? b}</strong>`);
+  t = t.replace(/(?<![*\w])\*(?=\S)([^*]*?\S)\*(?![*\w])|(?<![_\w])_(?=\S)([^_]*?\S)_(?![_\w])/g, (_, a, b) => `<em>${a ?? b}</em>`);
+  t = t.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, label, url) => `<a data-href="${url}">${label}</a>`);
+  t = t.replace(/\u0001(\d+)\u0001/g, (_, i) => `<code>${codes[i]}</code>`);
+  return t.replace(/\u0000(\d+)\u0000/g, (_, i) => `<span class="m${maths[i].display ? " m-display" : ""}" data-m="${i}"></span>`);
+}
+
+function markdown(src) {
+  const maths = [];
+  const text = String(src).replace(/\r\n?/g, "\n").replace(MATH, (_, dd, sq, rd, d) => {
+    const display = dd !== undefined || sq !== undefined;
+    return `\u0000${maths.push({ tex: (dd ?? sq ?? rd ?? d).trim(), display }) - 1}\u0000`;
+  });
+  const out = [];
+  let para = [], list = null, quote = [];
+  const flushPara = () => { if (para.length) out.push(`<p>${inline(para.join(" "), maths)}</p>`); para = []; };
+  const flushList = () => { if (list) out.push(`<${list.tag}>${list.items.map((i) => `<li>${inline(i, maths)}</li>`).join("")}</${list.tag}>`); list = null; };
+  const flushQuote = () => { if (quote.length) out.push(`<blockquote>${inline(quote.join(" "), maths)}</blockquote>`); quote = []; };
+  const flush = () => { flushPara(); flushList(); flushQuote(); };
+  const lines = text.split("\n");
+  for (let k = 0; k < lines.length; k += 1) {
+    const line = lines[k];
+    if (/^\s*```/.test(line)) { // a code block, to its closing fence
+      flush();
+      const code = [];
+      for (k += 1; k < lines.length && !/^\s*```/.test(lines[k]); k += 1) code.push(lines[k]);
+      out.push(`<pre><code>${escapeHtml(code.join("\n").replace(/\u0000(\d+)\u0000/g, (_, i) => (maths[i].display ? `$$${maths[i].tex}$$` : `$${maths[i].tex}$`)))}</code></pre>`);
+      continue;
+    }
+    if (!line.trim()) { flush(); continue; }
+    let m;
+    if ((m = /^\s*(#{1,6})\s+(.*)$/.exec(line))) {
+      flush();
+      const level = Math.min(5, m[1].length + 1); // # h2 ... #### h5, as the chat sizes its answer's headings
+      out.push(`<h${level}>${inline(m[2].replace(/\s+#+\s*$/, ""), maths)}</h${level}>`);
+    } else if (/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(line)) {
+      flush();
+      out.push("<hr>");
+    } else if ((m = /^\s*([-*+]|\d+[.)])\s+(.*)$/.exec(line))) {
+      flushPara(); flushQuote();
+      const tag = /\d/.test(m[1]) ? "ol" : "ul";
+      if (list && list.tag !== tag) flushList();
+      list ??= { tag, items: [] };
+      list.items.push(m[2]);
+    } else if ((m = /^\s*>\s?(.*)$/.exec(line))) {
+      flushPara(); flushList();
+      quote.push(m[1]);
+    } else if (list && /^\s+\S/.test(line)) {
+      list.items[list.items.length - 1] += ` ${line.trim()}`;
+    } else {
+      flushList(); flushQuote();
+      para.push(line.trim());
+    }
+  }
+  flush();
+  return { html: out.join(""), maths };
+}
+
+let tex = null; // the engine's MathJax (TeX to SVG), loaded with the first formula
+const texCache = new Map();
+function texSvg(source, display) {
+  const key = `${display ? "D" : "I"}${source}`;
+  if (!texCache.has(key)) {
+    tex ??= import(`${SITE}/static/js/engine/mw/mathjax.js`);
+    texCache.set(key, tex.then((m) => m.texToSvg(source, { display })));
+  }
+  return texCache.get(key);
+}
+
+let shownText = null, textTimer = 0, pendingText = null;
+/** Shows the explanation (now while it streams in, at most every 120 ms; at once when `final`). */
+function showText(text, final = false) {
+  if (typeof text !== "string") return;
+  pendingText = text;
+  if (final) { clearTimeout(textTimer); textTimer = 0; renderText(); return; }
+  if (!textTimer) textTimer = setTimeout(() => { textTimer = 0; renderText(); }, 120);
+}
+function renderText() {
+  const text = (pendingText ?? "").trim();
+  if (text === shownText) return;
+  shownText = text;
+  prose.hidden = !text;
+  const { html, maths } = markdown(text);
+  prose.innerHTML = html;
+  for (const el of prose.querySelectorAll(".m")) {
+    const math = maths[Number(el.dataset.m)];
+    el.textContent = math.display ? `$$${math.tex}$$` : `$${math.tex}$`; // until MathJax has drawn it
+    el.classList.add("m-raw");
+    texSvg(math.tex, math.display).then((svg) => {
+      if (!el.isConnected) return;
+      el.classList.remove("m-raw");
+      el.innerHTML = svg;
+      reportSize();
+    }, () => {}); // a formula MathJax can't read stays as its TeX
+  }
+  reportSize();
+}
+prose.addEventListener("click", (e) => {
+  const a = e.target.closest?.("a[data-href]");
+  if (a) request("ui/open-link", { url: a.dataset.href }).catch(() => {});
+});
+
+const PROSE_FACES = [["latin", "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, "
+  + "U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"],
+  ["latin-ext", "U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, "
+  + "U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF"]];
+document.head.append(Object.assign(document.createElement("style"), { textContent: PROSE_FACES.flatMap(([subset, range]) =>
+  [400, 600].flatMap((weight) => ["normal", "italic"].map((style) => `@font-face { font-family: "Manimator Prose"; `
+    + `font-weight: ${weight}; font-style: ${style}; font-display: swap; unicode-range: ${range}; `
+    + `src: url("${SITE}/static/fonts/prose/gelasio-${subset}-${weight}-${style}.woff2") format("woff2"); }`))).join("\n") }));
+
+/** The font families the chat hands the page (its @font-face rules). */
+function hostFamilies() {
+  const css = String(context.styles?.css?.fonts || "");
+  return [...new Set([...css.matchAll(/font-family:\s*["']?([^;"'}]+?)["']?\s*[;}]/g)].map((m) => m[1].trim()))];
+}
+
+/** Tells the site, once, which fonts and font variables the chat gives (style names and values only), so the text
+ *  above the clip can be matched to the chat's own. */
+let styleReported = false;
+function reportStyle() {
+  if (styleReported) return;
+  styleReported = true;
+  try {
+    const vars = context.styles?.variables || {};
+    const font = Object.fromEntries(Object.entries(vars).filter(([k]) => /font|line-height|text-.*size/.test(k)));
+    const info = { theme: context.theme, platform: context.platform, families: hostFamilies().slice(0, 12),
+      variables: Object.keys(vars).length, font,
+      prose: getComputedStyle(prose).fontFamily.slice(0, 120), width: Math.round(document.body.clientWidth) };
+    new Image().src = `${SITE}/mcp/style?s=${encodeURIComponent(JSON.stringify(info).slice(0, 1400))}`;
+  } catch { /* only a diagnostic */ }
+}
+
+// ------------------------------------------------------------------ the engine
+let engine = null, plan = null, input = {}, position = 0, autoplay = true;
+const engineReady = import(`${SITE}/static/js/engine/index.js`)
+  .then(({ createEngine }) => createEngine({ canvas, fontsUrl: `${SITE}/static/fonts` }));
+engineReady.catch(() => {});
+
+/** A package's kit.js as a module: from a blob: address, else a data: one, else the site by its sha256
+ *  (/mcp/kit-js/), whichever the chat's policy lets run. */
+async function importKit(text, sha) {
+  const url = URL.createObjectURL(new Blob([text], { type: "text/javascript" }));
+  try {
+    return await import(url);
+  } catch {
+    try {
+      return await import(`data:text/javascript;charset=utf-8,${encodeURIComponent(text)}`);
+    } catch {
+      return import(`${SITE}/mcp/kit-js/${sha}.js`);
+    }
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+/** The engine for a scene with customizations (server/kits.py). Their code runs right in this page, beside the
+ *  chat connection: the chat allows no nested frame for the site's sandbox (it blocked every one), and the owner
+ *  chose this, as they write or review every package (the public gallery is reviewed before it lists one). Their
+ *  code comes with the scene (`sources`). */
+async function directEngine(kits, sources) {
+  const [{ registerKitClass }, { createEngine }] = await Promise.all([
+    import(`${SITE}/static/js/engine/kits.js`), import(`${SITE}/static/js/engine/index.js`)]);
+  let replaced = false;
+  for (const kit of kits) {
+    const text = sources?.[kit.type];
+    if (typeof text !== "string") throw new Error(`${kit.class}: its code didn't arrive`);
+    let mod;
+    try {
+      mod = await importKit(text, kit.js_sha256);
+    } catch (e) {
+      throw new Error(`${kit.class}: kit.js failed to load (${e?.message ?? e})`);
+    }
+    replaced = registerKitClass(kit, mod.default) || replaced;
+  }
+  // Objects built under a class name that now means another package are stale: a fresh engine then.
+  return replaced ? createEngine({ canvas, fontsUrl: `${SITE}/static/fonts` }) : engineReady;
+}
+const kitBeacon = (s) => { new Image().src = `${SITE}/mcp/kit-frame?s=${s}`; };
+
+const clock = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
+function showTime(t) {
+  position = t;
+  const d = engine?.duration || 0;
+  seek.value = String(t);
+  seek.style.setProperty("--p", `${d ? (100 * t) / d : 0}%`);
+  timeLabel.textContent = `${clock(t)} / ${clock(d)}`;
+}
+function setIcon() {
+  const ended = engine && !engine.playing && position >= engine.duration - 1e-6;
+  const icon = engine?.playing ? "pause" : ended ? "replay" : "play";
+  playBtn.innerHTML = ICONS[icon];
+  playBtn.setAttribute("aria-label", icon[0].toUpperCase() + icon.slice(1));
+  // A big button only before the first play: after that the picture stays clear (the bar has the controls).
+  if (plan && !engine?.playing && position === 0) bigButton("play");
+  else overlay.hidden = true;
+}
+function play(from = position) {
+  if (!engine || !plan) return;
+  engine.play(from >= engine.duration - 1e-6 ? 0 : from, (t, ended) => {
+    showTime(t);
+    if (ended) setIcon();
+  });
+  setIcon();
+}
+function pause() {
+  engine?.stop();
+  setIcon();
+}
+const toggle = () => (engine?.playing ? pause() : play());
+
+async function received(result) {
+  if (typeof result?.structuredContent?.text === "string") showText(result.structuredContent.text, true);
+  if (result?.isError) {
+    const text = (result.content || []).filter((c) => c.type === "text").map((c) => c.text).join("\n");
+    message(text || "The animation couldn't be made.", { error: true });
+    return;
+  }
+  const next = result?.structuredContent?.plan;
+  if (!next) { message("This message has no animation in it.", { error: true }); return; }
+  plan = next;
+  stage.setAttribute("aria-label", result.structuredContent.title || input.title || "Animation");
+  const openUrl = result.structuredContent.open_url; // a project saved in the account (the User MCP)
+  if (typeof openUrl === "string" && openUrl.startsWith(`${SITE}/`)) {
+    openBtn.hidden = false;
+    openBtn.onclick = () => request("ui/open-link", { url: openUrl }).catch(() => {});
+  }
+  message("Loading", { spinner: true });
+  try {
+    engine = plan.kits?.length ? await directEngine(plan.kits, result.structuredContent.kits) : await engineReady;
+    const shown = await engine.show(plan);
+    if (plan.kits?.length) kitBeacon("ok");
+    await engine.prepare(); // formulas the video makes as it plays
+    bar.hidden = false;
+    seek.max = String(engine.duration);
+    showTime(0);
+    layout();
+    engine.renderAt(0);
+    canvas.classList.add("on");
+    tell(shown);
+    setIcon();
+    whenVisible(() => { if (autoplay && !matchMedia("(prefers-reduced-motion: reduce)").matches) play(0); });
+  } catch (e) {
+    console.error(e);
+    if (plan.kits?.length) kitBeacon("failed");
+    message(`The player couldn't start: ${e?.message || e}`, { error: true });
+  }
+}
+
+/** Problems the assistant can fix next time (it can't see the picture): objects that couldn't be drawn, or that
+ *  start out partly outside the frame. Shown under the video and handed to the chat as context. */
+function tell(shown) {
+  const names = new Map((plan.objects || []).map((o) => [o.id, o.var]));
+  const lines = [];
+  for (const [id, err] of Object.entries(shown?.errors || {})) lines.push(`${names.get(id) || id} couldn't be drawn: ${err}`);
+  if (shown?.scene_error) lines.push(`the scene couldn't be set up: ${shown.scene_error}`);
+  if (!plan.scene?.moving_camera && !plan.scene?.three_d) { // where each object is first shown (or made)
+    for (const [id, [x0, y0, x1, y1]] of Object.entries(shown?.boxes || {})) {
+      const out = x0 < -FRAME.x - 0.02 || x1 > FRAME.x + 0.02 || y0 < -FRAME.y - 0.02 || y1 > FRAME.y + 0.02;
+      if (out) lines.push(`${names.get(id) || id} goes outside the frame (x ${x0.toFixed(2)} to ${x1.toFixed(2)}, y ${y0.toFixed(2)} to ${y1.toFixed(2)})`);
+    }
+  }
+  const drawErrors = Object.keys(shown?.errors || {}).length + (shown?.scene_error ? 1 : 0);
+  if (drawErrors) {
+    notes.textContent = lines.slice(0, drawErrors).join(" · ");
+    notes.hidden = false;
+    layout();
+  }
+  if (lines.length) {
+    request("ui/update-model-context", { content: [{ type: "text",
+      text: `Manimator player notes on the animation it is showing:\n- ${lines.join("\n- ")}` }] }).catch(() => {});
+  }
+}
+
+function whenVisible(fn) {
+  const io = new IntersectionObserver((entries) => {
+    if (entries.some((e) => e.isIntersecting)) { io.disconnect(); fn(); }
+  }, { threshold: 0.5 });
+  io.observe(stage);
+}
+
+// ------------------------------------------------------------------ controls
+playBtn.innerHTML = ICONS.play;
+fullBtn.innerHTML = ICONS.full;
+stage.addEventListener("click", () => { if (engine && plan) { autoplay = false; toggle(); } });
+playBtn.addEventListener("click", () => { autoplay = false; toggle(); });
+let resume = false;
+seek.addEventListener("input", () => {
+  if (!engine || !plan) return;
+  autoplay = false;
+  if (engine.playing) { resume = true; engine.stop(); }
+  const t = Number(seek.value);
+  engine.renderAt(t);
+  showTime(t);
+  setIcon();
+});
+seek.addEventListener("change", () => { if (resume) { resume = false; play(Number(seek.value)); } });
+document.addEventListener("keydown", (e) => {
+  if (!engine || !plan || e.target === seek && e.key !== " ") return;
+  if (e.key === " " || e.key === "k") { e.preventDefault(); autoplay = false; toggle(); }
+});
+fullBtn.addEventListener("click", async () => {
+  const want = context.displayMode === "fullscreen" ? "inline" : "fullscreen";
+  try {
+    const { mode } = await request("ui/request-display-mode", { mode: want });
+    applyContext({ displayMode: mode });
+  } catch { /* the chat said no */ }
+});
+
+// ------------------------------------------------------------------ start
+(async () => {
+  try {
+    const init = await request("ui/initialize", {
+      protocolVersion: "2026-01-26",
+      appInfo: { name: "Manimator", version: "1.0.0" },
+      appCapabilities: { availableDisplayModes: ["inline", "fullscreen"] },
+    });
+    applyContext(init?.hostContext || {});
+    notify("ui/notifications/initialized");
+    reportStyle();
+  } catch (e) {
+    console.warn("Manimator: no chat to talk to", e);
+  }
+  reportSize();
+  engineReady.catch((e) => { if (!plan) message(`The player couldn't load from ${SITE}: ${e?.message || e}`, { error: true }); });
+})();
+</script>
+</body>
+</html>

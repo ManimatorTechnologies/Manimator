@@ -1,0 +1,15 @@
+{
+  "manimkit": 1,
+  "name": "Pop in",
+  "kind": "animation",
+  "class": "PopIn",
+  "version": "1.0",
+  "description": "Grow from nothing, a little past full size, and settle",
+  "license": "MIT",
+  "introducer": true,
+  "run_time": 0.8,
+  "params": [
+    {"name": "bounce", "kind": "float", "default": 1.7, "min": 0, "max": 5, "step": 0.1, "label": "Bounce",
+     "tooltip": "How far past full size it goes (0: none)"}
+  ]
+}

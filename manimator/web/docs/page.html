@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{title}} · Manimator Docs</title>
+  <meta name="description" content="{{lead}}">
+  <meta name="theme-color" content="#111111">
+  <link rel="icon" href="/static/favicon/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/static/favicon/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/static/favicon/apple-touch-icon.png">
+  <link rel="preload" href="/static/fonts/geist/Geist-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="/static/fonts/geist/Geist-Bold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="/static/docs/docs.css">
+  <script type="module" src="/static/landing/center.js" blocking="render"></script>
+  <script type="module" src="/static/docs/docs.js"></script>
+</head>
+<body>
+  <header class="d-top">
+    <div class="d-crumbs">
+      <a class="d-brand" href="/?home">Manimator</a><span class="d-slash" aria-hidden="true">/</span><a class="d-section" href="/docs">Docs</a>
+    </div>
+    <nav class="d-account" aria-label="App">
+      <a class="lp-btn d-btn primary" href="/app"><span>Open Manimator</span></a>
+    </nav>
+  </header>
+  <div class="d-bar">
+    <button class="d-menu" type="button" aria-controls="d-side" aria-expanded="false">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11" /></svg>
+      <span>Menu</span>
+    </button>
+    <span class="d-bar-title">{{title}}</span>
+  </div>
+
+  <div class="d-body">
+    <aside class="d-side" id="d-side">
+      <label class="d-search">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.75" /><path d="M10.5 10.5l3 3" /></svg>
+        <input type="search" placeholder="Search docs" aria-label="Search docs" autocomplete="off" spellcheck="false">
+        <kbd>Ctrl K</kbd>
+      </label>
+      <div class="d-results" role="listbox" aria-label="Search results" hidden></div>
+      <nav class="d-nav" aria-label="Docs">
+{{nav}}
+      </nav>
+    </aside>
+
+    <main class="d-main">
+      <article class="d-article">
+        <h1>{{title}}</h1>
+        <p class="d-lead">{{lead}}</p>
+{{content}}
+      </article>
+      <nav class="d-pager" aria-label="Previous and next pages">
+{{pager}}
+      </nav>
+      <footer class="d-foot">
+        <span>Manimator</span>
+        <nav aria-label="Site">
+          <a href="/docs">Docs</a><a href="/app">App</a>
+        </nav>
+      </footer>
+    </main>
+
+    <aside class="d-toc" aria-label="On this page">
+      <p class="d-toc-title">On this page</p>
+      <ul>
+{{toc}}
+      </ul>
+    </aside>
+  </div>
+
+</body>
+</html>

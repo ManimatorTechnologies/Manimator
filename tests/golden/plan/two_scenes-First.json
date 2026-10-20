@@ -1,0 +1,114 @@
+{
+ "add": [],
+ "background": "#000000",
+ "duration": 1.0,
+ "layout": {
+  "fixed": {},
+  "hidden": [
+   "#dot"
+  ],
+  "order": [
+   "#dot"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Dot",
+    "kwargs": {
+     "radius": 0.1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dot",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      [
+       1,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dot"
+     }
+    }
+   ],
+   "type": "Dot",
+   "var": "dot"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "Scene",
+  "moving_camera": false,
+  "name": "First",
+  "three_d": false
+ },
+ "screen_orders": [
+  [],
+  [
+   "#dot"
+  ]
+ ],
+ "screen_states": [
+  [],
+  [
+   "#dot"
+  ]
+ ],
+ "setup": [],
+ "steps": [
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#dot"
+         }
+        ],
+        "call": "Create"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "version": 1
+}

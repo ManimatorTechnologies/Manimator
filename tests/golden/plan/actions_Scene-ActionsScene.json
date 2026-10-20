@@ -1,0 +1,224 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#circle"
+     },
+     {
+      "ref": "#vector"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 1.0,
+ "layout": {
+  "fixed": {},
+  "hidden": [
+   "#eq"
+  ],
+  "order": [
+   "#circle",
+   "#vector",
+   "#eq"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle"
+  },
+  {
+   "call": {
+    "call": "Vector",
+    "kwargs": {
+     "direction": [
+      2.0,
+      1.0,
+      0.0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#vector",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#vector"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#vector"
+     }
+    }
+   ],
+   "type": "Vector",
+   "var": "vector"
+  },
+  {
+   "call": {
+    "args": [
+     "e^{i\\pi} + 1 = 0"
+    ],
+    "call": "MathTex",
+    "kwargs": {
+     "font_size": 48
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#eq",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#eq"
+     }
+    },
+    {
+     "args": [
+      [
+       -3,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#eq"
+     }
+    }
+   ],
+   "type": "MathTex",
+   "var": "eq"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "Scene",
+  "moving_camera": false,
+  "name": "ActionsScene",
+  "three_d": false
+ },
+ "screen_orders": [
+  [
+   "#circle",
+   "#vector"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#circle",
+   "#vector"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ]
+ ],
+ "setup": [],
+ "steps": [
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#eq"
+         }
+        ],
+        "call": "Write"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "version": 1
+}

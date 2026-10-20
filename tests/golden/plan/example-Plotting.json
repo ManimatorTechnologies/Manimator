@@ -1,0 +1,252 @@
+{
+ "add": [],
+ "background": "#000000",
+ "duration": 4.0,
+ "layout": {
+  "fixed": {},
+  "hidden": [
+   "#axes",
+   "#dot"
+  ],
+  "order": [
+   "#axes",
+   "#dot"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Axes",
+    "kwargs": {
+     "axis_config": {
+      "dict": {
+       "include_numbers": true
+      }
+     },
+     "x_length": 10,
+     "x_range": [
+      -5,
+      5,
+      1
+     ],
+     "y_length": 6,
+     "y_range": [
+      -3,
+      3,
+      1
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#axes",
+   "post": [
+    {
+     "args": [
+      [
+       0,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#axes"
+     }
+    }
+   ],
+   "type": "Axes",
+   "var": "axes"
+  },
+  {
+   "call": {
+    "call": "Dot",
+    "kwargs": {
+     "radius": 0.1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dot",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      "#FFFF00"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dot"
+     }
+    }
+   ],
+   "type": "Dot",
+   "var": "dot"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "Scene",
+  "moving_camera": false,
+  "name": "Plotting",
+  "three_d": false
+ },
+ "screen_orders": [
+  [],
+  [
+   "#axes"
+  ],
+  [
+   "#axes",
+   "#dot"
+  ],
+  [
+   "#axes",
+   "#dot"
+  ]
+ ],
+ "screen_states": [
+  [],
+  [
+   "#axes"
+  ],
+  [
+   "#axes",
+   "#dot"
+  ],
+  [
+   "#axes",
+   "#dot"
+  ]
+ ],
+ "setup": [],
+ "steps": [
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#axes"
+         }
+        ],
+        "call": "Create"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#dot"
+         }
+        ],
+        "call": "GrowFromCenter"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#dot"
+        },
+        "calls": [
+         {
+          "args": [
+           [
+            8.0,
+            4.0,
+            0.0
+           ]
+          ],
+          "call": "shift"
+         }
+        ]
+       },
+       {
+        "args": [
+         {
+          "ref": "#dot"
+         }
+        ],
+        "call": "Flash",
+        "kwargs": {
+         "flash_radius": 0.5
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "version": 1
+}

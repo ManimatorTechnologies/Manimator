@@ -1,0 +1,486 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#circle"
+     },
+     {
+      "ref": "#dot"
+     }
+    ],
+    "call": "add_transformable_mobject",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 18.0,
+ "layout": {
+  "fixed": {},
+  "hidden": [],
+  "order": [
+   "#circle",
+   "#dot"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle"
+  },
+  {
+   "call": {
+    "call": "Dot",
+    "kwargs": {
+     "radius": 0.1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dot",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dot"
+     }
+    }
+   ],
+   "type": "Dot",
+   "var": "dot"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "LinearTransformationScene",
+  "moving_camera": false,
+  "name": "ChangedLinearTransformationScene",
+  "three_d": false
+ },
+ "screen_orders": [
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ]
+ ],
+ "setup": [],
+ "steps": [
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 3.0,
+   "statements": [
+    {
+     "set": "self.moving_mobjects",
+     "value": []
+    },
+    {
+     "do": {
+      "args": [
+       [
+        [
+         2,
+         1
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      ],
+      "call": "apply_matrix",
+      "kwargs": {
+       "run_time": 3
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 3.0,
+   "statements": [
+    {
+     "set": "self.moving_mobjects",
+     "value": []
+    },
+    {
+     "do": {
+      "args": [
+       [
+        [
+         2,
+         1
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      ],
+      "call": "apply_inverse",
+      "kwargs": {
+       "run_time": 3
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 3.0,
+   "statements": [
+    {
+     "set": "self.moving_mobjects",
+     "value": []
+    },
+    {
+     "do": {
+      "args": [
+       {
+        "bind": {
+         "x": [
+          "p",
+          0
+         ],
+         "y": [
+          "p",
+          1
+         ]
+        },
+        "body": {
+         "args": [
+          [
+           {
+            "expr": {
+             "a": {
+              "a": {
+               "v": "x"
+              },
+              "b": {
+               "v": "y"
+              },
+              "op": "*"
+             },
+             "b": 1.0,
+             "op": "-"
+            }
+           },
+           {
+            "expr": {
+             "a": {
+              "a": {
+               "v": "x"
+              },
+              "b": {
+               "v": "y"
+              },
+              "op": "*"
+             },
+             "b": 1.0,
+             "op": "-"
+            }
+           },
+           0
+          ]
+         ],
+         "call": "np.array"
+        },
+        "lambda": [
+         "p"
+        ]
+       }
+      ],
+      "call": "apply_nonlinear_transformation",
+      "kwargs": {
+       "run_time": 3
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 3.0,
+   "statements": [
+    {
+     "set": "self.moving_mobjects",
+     "value": []
+    },
+    {
+     "do": {
+      "args": [
+       [
+        [
+         2,
+         1
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      ],
+      "call": "apply_matrix",
+      "kwargs": {
+       "run_time": 3
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 3.0,
+   "statements": [
+    {
+     "set": "self.moving_mobjects",
+     "value": []
+    },
+    {
+     "do": {
+      "args": [
+       [
+        [
+         2,
+         1
+        ],
+        [
+         1,
+         1
+        ]
+       ]
+      ],
+      "call": "apply_inverse",
+      "kwargs": {
+       "run_time": 3
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 3.0,
+   "statements": [
+    {
+     "set": "self.moving_mobjects",
+     "value": []
+    },
+    {
+     "do": {
+      "args": [
+       {
+        "bind": {
+         "x": [
+          "p",
+          0
+         ],
+         "y": [
+          "p",
+          1
+         ]
+        },
+        "body": {
+         "args": [
+          [
+           {
+            "expr": {
+             "a": {
+              "a": {
+               "v": "x"
+              },
+              "b": {
+               "v": "y"
+              },
+              "op": "*"
+             },
+             "b": 1.0,
+             "op": "-"
+            }
+           },
+           {
+            "expr": {
+             "a": {
+              "a": {
+               "v": "x"
+              },
+              "b": {
+               "v": "y"
+              },
+              "op": "*"
+             },
+             "b": 1.0,
+             "op": "-"
+            }
+           },
+           0
+          ]
+         ],
+         "call": "np.array"
+        },
+        "lambda": [
+         "p"
+        ]
+       }
+      ],
+      "call": "apply_nonlinear_transformation",
+      "kwargs": {
+       "run_time": 3
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "version": 1
+}

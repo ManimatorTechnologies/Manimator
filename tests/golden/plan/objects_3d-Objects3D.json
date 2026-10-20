@@ -1,0 +1,739 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#square"
+     },
+     {
+      "ref": "#circle"
+     },
+     {
+      "ref": "#sphere"
+     },
+     {
+      "ref": "#cube"
+     },
+     {
+      "ref": "#prism"
+     },
+     {
+      "ref": "#cone"
+     },
+     {
+      "ref": "#cylinder"
+     },
+     {
+      "ref": "#torus"
+     },
+     {
+      "ref": "#line3d"
+     },
+     {
+      "ref": "#arrow3d"
+     },
+     {
+      "ref": "#dot3d"
+     },
+     {
+      "ref": "#surface"
+     },
+     {
+      "ref": "#axes3d"
+     },
+     {
+      "ref": "#tetra"
+     },
+     {
+      "ref": "#octa"
+     },
+     {
+      "ref": "#icosa"
+     },
+     {
+      "ref": "#dodeca"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 0,
+ "layout": {
+  "fixed": {},
+  "hidden": [],
+  "order": [
+   "#square",
+   "#circle",
+   "#sphere",
+   "#cube",
+   "#prism",
+   "#cone",
+   "#cylinder",
+   "#torus",
+   "#line3d",
+   "#arrow3d",
+   "#dot3d",
+   "#surface",
+   "#axes3d",
+   "#tetra",
+   "#octa",
+   "#icosa",
+   "#dodeca"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Square",
+    "kwargs": {
+     "side_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#square",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#square"
+     }
+    }
+   ],
+   "type": "Square",
+   "var": "square"
+  },
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       3,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle"
+  },
+  {
+   "call": {
+    "call": "Sphere",
+    "kwargs": {
+     "radius": 1.5,
+     "resolution": [
+      24,
+      48
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#sphere",
+   "post": [
+    {
+     "args": [
+      [
+       -6,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#sphere"
+     }
+    }
+   ],
+   "type": "Sphere",
+   "var": "sphere"
+  },
+  {
+   "call": {
+    "call": "Cube",
+    "kwargs": {
+     "side_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#cube",
+   "post": [
+    {
+     "args": [
+      [
+       -4,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#cube"
+     }
+    }
+   ],
+   "type": "Cube",
+   "var": "cube"
+  },
+  {
+   "call": {
+    "call": "Prism",
+    "kwargs": {
+     "dimensions": [
+      3,
+      2,
+      1
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#prism",
+   "post": [
+    {
+     "args": [
+      [
+       -2,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#prism"
+     }
+    }
+   ],
+   "type": "Prism",
+   "var": "prism"
+  },
+  {
+   "call": {
+    "call": "Cone",
+    "kwargs": {
+     "base_radius": 1,
+     "height": 2,
+     "show_base": true
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#cone",
+   "post": [
+    {
+     "args": [
+      [
+       0,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#cone"
+     }
+    }
+   ],
+   "type": "Cone",
+   "var": "cone"
+  },
+  {
+   "call": {
+    "call": "Cylinder",
+    "kwargs": {
+     "height": 2,
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#cylinder",
+   "post": [
+    {
+     "args": [
+      [
+       2,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#cylinder"
+     }
+    }
+   ],
+   "type": "Cylinder",
+   "var": "cylinder"
+  },
+  {
+   "call": {
+    "call": "Torus",
+    "kwargs": {
+     "major_radius": 2,
+     "minor_radius": 0.6,
+     "resolution": [
+      24,
+      24
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#torus",
+   "post": [
+    {
+     "args": [
+      [
+       4,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#torus"
+     }
+    }
+   ],
+   "type": "Torus",
+   "var": "torus"
+  },
+  {
+   "call": {
+    "call": "Line3D",
+    "kwargs": {
+     "end": [
+      7.5,
+      4,
+      1
+     ],
+     "start": [
+      4.5,
+      2,
+      -1
+     ],
+     "thickness": 0.03
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#line3d",
+   "post": [],
+   "type": "Line3D",
+   "var": "line3d"
+  },
+  {
+   "call": {
+    "call": "Arrow3D",
+    "kwargs": {
+     "end": [
+      -4.5,
+      3,
+      1
+     ],
+     "start": [
+      -7.5,
+      1,
+      -1
+     ],
+     "thickness": 0.03
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#arrow3d",
+   "post": [],
+   "type": "Arrow3D",
+   "var": "arrow3d"
+  },
+  {
+   "call": {
+    "call": "Dot3D",
+    "kwargs": {
+     "radius": 0.12
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dot3d",
+   "post": [
+    {
+     "args": [
+      [
+       -4,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dot3d"
+     }
+    }
+   ],
+   "type": "Dot3D",
+   "var": "dot3d"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "body": {
+       "args": [
+        [
+         {
+          "expr": {
+           "v": "u"
+          }
+         },
+         {
+          "expr": {
+           "v": "v"
+          }
+         },
+         {
+          "expr": {
+           "a": {
+            "a": 0.5,
+            "b": {
+             "args": [
+              {
+               "v": "u"
+              }
+             ],
+             "f": "sin"
+            },
+            "op": "*"
+           },
+           "b": {
+            "args": [
+             {
+              "v": "v"
+             }
+            ],
+            "f": "cos"
+           },
+           "op": "*"
+          }
+         }
+        ]
+       ],
+       "call": "np.array"
+      },
+      "lambda": [
+       "u",
+       "v"
+      ]
+     }
+    ],
+    "call": "Surface",
+    "kwargs": {
+     "resolution": 24,
+     "u_range": [
+      -3,
+      3
+     ],
+     "v_range": [
+      -3,
+      3
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#surface",
+   "post": [],
+   "type": "Surface",
+   "var": "surface"
+  },
+  {
+   "call": {
+    "call": "ThreeDAxes",
+    "kwargs": {
+     "x_length": 7,
+     "x_range": [
+      -4,
+      4,
+      1
+     ],
+     "y_length": 7,
+     "y_range": [
+      -4,
+      4,
+      1
+     ],
+     "z_length": 5,
+     "z_range": [
+      -3,
+      3,
+      1
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#axes3d",
+   "post": [
+    {
+     "args": [
+      [
+       0,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#axes3d"
+     }
+    }
+   ],
+   "type": "ThreeDAxes",
+   "var": "axes3d"
+  },
+  {
+   "call": {
+    "call": "Tetrahedron",
+    "kwargs": {
+     "edge_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#tetra",
+   "post": [
+    {
+     "args": [
+      [
+       2,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#tetra"
+     }
+    }
+   ],
+   "type": "Tetrahedron",
+   "var": "tetra"
+  },
+  {
+   "call": {
+    "call": "Octahedron",
+    "kwargs": {
+     "edge_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#octa",
+   "post": [
+    {
+     "args": [
+      [
+       4,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#octa"
+     }
+    }
+   ],
+   "type": "Octahedron",
+   "var": "octa"
+  },
+  {
+   "call": {
+    "call": "Icosahedron",
+    "kwargs": {
+     "edge_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#icosa",
+   "post": [
+    {
+     "args": [
+      [
+       6,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#icosa"
+     }
+    }
+   ],
+   "type": "Icosahedron",
+   "var": "icosa"
+  },
+  {
+   "call": {
+    "call": "Dodecahedron",
+    "kwargs": {
+     "edge_length": 1.5
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dodeca",
+   "post": [
+    {
+     "args": [
+      [
+       -6,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dodeca"
+     }
+    }
+   ],
+   "type": "Dodecahedron",
+   "var": "dodeca"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "ThreeDScene",
+  "moving_camera": false,
+  "name": "Objects3D",
+  "three_d": true
+ },
+ "screen_orders": [
+  [
+   "#square",
+   "#circle",
+   "#sphere",
+   "#cube",
+   "#prism",
+   "#cone",
+   "#cylinder",
+   "#torus",
+   "#line3d",
+   "#arrow3d",
+   "#dot3d",
+   "#surface",
+   "#axes3d",
+   "#tetra",
+   "#octa",
+   "#icosa",
+   "#dodeca"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#square",
+   "#circle",
+   "#sphere",
+   "#cube",
+   "#prism",
+   "#cone",
+   "#cylinder",
+   "#torus",
+   "#line3d",
+   "#arrow3d",
+   "#dot3d",
+   "#surface",
+   "#axes3d",
+   "#tetra",
+   "#octa",
+   "#icosa",
+   "#dodeca"
+  ]
+ ],
+ "setup": [
+  {
+   "do": {
+    "call": "set_camera_orientation",
+    "kwargs": {
+     "phi": 1.2217304763960306,
+     "theta": -0.8726646259971648
+    },
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "steps": [],
+ "version": 1
+}

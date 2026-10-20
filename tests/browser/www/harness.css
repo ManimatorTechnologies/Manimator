@@ -1,0 +1,4 @@
+html, body { margin: 0; background: #111; color: #ccc; font: 13px/1.4 monospace; }
+#stage { position: relative; overflow: hidden; }
+#stage canvas { display: block; }
+#log { margin: 8px; white-space: pre-wrap; }

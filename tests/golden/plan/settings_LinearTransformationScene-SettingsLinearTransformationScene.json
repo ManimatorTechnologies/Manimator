@@ -1,0 +1,105 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#square"
+     }
+    ],
+    "call": "add_transformable_mobject",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#202040",
+ "duration": 0,
+ "layout": {
+  "fixed": {},
+  "hidden": [],
+  "order": [
+   "#square"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Square",
+    "kwargs": {
+     "side_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#square",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      [
+       1,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#square"
+     }
+    }
+   ],
+   "type": "Square",
+   "var": "square"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {
+   "include_background_plane": false,
+   "include_foreground_plane": false,
+   "leave_ghost_vectors": true,
+   "show_basis_vectors": false
+  },
+  "kind": "LinearTransformationScene",
+  "moving_camera": false,
+  "name": "SettingsLinearTransformationScene",
+  "three_d": false
+ },
+ "screen_orders": [
+  [
+   "#square"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#square"
+  ]
+ ],
+ "setup": [
+  {
+   "set": "self.camera.background_color",
+   "value": "#202040"
+  }
+ ],
+ "steps": [],
+ "version": 1
+}

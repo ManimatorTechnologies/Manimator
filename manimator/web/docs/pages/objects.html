@@ -1,0 +1,58 @@
+        <h2 id="objects">Adding objects</h2>
+        <p>Press <strong>+</strong> in the Objects panel to see Manim's objects in groups: Shapes, Arcs &amp; angles,
+          Lines, Text, Tables, Graphs, Media (pictures and SVG files), Helpers, Groups and 3D, plus your
+          <a href="/docs/customizations">customizations</a> under Custom. Search them by name.</p>
+        <ul>
+          <li>Click an object, then click the canvas where it should go. You can also drag it onto the canvas.</li>
+          <li>Some objects attach to another one, such as braces and labels. Select that object first, then add
+            them.</li>
+          <li>Adding a 3D object turns the scene into a 3D scene.</li>
+        </ul>
+
+        <h2 id="arranging">Moving and arranging</h2>
+        <ul>
+          <li>Drag the selected object on the canvas, or move it with the arrow keys (0.1 units, or 0.5 with
+            <kbd>Shift</kbd>). Hold <kbd>Shift</kbd> while dragging to switch snapping to the grid on or off.</li>
+          <li>The buttons above the Objects list bring the object forward or send it backward (which is drawn on top),
+            duplicate it (<kbd>Ctrl+D</kbd>) and delete it (<kbd>Del</kbd>).</li>
+          <li>Double-click a name in the list to rename it.</li>
+        </ul>
+
+        <h2 id="inspector">Changing objects</h2>
+        <p>Select an object to see it in the Inspector:</p>
+        <ul>
+          <li><strong>Name</strong> is its variable name in the Python code.</li>
+          <li><strong>At start</strong>: <em>Visible</em> objects are on screen when the scene begins. <em>Hidden</em>
+            ones wait until an animation brings them in.</li>
+          <li><strong>Properties</strong> holds the object's own settings, its <strong>Style</strong> (colors, line
+            width, fill) and its <strong>Placement</strong> (position, rotation, scale and layer).</li>
+        </ul>
+        <p>To change a number quickly, drag its label sideways.</p>
+
+        <h3 id="methods">Methods</h3>
+        <p>On the <strong>Methods</strong> tab, press <strong>Add Method</strong> to run one of Manim's methods on the
+          object, such as <em>To corner</em> or <em>Next to</em>. Methods run once, top to bottom, right after the
+          object is made.</p>
+
+        <h2 id="scenes">Scenes</h2>
+        <p>The tabs along the bottom are the project's scenes, and each becomes its own video. Press
+          <strong>+</strong> to add one, drag a tab to reorder it, and right-click it to duplicate, move or delete
+          it.</p>
+        <p>Click an empty part of the canvas to see the scene in the Inspector: its name, the background color and the
+          scene type.</p>
+
+        <h3 id="scene-types">Scene types</h3>
+        <p>The type decides what the camera can do, and which <a href="/docs/animation#scene-actions">scene
+          actions</a> you can animate.</p>
+        <table>
+          <tr><th>Scene type</th><th>What it gives you</th></tr>
+          <tr><td><code>Scene</code></td><td>A fixed camera looking at the flat scene.</td></tr>
+          <tr><td><code>MovingCameraScene</code></td><td>A camera that can pan and zoom during the video.</td></tr>
+          <tr><td><code>ZoomedScene</code></td><td>A moving camera plus a magnifying lens shown in a picture-in-picture
+            display.</td></tr>
+          <tr><td><code>VectorScene</code></td><td>A grid for drawing vectors, with î and ĵ.</td></tr>
+          <tr><td><code>LinearTransformationScene</code></td><td>A grid that matrices and functions transform, carrying
+            vectors and shapes along.</td></tr>
+          <tr><td><code>ThreeDScene</code></td><td>A 3D camera that can tilt, turn, spin and fly around.</td></tr>
+          <tr><td><code>SpecialThreeDScene</code></td><td>A 3D scene with Manim's preset camera angle.</td></tr>
+        </table>

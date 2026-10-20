@@ -1,0 +1,999 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#circle"
+     },
+     {
+      "ref": "#dot"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 20.0,
+ "layout": {
+  "fixed": {},
+  "hidden": [],
+  "order": [
+   "#circle",
+   "#dot"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle"
+  },
+  {
+   "call": {
+    "call": "Dot",
+    "kwargs": {
+     "radius": 0.1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dot",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      [
+       -2,
+       -1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dot"
+     }
+    }
+   ],
+   "type": "Dot",
+   "var": "dot"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "ZoomedScene",
+  "moving_camera": true,
+  "name": "ChangedZoomedScene",
+  "three_d": false
+ },
+ "screen_orders": [
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ],
+  [
+   "#circle",
+   "#dot"
+  ]
+ ],
+ "setup": [
+  {
+   "do": {
+    "call": "save_state",
+    "on": {
+     "attr": "self.camera.frame"
+    }
+   }
+  }
+ ],
+ "steps": [
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "attr": "self.camera.frame"
+        },
+        "calls": [
+         {
+          "args": [
+           [
+            1.5,
+            -0.5,
+            0
+           ]
+          ],
+          "call": "move_to"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "attr": "self.camera.frame"
+        },
+        "calls": [
+         {
+          "args": [
+           {
+            "ref": "#dot"
+           }
+          ],
+          "call": "move_to"
+         },
+         {
+          "call": "set",
+          "kwargs": {
+           "width": {
+            "frame_width": 3.5
+           }
+          }
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "attr": "self.camera.frame"
+        },
+        "calls": [
+         {
+          "call": "set",
+          "kwargs": {
+           "width": {
+            "frame_width": 3.5
+           }
+          }
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         [
+          {
+           "ref": "#circle"
+          },
+          {
+           "ref": "#dot"
+          }
+         ]
+        ],
+        "call": "auto_zoom",
+        "kwargs": {
+         "margin": 2
+        },
+        "on": {
+         "attr": "self.camera"
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "attr": "self.camera.frame"
+         }
+        ],
+        "call": "Restore"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "call": "activate_zooming",
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       1
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "attr": "self.zoomed_display"
+         }
+        ],
+        "call": "FadeOut"
+       },
+       {
+        "args": [
+         {
+          "attr": "self.zoomed_camera.frame"
+         }
+        ],
+        "call": "FadeOut"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "ref": "#dot"
+       }
+      ],
+      "call": "move_to",
+      "on": {
+       "attr": "self.zoomed_camera.frame"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       1
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       [
+        1.5,
+        -0.5,
+        0
+       ]
+      ],
+      "call": "move_to",
+      "on": {
+       "attr": "self.zoomed_camera.frame"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       1
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       3.5
+      ],
+      "call": "scale",
+      "on": {
+       "attr": "self.zoomed_camera.frame"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       1
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "attr": "self.camera.frame"
+        },
+        "calls": [
+         {
+          "args": [
+           [
+            1.5,
+            -0.5,
+            0
+           ]
+          ],
+          "call": "move_to"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "attr": "self.camera.frame"
+        },
+        "calls": [
+         {
+          "args": [
+           {
+            "ref": "#dot"
+           }
+          ],
+          "call": "move_to"
+         },
+         {
+          "call": "set",
+          "kwargs": {
+           "width": {
+            "frame_width": 3.5
+           }
+          }
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "attr": "self.camera.frame"
+        },
+        "calls": [
+         {
+          "call": "set",
+          "kwargs": {
+           "width": {
+            "frame_width": 3.5
+           }
+          }
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         [
+          {
+           "ref": "#circle"
+          },
+          {
+           "ref": "#dot"
+          }
+         ]
+        ],
+        "call": "auto_zoom",
+        "kwargs": {
+         "margin": 2
+        },
+        "on": {
+         "attr": "self.camera"
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "attr": "self.camera.frame"
+         }
+        ],
+        "call": "Restore"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "attr": "self.zoomed_camera.frame"
+       },
+       {
+        "attr": "self.zoomed_display"
+       }
+      ],
+      "call": "add_foreground_mobjects",
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       1
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "attr": "self.zoomed_display"
+         }
+        ],
+        "call": "FadeOut"
+       },
+       {
+        "args": [
+         {
+          "attr": "self.zoomed_camera.frame"
+         }
+        ],
+        "call": "FadeOut"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "ref": "#dot"
+       }
+      ],
+      "call": "move_to",
+      "on": {
+       "attr": "self.zoomed_camera.frame"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       1
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       [
+        1.5,
+        -0.5,
+        0
+       ]
+      ],
+      "call": "move_to",
+      "on": {
+       "attr": "self.zoomed_camera.frame"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       1
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       3.5
+      ],
+      "call": "scale",
+      "on": {
+       "attr": "self.zoomed_camera.frame"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       1
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "version": 1
+}

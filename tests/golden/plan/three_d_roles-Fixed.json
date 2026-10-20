@@ -1,0 +1,563 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#text"
+     }
+    ],
+    "call": "add_fixed_in_frame_mobjects",
+    "on": {
+     "attr": "self"
+    }
+   }
+  },
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#text_3"
+     }
+    ],
+    "call": "add_fixed_orientation_mobjects",
+    "on": {
+     "attr": "self"
+    }
+   }
+  },
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#group"
+     }
+    ],
+    "call": "add_fixed_in_frame_mobjects",
+    "on": {
+     "attr": "self"
+    }
+   }
+  },
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#sphere"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  },
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#text_2"
+     }
+    ],
+    "call": "add_fixed_in_frame_mobjects",
+    "on": {
+     "attr": "self.camera"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 13.0,
+ "layout": {
+  "fixed": {
+   "#dot": "in_frame",
+   "#group": "in_frame",
+   "#text": "in_frame",
+   "#text_2": "in_frame",
+   "#text_3": "orientation"
+  },
+  "hidden": [
+   "#text_2"
+  ],
+  "order": [
+   "#text",
+   "#text_2",
+   "#text_3",
+   "#dot",
+   "#sphere"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "args": [
+     "Hello"
+    ],
+    "call": "Text",
+    "kwargs": {
+     "font_size": 48
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#text",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#text"
+     }
+    },
+    {
+     "args": [
+      [
+       -4,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#text"
+     }
+    }
+   ],
+   "type": "Text",
+   "var": "text"
+  },
+  {
+   "call": {
+    "args": [
+     "Hello"
+    ],
+    "call": "Text",
+    "kwargs": {
+     "font_size": 48
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#text_2",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#text_2"
+     }
+    },
+    {
+     "args": [
+      [
+       4,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#text_2"
+     }
+    }
+   ],
+   "type": "Text",
+   "var": "text_2"
+  },
+  {
+   "call": {
+    "args": [
+     "Hello"
+    ],
+    "call": "Text",
+    "kwargs": {
+     "font_size": 48
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#text_3",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#text_3"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#text_3"
+     }
+    }
+   ],
+   "type": "Text",
+   "var": "text_3"
+  },
+  {
+   "call": {
+    "call": "Dot",
+    "kwargs": {
+     "radius": 0.1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#dot",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#dot"
+     }
+    },
+    {
+     "args": [
+      [
+       1,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#dot"
+     }
+    }
+   ],
+   "type": "Dot",
+   "var": "dot"
+  },
+  {
+   "call": {
+    "args": [
+     {
+      "ref": "#dot"
+     }
+    ],
+    "call": "VGroup"
+   },
+   "deps": [
+    "#dot"
+   ],
+   "error": null,
+   "id": "#group",
+   "post": [],
+   "type": "VGroup",
+   "var": "group"
+  },
+  {
+   "call": {
+    "call": "Sphere",
+    "kwargs": {
+     "radius": 1.5,
+     "resolution": [
+      24,
+      48
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#sphere",
+   "post": [
+    {
+     "args": [
+      [
+       0,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#sphere"
+     }
+    }
+   ],
+   "type": "Sphere",
+   "var": "sphere"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "ThreeDScene",
+  "moving_camera": false,
+  "name": "Fixed",
+  "three_d": true
+ },
+ "screen_orders": [
+  [
+   "#text",
+   "#text_3",
+   "#group",
+   "#sphere"
+  ],
+  [
+   "#text",
+   "#text_3",
+   "#group",
+   "#sphere",
+   "#text_2"
+  ],
+  [
+   "#text",
+   "#text_3",
+   "#group",
+   "#sphere",
+   "#text_2"
+  ],
+  [
+   "#text",
+   "#text_3",
+   "#group",
+   "#sphere",
+   "#text_2"
+  ],
+  [
+   "#text",
+   "#text_3",
+   "#group",
+   "#sphere",
+   "#text_2"
+  ],
+  [
+   "#text",
+   "#text_3",
+   "#group",
+   "#sphere",
+   "#text_2"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#text",
+   "#text_3",
+   "#group",
+   "#sphere"
+  ],
+  [
+   "#text",
+   "#text_2",
+   "#text_3",
+   "#group",
+   "#sphere"
+  ],
+  [
+   "#text",
+   "#text_2",
+   "#text_3",
+   "#group",
+   "#sphere"
+  ],
+  [
+   "#text",
+   "#text_2",
+   "#text_3",
+   "#group",
+   "#sphere"
+  ],
+  [
+   "#text",
+   "#text_2",
+   "#text_3",
+   "#group",
+   "#sphere"
+  ],
+  [
+   "#text",
+   "#text_2",
+   "#text_3",
+   "#group",
+   "#sphere"
+  ]
+ ],
+ "setup": [
+  {
+   "do": {
+    "call": "set_camera_orientation",
+    "kwargs": {
+     "phi": 1.2217304763960306,
+     "theta": -0.8726646259971648
+    },
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "steps": [
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#text_2"
+         }
+        ],
+        "call": "Write"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "call": "move_camera",
+      "kwargs": {
+       "phi": 1.2217304763960306,
+       "run_time": 2,
+       "theta": 0.17453292519943295
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 4.0,
+   "statements": [
+    {
+     "do": {
+      "call": "begin_ambient_camera_rotation",
+      "kwargs": {
+       "about": "gamma",
+       "rate": 0.3490658503988659
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       4
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "call": "stop_ambient_camera_rotation",
+      "kwargs": {
+       "about": "gamma"
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "call": "move_camera",
+      "kwargs": {
+       "gamma": 0,
+       "phi": 1.2217304763960306,
+       "run_time": 2,
+       "theta": 1.2217304763960306
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 4.0,
+   "statements": [
+    {
+     "do": {
+      "call": "begin_3dillusion_camera_rotation",
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       4
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "call": "stop_3dillusion_camera_rotation",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "version": 1
+}

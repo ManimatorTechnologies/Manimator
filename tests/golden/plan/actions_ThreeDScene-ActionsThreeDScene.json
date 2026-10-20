@@ -1,0 +1,472 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#circle"
+     },
+     {
+      "ref": "#vector"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 15.0,
+ "layout": {
+  "fixed": {},
+  "hidden": [
+   "#eq"
+  ],
+  "order": [
+   "#circle",
+   "#vector",
+   "#eq"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       2,
+       1,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle"
+  },
+  {
+   "call": {
+    "call": "Vector",
+    "kwargs": {
+     "direction": [
+      2.0,
+      1.0,
+      0.0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#vector",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#vector"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#vector"
+     }
+    }
+   ],
+   "type": "Vector",
+   "var": "vector"
+  },
+  {
+   "call": {
+    "args": [
+     "e^{i\\pi} + 1 = 0"
+    ],
+    "call": "MathTex",
+    "kwargs": {
+     "font_size": 48
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#eq",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#eq"
+     }
+    },
+    {
+     "args": [
+      [
+       -3,
+       2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#eq"
+     }
+    }
+   ],
+   "type": "MathTex",
+   "var": "eq"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "ThreeDScene",
+  "moving_camera": false,
+  "name": "ActionsThreeDScene",
+  "three_d": true
+ },
+ "screen_orders": [
+  [
+   "#circle",
+   "#vector"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#circle",
+   "#vector"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ],
+  [
+   "#circle",
+   "#vector",
+   "#eq"
+  ]
+ ],
+ "setup": [
+  {
+   "do": {
+    "call": "set_camera_orientation",
+    "kwargs": {
+     "phi": 1.2217304763960306,
+     "theta": -0.8726646259971648
+    },
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "steps": [
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#eq"
+         }
+        ],
+        "call": "Write"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "call": "move_camera",
+      "kwargs": {
+       "added_anims": [
+        {
+         "args": [
+          {
+           "ref": "#vector"
+          }
+         ],
+         "call": "Indicate"
+        }
+       ],
+       "phi": 1.2217304763960306,
+       "run_time": 2,
+       "theta": 0.17453292519943295
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "call": "move_camera",
+      "kwargs": {
+       "added_anims": [
+        {
+         "args": [
+          {
+           "ref": "#vector"
+          }
+         ],
+         "call": "Indicate"
+        }
+       ],
+       "frame_center": {
+        "ref": "#circle"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "call": "move_camera",
+      "kwargs": {
+       "added_anims": [
+        {
+         "args": [
+          {
+           "ref": "#vector"
+          }
+         ],
+         "call": "Indicate"
+        }
+       ],
+       "frame_center": [
+        0,
+        0,
+        0
+       ],
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 4.0,
+   "statements": [
+    {
+     "do": {
+      "call": "begin_ambient_camera_rotation",
+      "kwargs": {
+       "rate": 0.3490658503988659
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#vector"
+         }
+        ],
+        "call": "Indicate"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 4
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "call": "stop_ambient_camera_rotation",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 1,
+   "run_time": 4.0,
+   "statements": [
+    {
+     "do": {
+      "call": "begin_3dillusion_camera_rotation",
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#vector"
+         }
+        ],
+        "call": "Indicate"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 4
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    },
+    {
+     "do": {
+      "call": "stop_3dillusion_camera_rotation",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "version": 1
+}

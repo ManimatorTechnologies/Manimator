@@ -1,0 +1,4027 @@
+{
+ "add": [
+  {
+   "do": {
+    "args": [
+     {
+      "ref": "#square"
+     },
+     {
+      "ref": "#eq"
+     },
+     {
+      "ref": "#eq_2"
+     },
+     {
+      "ref": "#star"
+     }
+    ],
+    "call": "add",
+    "on": {
+     "attr": "self"
+    }
+   }
+  }
+ ],
+ "background": "#000000",
+ "duration": 90.25,
+ "layout": {
+  "fixed": {},
+  "hidden": [
+   "#circle",
+   "#text",
+   "#arrow"
+  ],
+  "order": [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ]
+ },
+ "objects": [
+  {
+   "call": {
+    "call": "Circle",
+    "kwargs": {
+     "radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#circle",
+   "post": [
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      "#FC6255"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#circle"
+     }
+    },
+    {
+     "args": [
+      [
+       -3,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#circle"
+     }
+    }
+   ],
+   "type": "Circle",
+   "var": "circle"
+  },
+  {
+   "call": {
+    "call": "Square",
+    "kwargs": {
+     "side_length": 2
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#square",
+   "post": [
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      "#58C4DD"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#square"
+     }
+    },
+    {
+     "args": [
+      [
+       3,
+       0,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#square"
+     }
+    }
+   ],
+   "type": "Square",
+   "var": "square"
+  },
+  {
+   "call": {
+    "args": [
+     "Hello"
+    ],
+    "call": "Text",
+    "kwargs": {
+     "font_size": 48
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#text",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#text"
+     }
+    },
+    {
+     "args": [
+      [
+       0,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#text"
+     }
+    }
+   ],
+   "type": "Text",
+   "var": "text"
+  },
+  {
+   "call": {
+    "call": "Arrow",
+    "kwargs": {
+     "buff": 0,
+     "end": [
+      1,
+      -3,
+      0
+     ],
+     "start": [
+      -1,
+      -3,
+      0
+     ]
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#arrow",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#arrow"
+     }
+    }
+   ],
+   "type": "Arrow",
+   "var": "arrow"
+  },
+  {
+   "call": {
+    "args": [
+     "e^{i\\pi} + 1 = 0"
+    ],
+    "call": "MathTex",
+    "kwargs": {
+     "font_size": 48
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#eq",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#eq"
+     }
+    },
+    {
+     "args": [
+      [
+       -3,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#eq"
+     }
+    }
+   ],
+   "type": "MathTex",
+   "var": "eq"
+  },
+  {
+   "call": {
+    "args": [
+     "e^{i\\pi} = -1"
+    ],
+    "call": "MathTex",
+    "kwargs": {
+     "font_size": 48
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#eq_2",
+   "post": [
+    {
+     "args": [
+      "#FFFFFF"
+     ],
+     "call": "set_color",
+     "on": {
+      "ref": "#eq_2"
+     }
+    },
+    {
+     "args": [
+      [
+       3,
+       -2,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#eq_2"
+     }
+    }
+   ],
+   "type": "MathTex",
+   "var": "eq_2"
+  },
+  {
+   "call": {
+    "call": "Star",
+    "kwargs": {
+     "inner_radius": 0.4,
+     "n": 5,
+     "outer_radius": 1
+    }
+   },
+   "deps": [],
+   "error": null,
+   "id": "#star",
+   "post": [
+    {
+     "args": [
+      "#F0AC5F"
+     ],
+     "call": "set_stroke",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      "#F0AC5F"
+     ],
+     "call": "set_fill",
+     "on": {
+      "ref": "#star"
+     }
+    },
+    {
+     "args": [
+      [
+       5,
+       3,
+       0
+      ]
+     ],
+     "call": "move_to",
+     "on": {
+      "ref": "#star"
+     }
+    }
+   ],
+   "type": "Star",
+   "var": "star"
+  }
+ ],
+ "scene": {
+  "id": "#scene",
+  "init": {},
+  "kind": "Scene",
+  "moving_camera": false,
+  "name": "Animations",
+  "three_d": false
+ },
+ "screen_orders": [
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star",
+   "#circle"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star",
+   "#circle"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star",
+   "#circle"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star",
+   "#circle"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star",
+   "#circle"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star",
+   "#circle"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star",
+   "#circle"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star",
+   "#circle",
+   "#arrow"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star",
+   "#circle",
+   "#arrow"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star",
+   "#circle",
+   "#arrow",
+   "#text"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star",
+   "#circle",
+   "#arrow",
+   "#text"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#circle",
+   "#arrow",
+   "#text"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#circle",
+   "#arrow",
+   "#text"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#circle",
+   "#arrow",
+   "#text"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#circle",
+   "#arrow",
+   "#text",
+   "#star"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#circle",
+   "#arrow",
+   "#text",
+   "#star"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#circle",
+   "#arrow",
+   "#text",
+   "#star"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#circle",
+   "#arrow",
+   "#text",
+   "#star"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#circle",
+   "#arrow",
+   "#text",
+   "#star"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#circle",
+   "#arrow",
+   "#text",
+   "#star"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#circle",
+   "#arrow",
+   "#text",
+   "#star"
+  ],
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#circle",
+   "#arrow",
+   "#text",
+   "#star"
+  ],
+  [
+   "#eq",
+   "#eq_2",
+   "#square",
+   "#arrow",
+   "#text",
+   "#star"
+  ],
+  [
+   "#square",
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#eq_2",
+   "#square",
+   "#circle",
+   "#star"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#eq_2",
+   "#square",
+   "#circle",
+   "#star"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#eq_2",
+   "#square",
+   "#circle",
+   "#star"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#eq_2",
+   "#square",
+   "#circle",
+   "#star"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#eq_2",
+   "#square",
+   "#circle",
+   "#star"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#eq_2",
+   "#square",
+   "#circle",
+   "#star"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#eq_2",
+   "#square",
+   "#circle",
+   "#star"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#eq_2",
+   "#square",
+   "#circle",
+   "#star"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#eq_2",
+   "#square",
+   "#star"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#square",
+   "#star",
+   "#eq_2"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#text",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle"
+  ],
+  [
+   "#arrow",
+   "#star",
+   "#eq_2",
+   "#square",
+   "#circle",
+   "#text"
+  ]
+ ],
+ "screen_states": [
+  [
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ],
+  [
+   "#circle",
+   "#square",
+   "#text",
+   "#arrow",
+   "#eq_2",
+   "#star"
+  ]
+ ],
+ "setup": [],
+ "steps": [
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Create"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Write"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "smooth"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "FadeIn"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "linear"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "wait",
+   "play": 0,
+   "run_time": 0.75,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       0.75
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "DrawBorderThenFill"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rush_into"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "GrowFromCenter"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rush_from"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         },
+         [
+          0.0,
+          -1.0,
+          0.0
+         ]
+        ],
+        "call": "GrowFromEdge"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "double_smooth"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#arrow"
+         }
+        ],
+        "call": "GrowArrow"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_in_sine"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "SpinInFromNothing"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_sine"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#text"
+         }
+        ],
+        "call": "AddTextLetterByLetter"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_in_out_sine"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "wait",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       2
+      ],
+      "call": "wait",
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#star"
+         }
+        ],
+        "call": "Uncreate"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_in_out_cubic"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#star"
+         }
+        ],
+        "call": "Unwrite"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_back"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#star"
+         }
+        ],
+        "call": "FadeOut"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_bounce"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#star"
+         }
+        ],
+        "call": "ShrinkToCenter"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_elastic"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Indicate"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "there_and_back"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Flash",
+        "kwargs": {
+         "flash_radius": 0.5
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "there_and_back_with_pause"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Circumscribe"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "wiggle"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Wiggle"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "there_and_back"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "FocusOn"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "there_and_back_with_pause"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "ApplyWave"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "wiggle"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         },
+         {
+          "ref": "#square"
+         }
+        ],
+        "call": "Transform"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         },
+         {
+          "ref": "#square"
+         }
+        ],
+        "call": "ReplacementTransform"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "smooth"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#eq"
+         },
+         {
+          "ref": "#eq_2"
+         }
+        ],
+        "call": "TransformMatchingTex"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "linear"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         },
+         {
+          "ref": "#square"
+         }
+        ],
+        "call": "TransformMatchingShapes"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rush_into"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         },
+         {
+          "ref": "#square"
+         }
+        ],
+        "call": "FadeTransform"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rush_from"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Rotate",
+        "kwargs": {
+         "angle": 3.141592653589793
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "double_smooth"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         },
+         {
+          "ref": "#square"
+         }
+        ],
+        "call": "MoveAlongPath"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_in_sine"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Create"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_sine"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Write"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_in_out_sine"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "FadeIn",
+        "kwargs": {
+         "scale": 2,
+         "shift": [
+          -1.0,
+          1.0,
+          0.0
+         ]
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_in_out_cubic"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "DrawBorderThenFill"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_back"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "GrowFromCenter"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_bounce"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         },
+         [
+          0.0,
+          1.0,
+          0.0
+         ]
+        ],
+        "call": "GrowFromEdge"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_elastic"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#arrow"
+         }
+        ],
+        "call": "GrowArrow"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "SpinInFromNothing",
+        "kwargs": {
+         "angle": 0.7853981633974483
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "smooth"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#text"
+         }
+        ],
+        "call": "AddTextLetterByLetter",
+        "kwargs": {
+         "time_per_char": 0.65
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "linear"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#star"
+         }
+        ],
+        "call": "Uncreate"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rush_into"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#star"
+         }
+        ],
+        "call": "Unwrite"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rush_from"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#star"
+         }
+        ],
+        "call": "FadeOut",
+        "kwargs": {
+         "scale": 2,
+         "shift": [
+          -1.0,
+          1.0,
+          0.0
+         ]
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "double_smooth"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#star"
+         }
+        ],
+        "call": "ShrinkToCenter"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_in_sine"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Indicate",
+        "kwargs": {
+         "color": "#123456",
+         "scale_factor": 2.3
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "there_and_back"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Flash",
+        "kwargs": {
+         "color": "#123456",
+         "flash_radius": 1.25,
+         "num_lines": 13
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "there_and_back_with_pause"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Circumscribe",
+        "kwargs": {
+         "color": "#123456",
+         "fade_out": true,
+         "shape": {
+          "name": "Circle"
+         }
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "wiggle"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Wiggle",
+        "kwargs": {
+         "n_wiggles": 7,
+         "rotation_angle": 0.7853981633974483,
+         "scale_value": 2.15
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "there_and_back"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "FocusOn",
+        "kwargs": {
+         "color": "#123456",
+         "opacity": 0.8
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "there_and_back_with_pause"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "ApplyWave",
+        "kwargs": {
+         "amplitude": 0.8,
+         "direction": [
+          -1.0,
+          1.0,
+          0.0
+         ],
+         "ripples": 2
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "wiggle"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         },
+         {
+          "ref": "#square"
+         }
+        ],
+        "call": "Transform",
+        "kwargs": {
+         "path_arc": 0.7853981633974483
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_sine"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         },
+         {
+          "ref": "#square"
+         }
+        ],
+        "call": "ReplacementTransform",
+        "kwargs": {
+         "path_arc": 0.7853981633974483
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_in_out_sine"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#eq"
+         },
+         {
+          "ref": "#eq_2"
+         }
+        ],
+        "call": "TransformMatchingTex"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_in_out_cubic"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         },
+         {
+          "ref": "#square"
+         }
+        ],
+        "call": "TransformMatchingShapes"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_back"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         },
+         {
+          "ref": "#square"
+         }
+        ],
+        "call": "FadeTransform"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_bounce"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         }
+        ],
+        "call": "Rotate",
+        "kwargs": {
+         "angle": 0.7853981633974483
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_elastic"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "ref": "#circle"
+         },
+         {
+          "ref": "#square"
+         }
+        ],
+        "call": "MoveAlongPath"
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           [
+            -1.0,
+            2.0,
+            0.0
+           ]
+          ],
+          "call": "shift"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "smooth"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           [
+            1.5,
+            -0.5,
+            0
+           ]
+          ],
+          "call": "move_to"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "linear"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           {
+            "ref": "#circle"
+           },
+           [
+            -1.0,
+            1.0,
+            0.0
+           ]
+          ],
+          "call": "next_to",
+          "kwargs": {
+           "buff": 0.88
+          }
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rush_into"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           {
+            "ref": "#circle"
+           },
+           [
+            -1.0,
+            1.0,
+            0.0
+           ]
+          ],
+          "call": "align_to"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rush_from"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           [
+            0.0,
+            -1.0,
+            0.0
+           ]
+          ],
+          "call": "to_edge",
+          "kwargs": {
+           "buff": 1.25
+          }
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "double_smooth"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           [
+            1.0,
+            1.0,
+            0.0
+           ]
+          ],
+          "call": "to_corner",
+          "kwargs": {
+           "buff": 1.25
+          }
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_in_sine"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "call": "center"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_sine"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           [
+            -1.0,
+            1.0,
+            0.0
+           ]
+          ],
+          "call": "arrange",
+          "kwargs": {
+           "buff": 0.88
+          }
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_in_out_sine"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           2.75
+          ],
+          "call": "scale"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_in_out_cubic"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           0.7853981633974483
+          ],
+          "call": "rotate"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_back"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           [
+            1.0,
+            0.0,
+            0.0
+           ]
+          ],
+          "call": "flip"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_bounce"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           3.5,
+           1
+          ],
+          "call": "stretch"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rate_functions.ease_out_elastic"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           3.5
+          ],
+          "call": "scale_to_fit_width"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           3.5
+          ],
+          "call": "scale_to_fit_height"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "smooth"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           "#123456"
+          ],
+          "call": "set_color"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "linear"
+       },
+       "run_time": 1.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 2.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "call": "set_fill",
+          "kwargs": {
+           "color": "#123456",
+           "opacity": 0.5
+          }
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rush_into"
+       },
+       "run_time": 2
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 0.5,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "call": "set_stroke",
+          "kwargs": {
+           "color": "#123456",
+           "opacity": 0.5,
+           "width": 6.5
+          }
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "rush_from"
+       },
+       "run_time": 0.5
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "animate": {
+         "ref": "#square"
+        },
+        "calls": [
+         {
+          "args": [
+           1
+          ],
+          "call": "set_opacity"
+         }
+        ]
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "rate_func": {
+        "name": "double_smooth"
+       },
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "kind": "play",
+   "play": 0,
+   "run_time": 1.0,
+   "statements": [
+    {
+     "do": {
+      "args": [
+       {
+        "args": [
+         {
+          "args": [
+           {
+            "ref": "#circle"
+           }
+          ],
+          "call": "FadeIn"
+         },
+         {
+          "args": [
+           {
+            "ref": "#square"
+           }
+          ],
+          "call": "FadeIn"
+         },
+         {
+          "args": [
+           {
+            "ref": "#text"
+           }
+          ],
+          "call": "Rotate",
+          "kwargs": {
+           "angle": 3.141592653589793
+          }
+         }
+        ],
+        "call": "LaggedStart",
+        "kwargs": {
+         "lag_ratio": 0.3
+        }
+       }
+      ],
+      "call": "play",
+      "kwargs": {
+       "run_time": 1
+      },
+      "on": {
+       "attr": "self"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "version": 1
+}
