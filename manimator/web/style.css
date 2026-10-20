@@ -998,7 +998,6 @@ textarea.input { height: auto; min-height: 64px; padding: 8px 10px; resize: vert
 }
 
 /* Customizations page (web/js/customizations.js) */
-.cz-list .prow { grid-template-columns: minmax(0, 1fr) 120px 200px 48px; }
 .cz-how { margin: -16px 0 20px; color: var(--text-2); font-size: 13px; line-height: 1.6; }
 .cz-detail { max-width: 860px; }
 .cz-name { margin: 0; font: 600 24px/40px var(--font); letter-spacing: -0.02em; color: var(--white); min-width: 0;
@@ -1022,10 +1021,6 @@ textarea.input { height: auto; min-height: 64px; padding: 8px 10px; resize: vert
 .cz-note { margin: 8px 0 0; font-size: 12px; }
 .cz-readme { margin: 0; padding: 14px 16px; border: 1px solid var(--line-2); border-radius: var(--radius-lg);
   background: var(--bg-1); color: var(--text); font: 13px/1.6 var(--font); white-space: pre-wrap; overflow-wrap: anywhere; }
-@media (max-width: 720px) {
-  .cz-list .prow { grid-template-columns: minmax(0, 1fr) 48px; }
-  .cz-list .prow .meta, .cz-list .prow .pwhen, .cz-list .prow.head { display: none; }
-}
 .cz-tabs { display: flex; gap: 4px; margin: -12px 0 20px; border-bottom: 1px solid var(--line); }
 .cz-tab { height: 36px; padding: 0 12px; border: 0; border-bottom: 2px solid transparent; background: none;
   color: var(--text-2); font: 500 13.5px var(--font); cursor: pointer; margin-bottom: -1px; }

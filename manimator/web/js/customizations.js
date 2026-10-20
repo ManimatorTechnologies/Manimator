@@ -46,6 +46,7 @@ async function sendPackage(url, file) {
 
 const choosePackage = () => chooseLocalFile(".manimkit,application/zip");
 const latest = (kit) => kit.versions.at(-1);
+const newestPublic = (kit) => kit.versions.filter((v) => v.status === "public").at(-1);
 
 function Blank({ icon, title, children }) {
   return html`<div class="home-blank">
@@ -66,17 +67,59 @@ function NeedPlan({ why }) {
   </div>`;
 }
 
-function Row({ kit, sub, right, onOpen, onMenu }) {
-  return html`<div class="prow" tabindex="0" onClick=${onOpen} onContextMenu=${onMenu}
+/** Card pictures, made in one sandbox shared by the cards (customizations' code never runs on this page), kept for
+ *  the visit: "id:version" -> a promise of an image URL (null if it couldn't be drawn). */
+const pictures = new Map();
+let sandbox = null;
+let queue = Promise.resolve();
+let idle = 0;
+
+function picture(kitId, version) {
+  const key = `${kitId}:${version ?? ""}`;
+  if (!pictures.has(key)) {
+    const made = queue.then(async () => {
+      clearTimeout(idle);
+      try {
+        const { plan } = await get(`/api/kits/${kitId}/demo${version ? `?version=${version}` : ""}`);
+        sandbox ??= await (await import("./sandboxed.js")).openSandbox();
+        return URL.createObjectURL(await sandbox.thumbnail(plan));
+      } catch {
+        sandbox?.close(); // a stuck or broken one: the next card gets a fresh sandbox
+        sandbox = null;
+        return null;
+      } finally {
+        idle = setTimeout(() => { sandbox?.close(); sandbox = null; }, 20000);
+      }
+    });
+    queue = made;
+    pictures.set(key, made);
+  }
+  return pictures.get(key);
+}
+
+function Thumb({ kit, version }) {
+  const [src, setSrc] = useState(null);
+  useEffect(() => {
+    let alive = true;
+    picture(kit.id, version).then((url) => alive && setSrc(url));
+    return () => { alive = false; };
+  }, [kit.id, version]);
+  return html`<div class=${`pthumb ${src ? "ready" : ""}`}>
+    ${src && html`<img src=${src} alt="" draggable=${false} />`}
+  </div>`;
+}
+
+function Card({ kit, version, sub, meta, onOpen, onMenu }) {
+  return html`<div class="pcard" tabindex="0" onClick=${onOpen} onContextMenu=${onMenu}
       onKeyDown=${(e) => e.key === "Enter" && onOpen()}>
-    <span class="pmain">
-      <span class="pline"><span class="pname" title=${kit.name}>${kit.name}</span></span>
-      <span class="psub">${sub}</span>
-    </span>
-    <span class="meta">${KINDS[kit.kind]}</span>
-    <span class="pwhen">${right}</span>
-    ${onMenu ? html`<button class="btn small icon ghost more" title="More" aria-label="More" onClick=${onMenu}>
-      <${Icon} name="more" /></button>` : html`<span />`}
+    <${Thumb} kit=${kit} version=${version} />
+    <div class="pbody">
+      <div class="pline"><span class="pname" title=${kit.name}>${kit.name}</span>
+        ${onMenu && html`<button class="btn small icon ghost more" title="More" aria-label="More" onClick=${onMenu}>
+          <${Icon} name="more" /></button>`}</div>
+      <div class="psub" title=${sub}>${sub}</div>
+      <div class="meta">${meta}</div>
+    </div>
   </div>`;
 }
 
@@ -204,16 +247,17 @@ function Mine({ data, actions, open }) {
   if (!data.kits.length && !data.library.length) {
     return html`<${Blank} icon="spark" title="No customizations yet" />`;
   }
-  return html`${data.kits.length > 0 && html`<div class="home-list cz-list">
-      <div class="prow head"><span>Name</span><span>Kind</span><span>Version</span><span /></div>
-      ${data.kits.map((k) => html`<${Row} key=${k.id} kit=${k} sub=${k.description || k.class}
-        right=${latest(k) ? `${latest(k).label} · ${STATUS[latest(k).status] ?? latest(k).status}` : ""}
+  return html`${data.kits.length > 0 && html`<div class="home-grid">
+      ${data.kits.map((k) => html`<${Card} key=${k.id} kit=${k} version=${latest(k)?.version} sub=${k.description || k.class}
+        meta=${[KINDS[k.kind], latest(k) && `${latest(k).label} · ${STATUS[latest(k).status] ?? latest(k).status}`]
+          .filter(Boolean).join(" · ")}
         onOpen=${() => open(k.id)} onMenu=${(e) => menu(e, k)} />`)}
     </div>`}
     ${data.library.length > 0 && html`<h3 class="cz-h">From the gallery</h3>
-      <div class="home-list cz-list">
-        ${data.library.map((k) => html`<${Row} key=${k.id} kit=${k} sub=${`by ${k.author || "someone"}`}
-          right=${latest(k)?.label ?? ""} onOpen=${() => open(k.id)} />`)}
+      <div class="home-grid">
+        ${data.library.map((k) => html`<${Card} key=${k.id} kit=${k} version=${newestPublic(k)?.version}
+          sub=${k.description || k.class} meta=${`${KINDS[k.kind]} · by ${k.author || "someone"}`}
+          onOpen=${() => open(k.id)} />`)}
       </div>`}`;
 }
 
@@ -232,10 +276,10 @@ function Gallery({ open }) {
         onInput=${(e) => setQuery(e.currentTarget.value)} /></label>
     ${found && !found.kits.length ? html`<${Blank} icon="spark" title=${query ? `Nothing matches “${query}”` : "Nothing here yet"}>
         <p>${query ? "Try other words." : "Approved customizations will appear here."}</p><//>`
-      : found && html`<div class="home-list cz-list">
-        <div class="prow head"><span>Name</span><span>Kind</span><span>By</span><span /></div>
-        ${found.kits.map((k) => html`<${Row} key=${k.id} kit=${k} sub=${k.description || k.class}
-          right=${html`${k.author || "someone"}${waits(k) ? html` · <span class="cz-waits">${waits(k)}</span>`
+      : found && html`<div class="home-grid">
+        ${found.kits.map((k) => html`<${Card} key=${k.id} kit=${k} version=${k.review?.version || newestPublic(k)?.version}
+          sub=${k.description || k.class}
+          meta=${html`${KINDS[k.kind]} · ${k.author || "someone"}${waits(k) ? html` · <span class="cz-waits">${waits(k)}</span>`
             : k.in_library ? html` · <span class="cz-in">In your library</span>` : ""}`}
           onOpen=${() => open(k.id, k.review?.version || undefined)} />`)}
       </div>`}`;
