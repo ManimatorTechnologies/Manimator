@@ -68,8 +68,6 @@ are in `WebConfig` in `manimator/server/web.py`.
 Sizing: the server only edits and stores JSON, so 1–2 CPU cores and 1–2 GB of memory serve many people. "Serverless"
 and per-request platforms are a poor fit: sessions need a disk.
 
-The license allows running Manimator for others only for noncommercial purposes; see [LICENSE](../LICENSE).
-
 ## What protects the server and the visitors
 
 - **Private workspaces.** Each visitor gets a random 128-bit id in an `HttpOnly`, `SameSite=Lax` cookie. Only ids the

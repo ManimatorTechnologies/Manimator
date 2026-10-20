@@ -1,6 +1,6 @@
 # Third-party notices
 
-Manimator's own code is under the PolyForm Noncommercial License (see `LICENSE.md` and `NOTICE`). These parts were
+Manimator's own code is under the MIT License (see `LICENSE`). These parts were
 made by others and stay under their own licenses, whose full texts are in this repository:
 
 | What | Where it is used | License | Text |

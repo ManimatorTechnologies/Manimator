@@ -10,12 +10,9 @@ Bug reports and ideas are welcome as GitHub issues. For a larger change, open an
 
 ## Contributor terms
 
-Manimator is free for noncommercial use under the PolyForm Noncommercial License, and its author also runs it as a
-paid service (manimator.app). So that contributions can be part of both, by sending a contribution you agree that:
+By sending a contribution you agree that:
 
 1. You wrote it, or otherwise have the right to give it under these terms.
-2. Everyone gets it under the same license as the rest of the project (PolyForm Noncommercial 1.0.0).
-3. You also give Savith Enterprise a perpetual, worldwide, non-exclusive, royalty-free, irrevocable license to use,
-   copy, change, distribute, sublicense and relicense your contribution, including for commercial purposes.
+2. Everyone gets it under the same license as the rest of the project (the MIT License).
 
 You keep the copyright of your contribution.

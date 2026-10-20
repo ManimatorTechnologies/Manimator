@@ -164,8 +164,8 @@ This repository is the editor and its server, as you run it yourself: no account
 
 ## License
 
-Manimator is source-available under the [PolyForm Noncommercial License 1.0.0](LICENSE.md): you may use, change and
-share it for any noncommercial purpose (personal use, study, teaching, research, charities and public institutions).
-Commercial use needs a separate license. Parts made by others keep their own licenses: see
+Manimator is open source under the [MIT License](LICENSE): you may use, change and share it for any purpose,
+including commercial use, as long as you keep the copyright and license notice. The Manimator name and logo are not
+licensed for use by other projects or services. Parts made by others keep their own licenses: see
 [ThirdPartyNotices.md](ThirdPartyNotices.md). Contributions are welcome under the terms in
 [CONTRIBUTING.md](CONTRIBUTING.md).
