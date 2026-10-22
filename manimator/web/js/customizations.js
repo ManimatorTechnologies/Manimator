@@ -11,8 +11,6 @@ import { loadKits, status, store } from "./store.js";
 import { Markdown } from "./markdown.js";
 import { confirmDialog, Icon, openMenu, promptDialog } from "./ui.js";
 
-const KINDS = { object: "Object", animation: "Animation" };
-
 const STATUS = { private: "Private", pending: "Waiting for review", public: "Public", rejected: "Not approved",
   taken_down: "Taken down" };
 
@@ -299,9 +297,7 @@ function Gallery({ open }) {
 function Detail({ id, version, back, show, busy, actions, isPublic }) {
   const [kit, setKit] = useState(null);
   const [missing, setMissing] = useState("");
-  const [part, setPart] = useState(null); // the class of the part the preview plays and the page describes (null: the first)
   useEffect(() => {
-    setPart(null);
     get(`/api/kits/${id}${version ? `?version=${version}` : ""}`).then(setKit).catch((e) => setMissing(e.message));
   }, [id, version]);
   if (missing) {
@@ -317,10 +313,6 @@ function Detail({ id, version, back, show, busy, actions, isPublic }) {
   const waiting = review?.version ? kit.versions.find((v) => v.version === review.version) : null;
   const inGallery = kit.versions.some((v) => v.status === "public");
   const down = newest?.status === "taken_down";
-  const parts = kit.parts ?? [];
-  const picked = parts.find((p) => p.class === part) ?? parts[0];
-  // an animation of the object plays on it; a first-format animation (no object) plays on a square: no `anim` either
-  const anim = picked?.kind === "animation" && parts[0].kind === "object" ? picked.class : null;
   const more = [
     ...(kit.mine ? [{ label: "Edit description…", onClick: () => actions.describe(kit) }, { separator: true },
       { label: "Delete…", onClick: () => actions.remove(kit) }] : []),
@@ -360,14 +352,13 @@ function Detail({ id, version, back, show, busy, actions, isPublic }) {
     <div class="cz-layout">
       <div class="cz-main">
         ${down ? html`<div class="cz-preview cz-off"><span>Taken down: it doesn't play any more.</span></div>`
-          : html`<${Preview} kitId=${kit.id} version=${shown?.version} anim=${anim} />`}
+          : html`<${Preview} kitId=${kit.id} version=${shown?.version} />`}
         ${kit.readme && html`<section class="cz-readme">
           <h2 class="cz-sec-h">Readme</h2>
           <${Markdown} text=${kit.readme} dropTitle />
         </section>`}
       </div>
       <aside class="cz-side">
-        ${parts.length > 1 && html`<${Inside} parts=${parts} picked=${picked} pick=${setPart} />`}
         <section class="cz-box cz-about-box">
           <${About} kit=${kit} />
           <${Versions} kit=${kit} shown=${shown} theirs=${theirs} pick=${theirs && kit.versions.length > 1 ? show : null} />
@@ -417,31 +408,6 @@ function Callouts({ kit, shown, newest, waiting, inGallery, busy, actions, show 
   return out.length ? html`<div class="cz-callouts">${out}</div>` : null;
 }
 
-const num = (v) => String(+(+v).toFixed(4));
-const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
-
-/** A part in a few words: "Object · 19 settings", "Animation · 2 s · brings it in" (each fact kept on one line). */
-function partSub(p) {
-  const settings = p.settings.length ? plural(p.settings.length, "setting") : "";
-  const facts = p.kind !== "animation" ? [KINDS.object, settings] : [KINDS.animation, `${num(p.runTime)} s`,
-    p.introducer ? "brings it in" : p.remover ? "takes it away" : "", settings];
-  return facts.filter(Boolean).map((f) => f.replaceAll(" ", " ")).join(" · ");
-}
-
-/** The object and its animations: picking one plays it in the preview. */
-function Inside({ parts, picked, pick }) {
-  return html`<section class="cz-box cz-inside">
-    <h2 class="cz-h">Inside</h2>
-    <div role="tablist" aria-label="What the preview plays">
-      ${parts.map((p) => html`<button key=${p.type} role="tab" aria-selected=${p === picked}
-          class=${`cz-row ${p === picked ? "on" : ""}`} title=${p.description} onClick=${() => pick(p.class)}>
-        <span class="cz-ico"><${Icon} name=${p.kind === "animation" ? "play" : "box"} size=${15} /></span>
-        <span class="cz-row-text"><span class="cz-row-name">${p.name}</span><span class="cz-row-sub">${partSub(p)}</span></span>
-      </button>`)}
-    </div>
-  </section>`;
-}
-
 /** Who made it, its license and class. */
 function About({ kit }) {
   const rows = [
@@ -469,24 +435,22 @@ function Versions({ kit, shown, theirs, pick }) {
     </ul>`;
 }
 
-/** The customization drawn in the sandbox: its object standing still, or (`anim`: its class) one of the object's
- *  animations playing on a loop. */
-function Preview({ kitId, version, anim = null }) {
+/** The customization's object drawn in the sandbox, standing still. */
+function Preview({ kitId, version }) {
   const canvas = useRef();
   const [problem, setProblem] = useState("");
   const [early, setEarly] = useState(null); // the card's picture of the object, under the canvas till that is drawn
   useEffect(() => {
     let alive = true;
     let engine = null;
-    let timer = 0;
     setProblem("");
     setEarly(null);
-    const card = !anim && (pictures.get(`${kitId}:${version ?? ""}`) ?? pictures.get(`${kitId}:`));
+    const card = pictures.get(`${kitId}:${version ?? ""}`) ?? pictures.get(`${kitId}:`);
     card?.then((url) => alive && setEarly(url));
     (async () => {
       try {
-        const query = new URLSearchParams({ ...(version ? { version } : {}), ...(anim ? { anim } : { still: 1 }) }).toString();
-        const { plan } = await get(`/api/kits/${kitId}/demo${query ? `?${query}` : ""}`);
+        const query = new URLSearchParams({ ...(version ? { version } : {}), still: 1 }).toString();
+        const { plan } = await get(`/api/kits/${kitId}/demo?${query}`);
         const { createSandboxedEngine } = await import("./sandboxed.js");
         engine = await createSandboxedEngine({ canvas: canvas.current });
         if (!alive) return engine.dispose();
@@ -497,22 +461,15 @@ function Preview({ kitId, version, anim = null }) {
         if (!alive || !shown) return;
         const errors = [...Object.values(shown.errors ?? {}), ...(shown.scene_error ? [shown.scene_error] : [])];
         setProblem(errors.map(String).join(" · "));
-        if (!anim) return; // the object just stands there, drawn by show()
-        await engine.prepare();
-        const loop = () => engine.play(0, (_t, ended) => {
-          if (ended && alive) timer = setTimeout(() => alive && loop(), 900);
-        });
-        if (alive) loop();
       } catch (err) {
         if (alive) setProblem(err.message);
       }
     })();
     return () => {
       alive = false;
-      clearTimeout(timer);
       engine?.dispose();
     };
-  }, [kitId, version, anim]);
+  }, [kitId, version]);
   return html`<div class="cz-preview">${early && html`<img src=${early} alt="" draggable=${false} />`}<canvas ref=${canvas} />
     ${problem && html`<div class="cz-problem">${problem}</div>`}</div>`;
 }
