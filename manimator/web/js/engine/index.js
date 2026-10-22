@@ -111,10 +111,11 @@ export async function createEngine({ canvas = null, fontsUrl = "/static/fonts", 
       draw();
     },
 
-    /** Builds the plan's objects and draws the scene's starting layout. Resolves with what the editor needs:
+    /** Builds the plan's objects and draws the scene's starting layout (`draw: false`: draws nothing, the canvas
+     *  keeps its picture until renderAt(), as presenting wants). Resolves with what the editor needs:
      *  each object's box and error, the part of the scene shown ([center x, center y, width]), the scene's error.
      *  Resolves with null when a newer show() started meanwhile. */
-    async show(plan) {
+    async show(plan, { draw = true } = {}) {
       const mine = ++token;
       try {
         await loadPlanAssets(plan, fetchAsset);
@@ -147,7 +148,7 @@ export async function createEngine({ canvas = null, fontsUrl = "/static/fonts", 
       shown = { plan, timeline, layout, view: viewOf(camera), ready: null };
       dragging = null;
       time = null;
-      drawSoon(); // after the editor has had a chance to move a dragged object (drag())
+      if (draw) drawSoon(); // after the editor has had a chance to move a dragged object (drag())
       return { scene_id: plan.scene?.id, boxes, errors, view: shown.view, scene_error: timeline.setupError,
         duration: timeline.duration };
     },

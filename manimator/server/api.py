@@ -32,7 +32,7 @@ from ..model.project import FILE_SUFFIX, Project
 from ..plan import plan_hash, project_plan, scene_plan
 from . import docs
 from .addon import Addon, Core, LayeredFiles
-from .catalog import animation_json, catalog, mobject_json
+from .catalog import animation_json, catalog, kit_part_json, mobject_json
 from .kits import SUFFIX as KIT_SUFFIX, KitStore, demo_project
 from ..registry.custom import kit_type
 from .mcp import USER_PATH, mount_mcp, site_of
@@ -616,13 +616,13 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
         """The site's owner, who reviews public customizations (MANIMATOR_ADMINS)."""
         return bool(accounts and ws.user and ws.user.get("email", "").lower() in web.admins)
 
-    def public_view(kit: dict, ws) -> dict:
-        """A package as someone other than its author sees it: only approved versions, no review notes."""
-        out = kits.summary(kit, ws.owner_key)
-        if not out["mine"] and not is_admin(ws):
+    def public_view(kit: dict, ws, shown: int = 0) -> dict:
+        """A package as the visitor sees it, as of version `shown` (default: the newest they may see). Someone other
+        than its author sees only approved versions, and no review notes."""
+        theirs = kit["owner"] == ws.owner_key or is_admin(ws)
+        out = kits.summary(kit, ws.owner_key, shown or (0 if theirs else kits.latest_public(kit["id"])))
+        if not theirs:
             out["versions"] = [{**v, "reason": ""} for v in out["versions"] if v["status"] == "public"]
-            spec = kits.spec(kit["id"], kits.latest_public(kit["id"]))
-            out.update(type=spec.key if spec else None, description=spec.description if spec else "")
         out["in_library"] = kits.in_library(ws.owner_key, kit["id"])
         return out
 
@@ -692,24 +692,33 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
     @app.get("/api/kits/{kid}")
     def get_kit(kid: str, version: int = 0, ws=Depends(current)):
         kit = visible_kit(ws, kid)
-        out = public_view(kit, ws)
         shown = shown_version(ws, kit, version)
+        out = public_view(kit, ws, shown)
         readme = kits.file(kid, shown, "README.md") if shown else None
+        parts = kits.specs(kid, shown) if shown else []
         out.update(readme=readme.read_text(encoding="utf-8") if readme else "", shown_version=shown,
-                   can_add=not kits_allowed(ws) and not out["mine"] and bool(kits.latest_public(kid)))
+                   can_add=not kits_allowed(ws) and not out["mine"] and bool(kits.latest_public(kid)),
+                   parts=[kit_part_json(s) for s in parts], license=parts[0].kit.get("license", "") if parts else "")
         if is_admin(ws):
             out["review"] = kits.review(kid)
         return out
 
     @app.get("/api/kits/{kid}/demo")
-    def kit_demo(kid: str, version: int = 0, ws=Depends(current)):
-        """A small scene showing a version of the customization (the one the visitor sees), for its preview."""
+    def kit_demo(kid: str, version: int = 0, anim: str = "", still: bool = False, ws=Depends(current)):
+        """A small scene showing a version of the customization (the one the visitor sees), for its preview: its
+        object, or (`anim`: its class) one of the object's animations playing on it. `still`: the object just
+        standing there, for its card's picture."""
         kit = visible_kit(ws, kid)
         shown = shown_version(ws, kit, version)
         spec = kits.spec(kid, shown) if shown else None
         if spec is None or spec.blocked:
             raise Refused("That customization has no version to show.", 404)
-        project = demo_project(kit_type(kid, shown))
+        key = kit_type(kid, shown)
+        if anim:
+            key = next((s.key for s in kits.specs(kid, shown)[1:] if s.kit["class"] == anim), "")
+            if not key:
+                raise Refused("That version has no such animation.", 404)
+        project = demo_project(key, still=still and not anim)
         return {"plan": scene_plan(project.scenes[0], project)}
 
     @app.post("/api/kits/{kid}/delete")
@@ -717,6 +726,13 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
         """Takes a customization off the lists; projects that use it keep working."""
         throttle(ws, "op")
         kits.unlist(ws.owner_key, kid)
+        return kits_listing(ws)
+
+    @app.post("/api/kits/{kid}/describe")
+    def describe_kit(kid: str, body: dict = Body(...), ws=Depends(current)):
+        """The author changes a customization's description."""
+        throttle(ws, "op")
+        kits.describe(ws.owner_key, kid, body.get("description"))
         return kits_listing(ws)
 
     @app.get("/api/kits/{kid}/{version}/{name}")

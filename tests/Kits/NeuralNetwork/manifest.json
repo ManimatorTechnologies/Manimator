@@ -1,0 +1,52 @@
+{
+  "manimkit": 2,
+  "name": "Neural network",
+  "version": "1.1",
+  "description": "Layers of neurons joined by edges; big layers show an ellipsis and a brace with their size",
+  "license": "MIT",
+  "object": {
+    "class": "NeuralNetwork",
+    "style": "none",
+    "params": [
+      {"name": "layers", "kind": "str", "default": "8, 6, 6, 4", "label": "Layers",
+       "tooltip": "Neurons in each layer, left to right, like 784, 16, 16, 10"},
+      {"name": "max_shown", "kind": "int", "default": 16, "min": 2, "max": 64, "step": 1, "label": "Most shown",
+       "tooltip": "Bigger layers show this many neurons around an ellipsis"},
+      {"name": "neuron_radius", "kind": "float", "default": 0.15, "min": 0.02, "max": 1, "step": 0.01,
+       "label": "Neuron size"},
+      {"name": "neuron_spacing", "kind": "float", "default": 0.25, "min": 0, "max": 2, "step": 0.05,
+       "label": "Neuron spacing", "tooltip": "Gap between neurons in a layer"},
+      {"name": "layer_spacing", "kind": "float", "default": 1.0, "min": 0, "max": 5, "step": 0.1,
+       "label": "Layer spacing", "tooltip": "Gap between layers"},
+      {"name": "neuron_color", "kind": "color", "default": "#58C4DD", "label": "Neuron color"},
+      {"name": "neuron_width", "kind": "float", "default": 3, "min": 0, "max": 12, "step": 0.5,
+       "label": "Neuron outline"},
+      {"name": "activation_color", "kind": "color", "default": "#83C167", "label": "Fill color",
+       "tooltip": "The color neurons fill with when they light up"},
+      {"name": "edge_color", "kind": "color", "default": "#BBBBBB", "label": "Edge color"},
+      {"name": "edge_width", "kind": "float", "default": 2, "min": 0, "max": 10, "step": 0.5, "label": "Edge width"},
+      {"name": "braces", "kind": "bool", "default": true, "label": "Size braces",
+       "tooltip": "A brace with the layer's size beside layers that are cut short"},
+      {"name": "output_labels", "kind": "bool", "default": false, "label": "Output labels",
+       "tooltip": "Number the last layer's neurons (0, 1, 2...)"},
+      {"name": "lit", "kind": "bool", "default": false, "label": "Light up",
+       "tooltip": "Fill the neurons by random amounts, as if the network were running"},
+      {"name": "seed", "kind": "int", "default": 7, "min": 0, "max": 9999, "step": 1, "label": "Pattern",
+       "tooltip": "Which random pattern Light up uses"}
+    ]
+  },
+  "animations": [
+    {
+      "class": "FeedForward", "name": "Feed forward",
+      "description": "Lights the network up layer by layer, with a pulse running along the edges into each layer",
+      "run_time": 3,
+      "params": [
+        {"name": "seed", "kind": "int", "default": 7, "min": 0, "max": 9999, "step": 1, "label": "Pattern",
+         "tooltip": "Which random pattern the neurons light up in (the same pattern as the network's Light up)"},
+        {"name": "pulse_color", "kind": "color", "default": "#F7D96F", "label": "Pulse color"},
+        {"name": "pulse_width", "kind": "float", "default": 1.5, "min": 0.5, "max": 5, "step": 0.1,
+         "label": "Pulse width", "tooltip": "How many times wider than an edge the pulse is"}
+      ]
+    }
+  ]
+}

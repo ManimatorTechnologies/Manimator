@@ -1,4 +1,4 @@
-// The Customizations page: custom objects and animations, written as code and uploaded as .manimkit files
+// The Customizations page: custom objects and their animations, written as code and uploaded as .manimkit files
 // (server/kits.py). Mine: the visitor's own (upload, new versions, make public) and the ones they added from the
 // gallery. Gallery: the public ones, which the site's owner approved first; the owner also sees there the ones waiting
 // for review or reported, and reviews each on its own page. Every preview plays in the sandbox (sandboxed.js):
@@ -8,9 +8,11 @@ import { html, useEffect, useRef, useState } from "./lib.js";
 import { chooseLocalFile, get, post } from "./api.js";
 import { openAuth, openPricing } from "./account.js";
 import { loadKits, status, store } from "./store.js";
+import { Markdown } from "./markdown.js";
 import { confirmDialog, Icon, openMenu, promptDialog } from "./ui.js";
 
 const KINDS = { object: "Object", animation: "Animation" };
+
 const STATUS = { private: "Private", pending: "Waiting for review", public: "Public", rejected: "Not approved",
   taken_down: "Taken down" };
 
@@ -80,7 +82,7 @@ function picture(kitId, version) {
     const made = queue.then(async () => {
       clearTimeout(idle);
       try {
-        const { plan } = await get(`/api/kits/${kitId}/demo${version ? `?version=${version}` : ""}`);
+        const { plan } = await get(`/api/kits/${kitId}/demo?still=1${version ? `&version=${version}` : ""}`);
         sandbox ??= await (await import("./sandboxed.js")).openSandbox();
         return URL.createObjectURL(await sandbox.thumbnail(plan));
       } catch {
@@ -110,14 +112,14 @@ function Thumb({ kit, version }) {
 }
 
 function Card({ kit, version, sub, meta, onOpen, onMenu }) {
-  return html`<div class="pcard" tabindex="0" onClick=${onOpen} onContextMenu=${onMenu}
+  return html`<div class="pcard cz-card" tabindex="0" onClick=${onOpen} onContextMenu=${onMenu}
       onKeyDown=${(e) => e.key === "Enter" && onOpen()}>
     <${Thumb} kit=${kit} version=${version} />
     <div class="pbody">
       <div class="pline"><span class="pname" title=${kit.name}>${kit.name}</span>
         ${onMenu && html`<button class="btn small icon ghost more" title="More" aria-label="More" onClick=${onMenu}>
           <${Icon} name="more" /></button>`}</div>
-      <div class="psub" title=${sub}>${sub}</div>
+      <div class="psub">${sub}</div>
       <div class="meta">${meta}</div>
     </div>
   </div>`;
@@ -163,6 +165,13 @@ export function CustomizationsPage() {
       changed(await post(`/api/kits/${kit.id}/delete`), `Deleted ${kit.name}.`);
       setOpen(null);
     }),
+    describe: (kit) => act(async () => {
+      const text = await promptDialog({ title: `Description of ${kit.name}`, message: "Up to 25 words. It shows on its "
+        + "card and in the editor.", value: kit.description || "", ok: "Save" });
+      if (text == null || text === kit.description) return;
+      changed(await post(`/api/kits/${kit.id}/describe`, { description: text }), "Description saved.");
+      setOpen((o) => o && { ...o, nonce: Date.now() });
+    }),
     submit: (kit) => act(async () => {
       const ok = await confirmDialog({ title: `Make ${kit.name} public?`, message: "Manimator looks at its code before "
         + "it joins the gallery, where anyone with an account can add it to their projects. Its newest version is the "
@@ -203,7 +212,8 @@ export function CustomizationsPage() {
 
   if (open) {
     return html`<${Detail} key=${`${open.id}:${open.version ?? ""}:${open.nonce ?? ""}`} id=${open.id} version=${open.version}
-      back=${() => { setOpen(null); refresh(); }} busy=${busy} actions=${actions} isPublic=${!!data?.public} />`;
+      back=${() => { setOpen(null); refresh(); }} show=${(version) => setOpen({ id: open.id, version })} busy=${busy}
+      actions=${actions} isPublic=${!!data?.public} />`;
   }
   const tabs = [...(data?.public ? [["gallery", "Gallery"]] : []), ["mine", "Mine"]];
   const tab = picked ?? tabs[0][0];
@@ -232,6 +242,7 @@ function Mine({ data, actions, open }) {
     const r = e.currentTarget.getBoundingClientRect?.() ?? { right: e.clientX + 180, bottom: e.clientY };
     openMenu([
       { label: "Open", onClick: () => open(kit.id) },
+      { label: "Edit description…", onClick: () => actions.describe(kit) },
       ...(latest(kit)?.status === "taken_down" ? [] // it gets no new versions
         : [{ label: "Upload a new version…", onClick: () => actions.upload(kit.id) }]),
       ...(data.public && ["private", "rejected"].includes(latest(kit)?.status)
@@ -247,16 +258,16 @@ function Mine({ data, actions, open }) {
   if (!data.kits.length && !data.library.length) {
     return html`<${Blank} icon="spark" title="No customizations yet" />`;
   }
-  return html`${data.kits.length > 0 && html`<div class="home-grid">
+  return html`${data.kits.length > 0 && html`<div class="home-grid cz-grid">
       ${data.kits.map((k) => html`<${Card} key=${k.id} kit=${k} version=${latest(k)?.version} sub=${k.description || k.class}
-        meta=${[KINDS[k.kind], latest(k) && `${latest(k).label} · ${STATUS[latest(k).status] ?? latest(k).status}`]
+        meta=${[latest(k) && `${latest(k).label} · ${STATUS[latest(k).status] ?? latest(k).status}`]
           .filter(Boolean).join(" · ")}
         onOpen=${() => open(k.id)} onMenu=${(e) => menu(e, k)} />`)}
     </div>`}
     ${data.library.length > 0 && html`<h3 class="cz-h">From the gallery</h3>
-      <div class="home-grid">
+      <div class="home-grid cz-grid">
         ${data.library.map((k) => html`<${Card} key=${k.id} kit=${k} version=${newestPublic(k)?.version}
-          sub=${k.description || k.class} meta=${`${KINDS[k.kind]} · by ${k.author || "someone"}`}
+          sub=${k.description || k.class} meta=${`by ${k.author || "someone"}`}
           onOpen=${() => open(k.id)} />`)}
       </div>`}`;
 }
@@ -276,19 +287,21 @@ function Gallery({ open }) {
         onInput=${(e) => setQuery(e.currentTarget.value)} /></label>
     ${found && !found.kits.length ? html`<${Blank} icon="spark" title=${query ? `Nothing matches “${query}”` : "Nothing here yet"}>
         <p>${query ? "Try other words." : "Approved customizations will appear here."}</p><//>`
-      : found && html`<div class="home-grid">
+      : found && html`<div class="home-grid cz-grid">
         ${found.kits.map((k) => html`<${Card} key=${k.id} kit=${k} version=${k.review?.version || newestPublic(k)?.version}
           sub=${k.description || k.class}
-          meta=${html`${KINDS[k.kind]} · ${k.author || "someone"}${waits(k) ? html` · <span class="cz-waits">${waits(k)}</span>`
+          meta=${html`${k.author || "someone"}${waits(k) ? html` · <span class="cz-waits">${waits(k)}</span>`
             : k.in_library ? html` · <span class="cz-in">In your library</span>` : ""}`}
           onOpen=${() => open(k.id, k.review?.version || undefined)} />`)}
       </div>`}`;
 }
 
-function Detail({ id, version, back, busy, actions, isPublic }) {
+function Detail({ id, version, back, show, busy, actions, isPublic }) {
   const [kit, setKit] = useState(null);
   const [missing, setMissing] = useState("");
+  const [part, setPart] = useState(null); // the class of the part the preview plays and the page describes (null: the first)
   useEffect(() => {
+    setPart(null);
     get(`/api/kits/${id}${version ? `?version=${version}` : ""}`).then(setKit).catch((e) => setMissing(e.message));
   }, [id, version]);
   if (missing) {
@@ -298,77 +311,182 @@ function Detail({ id, version, back, busy, actions, isPublic }) {
   if (!kit) return html`<main class="home-body" />`;
   const shown = kit.versions.find((v) => v.version === kit.shown_version) ?? latest(kit);
   const newest = latest(kit);
-  const canSubmit = kit.mine && isPublic && ["private", "rejected"].includes(newest?.status);
   const review = kit.review; // only for the site's owner, who reviews: { version waiting (0: none), reports }
+  const theirs = kit.mine || !!review; // the author and the reviewer see every version and how it stands
+  const canSubmit = kit.mine && isPublic && ["private", "rejected"].includes(newest?.status);
   const waiting = review?.version ? kit.versions.find((v) => v.version === review.version) : null;
   const inGallery = kit.versions.some((v) => v.status === "public");
+  const down = newest?.status === "taken_down";
+  const parts = kit.parts ?? [];
+  const picked = parts.find((p) => p.class === part) ?? parts[0];
+  // an animation of the object plays on it; a first-format animation (no object) plays on a square: no `anim` either
+  const anim = picked?.kind === "animation" && parts[0].kind === "object" ? picked.class : null;
+  const more = [
+    ...(kit.mine ? [{ label: "Edit description…", onClick: () => actions.describe(kit) }, { separator: true },
+      { label: "Delete…", onClick: () => actions.remove(kit) }] : []),
+    ...(!kit.mine && !review ? [{ label: "Report…", onClick: () => actions.report(kit) }] : []),
+    ...(review && inGallery && !review.reports.length ? [{ label: "Take down…", onClick: () => actions.review(kit, "take_down") }] : []),
+  ];
+  const openMore = (e) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    openMenu(more, r.right - 200, r.bottom + 4);
+  };
   return html`<main class="home-body cz-detail">
-    <div class="pres-top">
-      <button class="btn ghost small icon" title="Back" aria-label="Back" onClick=${back}><${Icon} name="left" /></button>
-      <h1 class="cz-name">${kit.name}</h1>
-      <span class="cz-kind">${KINDS[kit.kind]}</span>
-      <div class="spacer" />
-      ${waiting && html`<button class="btn" disabled=${busy} onClick=${() => actions.review(kit, "reject", waiting.version)}>
-          <span class="lbl">Don't approve</span></button>
-        <button class="btn primary" disabled=${busy} onClick=${() => actions.review(kit, "approve", waiting.version)}>
-          <span class="lbl">Approve</span></button>`}
-      ${review?.reports.length > 0 && html`<button class="btn" disabled=${busy} onClick=${() => actions.review(kit, "dismiss")}>
-        <span class="lbl">Dismiss reports</span></button>`}
-      ${review && inGallery && html`<button class="btn danger" disabled=${busy}
-        onClick=${() => actions.review(kit, "take_down")}><span class="lbl">Take down</span></button>`}
-      ${kit.mine ? html`
-        ${canSubmit && html`<button class="btn" disabled=${busy} onClick=${() => actions.submit(kit)}>
-          <span class="lbl">Make public</span></button>`}
-        ${newest?.status !== "taken_down" && html`<button class="btn" disabled=${busy}
-          onClick=${() => actions.upload(kit.id)}><span class="lbl">Upload new version</span></button>`}
-        <button class="btn" onClick=${() => actions.remove(kit)}><span class="lbl">Delete</span></button>`
-      : html`
-        ${!review && html`<button class="btn" onClick=${() => actions.report(kit)}><span class="lbl">Report</span></button>`}
-        ${kit.in_library ? html`<button class="btn" disabled=${busy} onClick=${() => actions.library(kit, false)}>
+    <button class="cz-back" onClick=${back}><${Icon} name="left" size=${15} /><span>Customizations</span></button>
+    <header class="cz-head">
+      <div class="cz-title">
+        <h1>${kit.name}</h1>
+        ${kit.description && html`<p class="cz-lede">${kit.description}</p>`}
+      </div>
+      <div class="cz-actions">
+        ${kit.mine ? html`
+          ${!down && html`<button class="btn" disabled=${busy} onClick=${() => actions.upload(kit.id)}>
+            <span class="lbl">Upload new version</span></button>`}
+          ${canSubmit && html`<button class="btn primary" disabled=${busy} onClick=${() => actions.submit(kit)}>
+            <span class="lbl">Make public</span></button>`}`
+        : kit.in_library ? html`<button class="btn" disabled=${busy} onClick=${() => actions.library(kit, false)}>
             <span class="lbl">Remove from library</span></button>`
-          : kit.can_add ? html`<button class="btn primary" disabled=${busy} onClick=${() => actions.library(kit, true)}>
+        : kit.can_add ? html`<button class="btn primary" disabled=${busy} onClick=${() => actions.library(kit, true)}>
             <span class="lbl">Add to my library</span></button>`
-          : inGallery && (store.account?.user
-            ? html`<button class="btn primary" onClick=${openPricing}><span class="lbl">See plans</span></button>`
-            : html`<button class="btn primary" onClick=${() => openAuth("signup")}><span class="lbl">Sign up to use it</span></button>`)}`}
+        : inGallery && (store.account?.user
+          ? html`<button class="btn primary" onClick=${openPricing}><span class="lbl">See plans</span></button>`
+          : html`<button class="btn primary" onClick=${() => openAuth("signup")}><span class="lbl">Sign up to use it</span></button>`)}
+        ${more.length > 0 && html`<button class="btn icon" title="More" aria-label="More" onClick=${openMore}>
+          <${Icon} name="more" /></button>`}
+      </div>
+    </header>
+    <${Callouts} kit=${kit} shown=${shown} newest=${newest} waiting=${waiting} inGallery=${inGallery} busy=${busy}
+      actions=${actions} show=${show} />
+    <div class="cz-layout">
+      <div class="cz-main">
+        ${down ? html`<div class="cz-preview cz-off"><span>Taken down: it doesn't play any more.</span></div>`
+          : html`<${Preview} kitId=${kit.id} version=${shown?.version} anim=${anim} />`}
+        ${kit.readme && html`<section class="cz-readme">
+          <h2 class="cz-sec-h">Readme</h2>
+          <${Markdown} text=${kit.readme} dropTitle />
+        </section>`}
+      </div>
+      <aside class="cz-side">
+        ${parts.length > 1 && html`<${Inside} parts=${parts} picked=${picked} pick=${setPart} />`}
+        <section class="cz-box cz-about-box">
+          <${About} kit=${kit} />
+          <${Versions} kit=${kit} shown=${shown} theirs=${theirs} pick=${theirs && kit.versions.length > 1 ? show : null} />
+        </section>
+      </aside>
     </div>
-    <p class="cz-desc">${kit.description || ""} <span class="cz-class">${kit.class}</span>
-      ${!kit.mine && html` · by ${kit.author || "someone"}`}</p>
-    ${waiting && html`<p class="cz-state">Version ${waiting.label || `#${waiting.version}`} is waiting for your review.</p>`}
-    ${review?.reports.length > 0 && html`<div class="cz-state warn">${reportCount(review.reports.length)}:
-      <ul class="cz-reasons">${review.reports.map((r) => html`<li>${r.reason} <span class="dim">${ago(r.created)}</span></li>`)}</ul>
-    </div>`}
-    ${kit.mine && !waiting && newest?.status === "pending" && html`<p class="cz-state">Waiting for review: Manimator looks at its code
-      before it joins the gallery.</p>`}
-    ${kit.mine && newest?.status === "rejected" && html`<p class="cz-state warn">Not approved${newest.reason
-      ? `: ${newest.reason}` : ""}. Upload a fixed version, then make it public again.</p>`}
-    ${kit.mine && newest?.status === "taken_down" && html`<p class="cz-state warn">Taken down${newest.reason
-      ? `: ${newest.reason}` : ""}. Its objects don't play any more.</p>`}
-    ${newest?.status === "taken_down" ? null : html`<${Preview} kitId=${kit.id} version=${shown?.version} />`}
-    <h3 class="cz-h">Versions</h3>
-    <ul class="cz-versions">
-      ${[...kit.versions].reverse().map((v) => html`<li key=${v.version}>
-        <b>${v.label || `#${v.version}`}</b><span>${STATUS[v.status] ?? v.status}${v.reason ? `: ${v.reason}` : ""}</span>
-        <span class="dim">${ago(v.created)}</span></li>`)}
-    </ul>
-    <p class="dim cz-note">Projects keep the version they were made with. New objects and animations use the newest.
-      ${shown && html` Code: <span class="cz-files">${["kit.js", "kit.py"].map((f) => html`<a
-        href=${`/api/kits/${kit.id}/${shown.version}/${f}`} target="_blank" rel="noopener">${f}</a>`)}</span>`}</p>
-    ${kit.readme && html`<h3 class="cz-h">README</h3><pre class="cz-readme">${kit.readme}</pre>`}
   </main>`;
 }
 
-/** The customization playing on a loop, drawn in the sandbox. */
-function Preview({ kitId, version }) {
+function Callout({ tone = "", icon, title, children, acts }) {
+  return html`<div class=${`cz-callout ${tone}`}>
+    <${Icon} name=${icon} />
+    <div class="cz-callout-text"><b>${title}</b> ${children}</div>
+    ${acts && html`<div class="cz-callout-acts">${acts}</div>`}
+  </div>`;
+}
+
+/** How the customization stands, when something needs saying: for its author (waiting, not approved, taken down), for
+ *  the site's owner (a version to review, reports), or when an older version is shown. */
+function Callouts({ kit, shown, newest, waiting, inGallery, busy, actions, show }) {
+  const review = kit.review;
+  const reports = review?.reports ?? [];
+  const label = (v) => v.label || `#${v.version}`;
+  const out = [
+    waiting && html`<${Callout} icon="wait" title=${`Version ${label(waiting)} is waiting for your review.`}
+      acts=${html`<button class="btn" disabled=${busy} onClick=${() => actions.review(kit, "reject", waiting.version)}>
+          <span class="lbl">Don't approve</span></button>
+        <button class="btn primary" disabled=${busy} onClick=${() => actions.review(kit, "approve", waiting.version)}>
+          <span class="lbl">Approve</span></button>`} />`,
+    reports.length > 0 && html`<${Callout} tone="warn" icon="x" title=${`${reportCount(reports.length)}.`}
+      acts=${html`<button class="btn" disabled=${busy} onClick=${() => actions.review(kit, "dismiss")}>
+          <span class="lbl">Dismiss reports</span></button>
+        ${inGallery && html`<button class="btn danger" disabled=${busy} onClick=${() => actions.review(kit, "take_down")}>
+          <span class="lbl">Take down</span></button>`}`}>
+      <ul class="cz-reasons">${reports.map((r) => html`<li>${r.reason} <span class="dim">${ago(r.created)}</span></li>`)}</ul><//>`,
+    kit.mine && !waiting && newest?.status === "pending" && html`<${Callout} icon="wait" title="Waiting for review.">
+      Manimator looks at its code before it joins the gallery.<//>`,
+    kit.mine && newest?.status === "rejected" && html`<${Callout} tone="danger" icon="x" title="Not approved.">
+      ${newest.reason && `${newest.reason}. `}Upload a fixed version, then make it public again.<//>`,
+    kit.mine && newest?.status === "taken_down" && html`<${Callout} tone="danger" icon="x" title="Taken down.">
+      ${newest.reason && `${newest.reason}. `}Its objects don't play any more.<//>`,
+    shown && newest && shown.version !== newest.version && newest.status !== "taken_down" && html`<${Callout}
+      icon="layers" title=${`This is version ${label(shown)}.`}
+      acts=${html`<button class="btn" onClick=${() => show(0)}><span class="lbl">Show the newest</span></button>`}>
+      The newest is ${label(newest)}.<//>`,
+  ].filter(Boolean);
+  return out.length ? html`<div class="cz-callouts">${out}</div>` : null;
+}
+
+const num = (v) => String(+(+v).toFixed(4));
+const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+
+/** A part in a few words: "Object · 19 settings", "Animation · 2 s · brings it in" (each fact kept on one line). */
+function partSub(p) {
+  const settings = p.settings.length ? plural(p.settings.length, "setting") : "";
+  const facts = p.kind !== "animation" ? [KINDS.object, settings] : [KINDS.animation, `${num(p.runTime)} s`,
+    p.introducer ? "brings it in" : p.remover ? "takes it away" : "", settings];
+  return facts.filter(Boolean).map((f) => f.replaceAll(" ", " ")).join(" · ");
+}
+
+/** The object and its animations: picking one plays it in the preview. */
+function Inside({ parts, picked, pick }) {
+  return html`<section class="cz-box cz-inside">
+    <h2 class="cz-h">Inside</h2>
+    <div role="tablist" aria-label="What the preview plays">
+      ${parts.map((p) => html`<button key=${p.type} role="tab" aria-selected=${p === picked}
+          class=${`cz-row ${p === picked ? "on" : ""}`} title=${p.description} onClick=${() => pick(p.class)}>
+        <span class="cz-ico"><${Icon} name=${p.kind === "animation" ? "play" : "box"} size=${15} /></span>
+        <span class="cz-row-text"><span class="cz-row-name">${p.name}</span><span class="cz-row-sub">${partSub(p)}</span></span>
+      </button>`)}
+    </div>
+  </section>`;
+}
+
+/** Who made it, its license and class. */
+function About({ kit }) {
+  const rows = [
+    ["Made by", kit.mine ? "You" : kit.author || "Someone"],
+    kit.license && ["License", kit.license],
+    ["Class", html`<code>${kit.class}</code>`],
+  ].filter(Boolean);
+  return html`<h2 class="cz-h">About</h2>
+    <dl class="cz-about">${rows.map(([k, v]) => html`<dt>${k}</dt><dd>${v}</dd>`)}</dl>`;
+}
+
+/** Every version (others see the approved ones); the author and the reviewer can show an older one. Shares About's box. */
+function Versions({ kit, shown, theirs, pick }) {
+  return html`<h2 class="cz-h split">Versions</h2>
+    <ul class="cz-versions">
+      ${[...kit.versions].reverse().map((v) => {
+        const on = v.version === shown?.version;
+        const body = html`<b>${v.label || `#${v.version}`}</b><span /><span class="dim">${ago(v.created)}</span>`;
+        return html`<li key=${v.version}>
+          ${pick ? html`<button class=${`cz-ver ${on ? "on" : ""}`} aria-current=${on ? "true" : null}
+              onClick=${() => pick(v.version)}>${body}</button>` : html`<div class="cz-ver">${body}</div>`}
+          ${theirs && v.reason && html`<p class="cz-ver-why">${v.reason}</p>`}
+        </li>`;
+      })}
+    </ul>`;
+}
+
+/** The customization drawn in the sandbox: its object standing still, or (`anim`: its class) one of the object's
+ *  animations playing on a loop. */
+function Preview({ kitId, version, anim = null }) {
   const canvas = useRef();
   const [problem, setProblem] = useState("");
+  const [early, setEarly] = useState(null); // the card's picture of the object, under the canvas till that is drawn
   useEffect(() => {
     let alive = true;
     let engine = null;
     let timer = 0;
+    setProblem("");
+    setEarly(null);
+    const card = !anim && (pictures.get(`${kitId}:${version ?? ""}`) ?? pictures.get(`${kitId}:`));
+    card?.then((url) => alive && setEarly(url));
     (async () => {
       try {
-        const { plan } = await get(`/api/kits/${kitId}/demo${version ? `?version=${version}` : ""}`);
+        const query = new URLSearchParams({ ...(version ? { version } : {}), ...(anim ? { anim } : { still: 1 }) }).toString();
+        const { plan } = await get(`/api/kits/${kitId}/demo${query ? `?${query}` : ""}`);
         const { createSandboxedEngine } = await import("./sandboxed.js");
         engine = await createSandboxedEngine({ canvas: canvas.current });
         if (!alive) return engine.dispose();
@@ -379,6 +497,7 @@ function Preview({ kitId, version }) {
         if (!alive || !shown) return;
         const errors = [...Object.values(shown.errors ?? {}), ...(shown.scene_error ? [shown.scene_error] : [])];
         setProblem(errors.map(String).join(" · "));
+        if (!anim) return; // the object just stands there, drawn by show()
         await engine.prepare();
         const loop = () => engine.play(0, (_t, ended) => {
           if (ended && alive) timer = setTimeout(() => alive && loop(), 900);
@@ -393,7 +512,7 @@ function Preview({ kitId, version }) {
       clearTimeout(timer);
       engine?.dispose();
     };
-  }, [kitId, version]);
-  return html`<div class="cz-preview"><canvas ref=${canvas} />
+  }, [kitId, version, anim]);
+  return html`<div class="cz-preview">${early && html`<img src=${early} alt="" draggable=${false} />`}<canvas ref=${canvas} />
     ${problem && html`<div class="cz-problem">${problem}</div>`}</div>`;
 }

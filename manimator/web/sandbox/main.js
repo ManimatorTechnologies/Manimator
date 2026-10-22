@@ -49,11 +49,11 @@ function picture() {
 }
 
 const ops = {
-  async show({ plan, kits }) {
+  async show({ plan, kits, draw = true }) {
     Object.assign(sources, kits ?? {});
     const e = await engineFor(plan.kits);
-    const shown = await e.show(plan);
-    if (shown) {
+    const shown = await e.show(plan, { draw });
+    if (shown && draw) { // (draw false: no picture until renderAt)
       e.renderAt(null);
       picture();
     }

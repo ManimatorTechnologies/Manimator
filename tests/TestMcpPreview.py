@@ -94,16 +94,16 @@ def test_customizations_are_drawn_as_stand_ins_and_their_code_never_loads(tmp_pa
     from tests.TestKits import package
 
     store = KitStore(tmp_path)
-    battery = kit_type(store.add("u", "Ada", package("battery"), 5)["id"], 1)
-    pop = kit_type(store.add("u", "Ada", package("PopIn"), 5)["id"], 1)
+    kit_id = store.add("u", "Ada", package("Battery"), 5)["id"]
+    battery, pop = kit_type(kit_id, 1), kit_type(kit_id, 1, "PopIn")
     s = Session(kits=lambda key: store.check_use("u", 10, key))
     sid = s.project.scenes[0].id
     cell = s.apply("add_mobject", {"scene_id": sid, "type": battery})
     dot = s.apply("add_mobject", {"scene_id": sid, "type": "Circle"})
     s.apply("add_method", {"scene_id": sid, "mob_id": dot, "method": "next_to"})
     s.apply("set_method_arg", {"scene_id": sid, "mob_id": dot, "index": 0, "name": "mobject_or_point", "value": cell})
-    s.apply("add_play_step", {"scene_id": sid, "anim": pop, "target_id": dot})
-    s.apply("add_play_step", {"scene_id": sid, "anim": "FadeIn", "target_id": cell})
+    s.apply("add_play_step", {"scene_id": sid, "anim": pop, "target_id": cell})
+    s.apply("add_play_step", {"scene_id": sid, "anim": "FadeIn", "target_id": dot})
     plan = scene_plan(s.project.scenes[0], s.project)
     assert [k["class"] for k in plan["kits"]] == ["Battery", "PopIn"]
 

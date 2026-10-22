@@ -448,20 +448,9 @@ async function importKit(text, sha) {
  *  chose this, as they write or review every package (the public gallery is reviewed before it lists one). Their
  *  code comes with the scene (`sources`). */
 async function directEngine(kits, sources) {
-  const [{ registerKitClass }, { createEngine }] = await Promise.all([
+  const [{ registerKits }, { createEngine }] = await Promise.all([
     import(`${SITE}/static/js/engine/kits.js`), import(`${SITE}/static/js/engine/index.js`)]);
-  let replaced = false;
-  for (const kit of kits) {
-    const text = sources?.[kit.type];
-    if (typeof text !== "string") throw new Error(`${kit.class}: its code didn't arrive`);
-    let mod;
-    try {
-      mod = await importKit(text, kit.js_sha256);
-    } catch (e) {
-      throw new Error(`${kit.class}: kit.js failed to load (${e?.message ?? e})`);
-    }
-    replaced = registerKitClass(kit, mod.default) || replaced;
-  }
+  const replaced = await registerKits(kits, sources ?? {}, importKit);
   // Objects built under a class name that now means another package are stale: a fresh engine then.
   return replaced ? createEngine({ canvas, fontsUrl: `${SITE}/static/fonts` }) : engineReady;
 }

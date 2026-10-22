@@ -16,30 +16,32 @@ export const NOT_STARTED = "The customizations' sandbox didn't start.";
 
 const defaultFetchAsset = (name) => fetch(`/api/assets/${encodeURIComponent(name)}`, { credentials: "same-origin" });
 
-// kit.js texts, by package type (each version's file never changes)
+// kit.js texts, by address: a package version's file, which never changes (an object's animations share it)
 const kitTexts = new Map();
 function kitText(kit) {
-  if (!kitTexts.has(kit.type)) {
-    kitTexts.set(kit.type, fetch(kit.js, { credentials: "same-origin" }).then((r) => {
+  if (!kitTexts.has(kit.js)) {
+    kitTexts.set(kit.js, fetch(kit.js, { credentials: "same-origin" }).then((r) => {
       if (!r.ok) throw new Error(`${kit.class}: its code can't be loaded (${r.status})`);
       return r.text();
     }).catch((e) => {
-      kitTexts.delete(kit.type);
+      kitTexts.delete(kit.js);
       throw e;
     }));
   }
-  return kitTexts.get(kit.type);
+  return kitTexts.get(kit.js);
 }
 
 /** {type: kit.js text} for the packages of `plans`: from `given` when the caller has them (the chat's player gets
- *  them with the scene), else fetched from the site. */
+ *  them with the scene, each version's once, under one of its types), else fetched from the site. */
 async function kitSources(plans, given = null) {
   const out = {};
   for (const plan of plans) {
     for (const kit of plan?.kits ?? []) {
       if (given) {
-        if (typeof given[kit.type] !== "string") throw new Error(`${kit.class}: its code didn't arrive`);
-        out[kit.type] = given[kit.type];
+        const text = given[kit.type] ?? given[plan.kits.find((k) => k.js_sha256 === kit.js_sha256
+          && typeof given[k.type] === "string")?.type];
+        if (typeof text !== "string") throw new Error(`${kit.class}: its code didn't arrive`);
+        out[kit.type] = text;
       } else out[kit.type] = await kitText(kit);
     }
   }
@@ -236,14 +238,14 @@ export async function createSandboxedEngine({ canvas = null, fetchAsset = defaul
       if (target && current) latest("renderAt", { t: time });
     },
 
-    async show(plan) {
+    async show(plan, { draw = true } = {}) {
       const mine = ++token;
       const kits = await kitSources([plan], sources);
       if (mine !== token) return null;
       current = { plan, kits };
       const b = await frame();
       b.allow([plan]);
-      const shown = await b.call("show", current, 60000);
+      const shown = await b.call("show", { ...current, draw }, 60000);
       if (mine !== token || !shown) return null;
       stopPlayer();
       duration = Number(shown.duration) || 0;

@@ -173,15 +173,28 @@ def kit_spec(key: str):
     return MOBJECTS.custom.get(key) or ANIMATIONS.custom.get(key)
 
 
-def kit_class_clash(project: Project, key: str) -> str | None:
-    """The class name `key` shares with another package the project uses (its Python can hold only one)."""
+def kit_clashes(project: Project, key: str) -> list[tuple[str, str]]:
+    """The project's custom types that can't be used with `key`, each with the name they share: they come from
+    another package (or another version of its own) with the same class name, or that goes in the same Python module
+    (the download can hold only one of each)."""
     spec = kit_spec(key)
-    cls = (spec.kit or {}).get("class") if spec is not None else None
-    for other in kit_types_in(project):
+    k = spec.kit if spec is not None else None
+    out = []
+    for other in kit_types_in(project) if k else ():
         o = kit_spec(other) if other != key else None
-        if o is not None and o.kit and o.kit.get("class") == cls:
-            return cls
-    return None
+        if o is None or not o.kit or (o.kit["id"], o.kit["version"]) == (k["id"], k["version"]):
+            continue
+        if o.kit.get("class") == k.get("class"):
+            out.append((other, k["class"]))
+        elif o.kit.get("module") == k.get("module"):
+            out.append((other, o.kit.get("name") or k["module"]))
+    return out
+
+
+def kit_class_clash(project: Project, key: str) -> str | None:
+    """The name `key` shares with a custom type the project uses already that it can't be used with (kit_clashes)."""
+    clashes = kit_clashes(project, key)
+    return clashes[0][1] if clashes else None
 
 
 def default_params(params) -> dict:

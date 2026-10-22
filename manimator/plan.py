@@ -130,7 +130,9 @@ def scene_plan(scene: Scene, project: Project) -> dict:
 
 def scene_kits(scene: Scene) -> list[dict]:
     """The packages (server/kits.py) whose code the browser engine needs for this scene: each available custom type
-    it uses, with where its JavaScript is (GET /api/kits/<id>/<version>/kit.js) and the file's hash."""
+    it uses, with where its JavaScript is (GET /api/kits/<id>/<version>/kit.js), the file's hash, and which of its
+    exports the class is (format 2; a first-format package's is its default export, and its entries stay as they
+    were, so plans that use it keep their hashes)."""
     single = Project(scenes=[scene])
     out = []
     for key in kit_types_in(single):
@@ -138,8 +140,11 @@ def scene_kits(scene: Scene) -> list[dict]:
         if spec is None or spec.blocked or not spec.kit:
             continue
         k = spec.kit
-        out.append({"type": key, "class": k["class"], "kind": k["kind"], "js_sha256": k.get("js_sha256", ""),
-                    "js": f"/api/kits/{k['id']}/{k['version']}/kit.js"})
+        entry = {"type": key, "class": k["class"], "kind": k["kind"], "js_sha256": k.get("js_sha256", ""),
+                 "js": f"/api/kits/{k['id']}/{k['version']}/kit.js"}
+        if k.get("export", "default") != "default":
+            entry["export"] = k["export"]
+        out.append(entry)
     return out
 
 

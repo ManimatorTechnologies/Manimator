@@ -1,8 +1,10 @@
 """Custom objects and animations from code packages (.manimkit, see server/kits.py), next to the built-in ones.
 
-A project stores a custom type as "kit:<package id>:<version>". MOBJECTS and ANIMATIONS are SpecTables: looking a
-type up also finds the packages' specs, while listing them (iteration, values(), items(), len) gives only the
-built-ins, so the palette, the AI guide and everything that walks the catalog stay as they were.
+A project stores a custom type as "kit:<package id>:<version>" (the package's object, or the one class of a package
+in the first format) or "kit:<package id>:<version>:<Class>" (one of its object's animations). MOBJECTS and
+ANIMATIONS are SpecTables: looking a type up also finds the packages' specs, while listing them (iteration, values(),
+items(), len) gives only the built-ins, so the palette, the AI guide and everything that walks the catalog stay as
+they were.
 
 A custom type nobody registered (a package taken down, or not loaded) still looks up: as a stand-in that draws
 nothing and says why, so a project is never quietly emptied of its objects.
@@ -14,7 +16,7 @@ import re
 from typing import Callable
 
 KIT_PREFIX = "kit:"
-KIT_TYPE_RE = re.compile(r"^kit:([0-9a-f]{12}):([1-9][0-9]{0,3})$")
+KIT_TYPE_RE = re.compile(r"^kit:([0-9a-f]{12}):([1-9][0-9]{0,3})(?::([A-Z][A-Za-z0-9]{0,39}))?$")
 UNAVAILABLE = "This custom object or animation isn't available any more."
 
 
@@ -26,8 +28,9 @@ def is_kit_type(key) -> bool:
     return isinstance(key, str) and KIT_TYPE_RE.match(key) is not None
 
 
-def kit_type(kit_id: str, version: int) -> str:
-    return f"{KIT_PREFIX}{kit_id}:{version}"
+def kit_type(kit_id: str, version: int, animation: str = "") -> str:
+    """A package version's object type, or (`animation`: its class) one of the object's animations."""
+    return f"{KIT_PREFIX}{kit_id}:{version}" + (f":{animation}" if animation else "")
 
 
 class SpecTable(dict):

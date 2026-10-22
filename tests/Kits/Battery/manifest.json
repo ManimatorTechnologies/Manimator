@@ -1,0 +1,26 @@
+{
+  "manimkit": 2,
+  "name": "Battery",
+  "version": "1.1",
+  "description": "A battery whose fill shows its charge: green, then yellow, then red as it runs down",
+  "license": "MIT",
+  "object": {
+    "class": "Battery",
+    "style": "none",
+    "params": [
+      {"name": "charge", "kind": "float", "default": 0.7, "min": 0, "max": 1, "step": 0.05, "slider": true,
+       "label": "Charge", "tooltip": "0 is empty, 1 is full"}
+    ]
+  },
+  "animations": [
+    {
+      "class": "PopIn", "name": "Pop in",
+      "description": "Grow from nothing, a little past full size, and settle",
+      "introducer": true, "run_time": 0.8,
+      "params": [
+        {"name": "bounce", "kind": "float", "default": 1.7, "min": 0, "max": 5, "step": 0.1, "label": "Bounce",
+         "tooltip": "How far past full size it goes (0: none)"}
+      ]
+    }
+  ]
+}

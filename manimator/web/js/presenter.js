@@ -5,7 +5,10 @@
 // play; "render" renders every scene in this browser before starting (nothing is kept); "stored" plays the renders
 // kept in the account's storage, rendering and saving first the ones missing or out of date.
 // Every presentation opens on a plain blank "Start" item in the first item's background colour (no text), so the
-// first press or click plays the first scene (like a Scene0 placeholder in ManimPresenter).
+// first press or click plays the first scene (like a Scene0 placeholder in ManimPresenter). The first item loads
+// behind it, so it starts at once.
+// A live scene never shows the editor's picture of itself (everything in place): the picture on screen stays until
+// the scene's first frame is drawn.
 
 import { html, useEffect, useRef, useState } from "./lib.js";
 import { get, sendWithProgress } from "./api.js";
@@ -147,12 +150,14 @@ async function prepare(data, signal, onStep) {
 function Presenter({ id }) {
   const [phase, setPhase] = useState({ kind: "loading" }); // loading | preparing | ready | failed
   const [index, setIndex] = useState(0);
+  const [onScreen, setOnScreen] = useState(0); // the item whose picture is up (a live scene: once its first frame is)
   const [chrome, setChrome] = useState(true); // the indicator and the close button, after the pointer moves
   const [name, setName] = useState("");
   const items = useRef([]);
   const video = useRef();
   const canvas = useRef();
   const engine = useRef(null);
+  const loaded = useRef(null); // { plan, ready }: the scene the engine holds (built and prepared, not drawn by load())
   const showing = useRef(0); // which call of show() is the latest (moving quickly skips the ones in between)
   const abort = useRef(new AbortController());
   const blobUrls = useRef([]);
@@ -221,6 +226,39 @@ function Presenter({ id }) {
     engine.current.resize(Math.max(1, Math.round(r.width * k)), Math.max(1, Math.round(r.height * k)));
   };
 
+  /** The engine holding `plan`, built and prepared, with nothing drawn: resolves true (false: a newer load came). */
+  function load(plan) {
+    const e = engine.current;
+    if (loaded.current?.plan !== plan) {
+      const ready = e.show(plan, { draw: false }).then((shown) => !!shown && e.prepare().then(() => true));
+      loaded.current = { plan, ready };
+      ready.catch(() => { if (loaded.current?.ready === ready) loaded.current = null; });
+    }
+    return loaded.current.ready;
+  }
+
+  /** Draws the loaded scene's first frame at the canvas's size (renderAt first: resizing redraws the moment drawn,
+   *  never the editor's picture). */
+  function firstFrame() {
+    engine.current.renderAt(0);
+    fit();
+  }
+
+  /** Gets the item after the Start blank ready behind it: a live scene drawn at its start, a video fetched. */
+  async function preload(it, mine) {
+    if (!it || (it.kind !== "scene" && it.kind !== "video")) return;
+    if (it.src) {
+      if (video.current.getAttribute("src") !== it.src) video.current.src = it.src;
+      return;
+    }
+    try {
+      if (!(await load(it.plan)) || mine !== showing.current) return;
+    } catch {
+      return; // showing it tries again
+    }
+    firstFrame();
+  }
+
   async function show(i, play) {
     const list = items.current;
     if (!list.length) return;
@@ -232,21 +270,23 @@ function Presenter({ id }) {
     const v = video.current;
     engine.current?.stop();
     v.pause();
-    if (it.kind === "missing" || it.kind === "start") return; // a slate: nothing plays
+    if (it.kind === "missing" || it.kind === "start") { // a slate: nothing plays
+      setOnScreen(at);
+      if (it.kind === "start") preload(list[at + 1], mine);
+      return;
+    }
     if (it.src) {
       if (v.getAttribute("src") !== it.src) v.src = it.src;
       v.currentTime = 0;
+      setOnScreen(at);
       if (play) v.play().catch(() => {});
       return;
     }
-    const e = engine.current;
-    await e.show(it.plan);
-    if (mine !== showing.current) return;
-    await e.prepare();
-    if (mine !== showing.current) return;
-    fit();
-    e.renderAt(0);
-    if (play) e.play(0);
+    // the picture on screen (the blank, the scene before's last frame) stays until this one's first frame is drawn
+    if (!(await load(it.plan)) || mine !== showing.current) return;
+    firstFrame();
+    setOnScreen(at);
+    if (play) engine.current.play(0);
   }
 
   const current = () => items.current[index];
@@ -255,7 +295,7 @@ function Presenter({ id }) {
   const toggle = () => {
     const it = current();
     if (it?.kind === "start") { next(); return; }
-    if (!it || it.kind === "missing") return;
+    if (!it || it.kind === "missing" || onScreen !== index) return; // (a scene still loading)
     if (it.src) {
       const v = video.current;
       if (v.paused || v.ended) v.play().catch(() => {}); else v.pause();
@@ -286,7 +326,12 @@ function Presenter({ id }) {
       e.stopImmediatePropagation(); // the editor's own shortcuts wait
       fn();
     };
-    const onResize = () => { if (!current()?.src) { fit(); if (engine.current && !engine.current.playing) engine.current.renderAt(engine.current.time ?? 0); } };
+    const onResize = () => {
+      const e = engine.current;
+      if (!e || e.time === null) return; // no frame drawn yet: it is sized when it is (firstFrame)
+      fit();
+      if (!e.playing) e.renderAt(e.time);
+    };
     // Esc in full screen is the browser's own (the page never hears it): leaving full screen like that ends the show
     const onFullscreen = () => {
       if (!document.fullscreenElement && !ownToggle.current) leave();
@@ -304,15 +349,15 @@ function Presenter({ id }) {
 
   // ---------------------------------------------------------------- the picture
   const it = current();
-  const live = phase.kind === "ready" && it && it.kind === "scene" && !it.src;
+  const up = phase.kind === "ready" ? items.current[onScreen] : null; // the picture shown
   const count = items.current.length - 1; // the Start item isn't counted
   return html`<div class=${`presenter ${chrome ? "chrome" : ""}`} onMouseMove=${flash}>
     <div class="pr-stage" onClick=${() => phase.kind === "ready" && toggle()}>
-      <video ref=${video} class=${phase.kind === "ready" && it?.src ? "on" : ""} preload="auto" playsinline />
-      <canvas ref=${canvas} class=${live ? "on" : ""} />
-      ${phase.kind === "ready" && it?.kind === "start" && html`<div class="pr-blank" style=${`background:${it.color}`} />`}
-      ${phase.kind === "ready" && it?.kind === "missing" && html`<div class="pr-slate">
-        <b>${it.name}</b><span>This scene or video was deleted. Press → to go on.</span></div>`}
+      <video ref=${video} class=${up?.src ? "on" : ""} preload="auto" playsinline />
+      <canvas ref=${canvas} class=${up?.kind === "scene" && !up.src ? "on" : ""} />
+      ${up?.kind === "start" && html`<div class="pr-blank" style=${`background:${up.color}`} />`}
+      ${up?.kind === "missing" && html`<div class="pr-slate">
+        <b>${up.name}</b><span>This scene or video was deleted. Press → to go on.</span></div>`}
     </div>
     ${phase.kind === "loading" && html`<div class="pr-card"><div class="pr-spin" /></div>`}
     ${phase.kind === "preparing" && html`<div class="pr-card">

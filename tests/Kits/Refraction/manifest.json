@@ -1,0 +1,64 @@
+{
+  "manimkit": 2,
+  "name": "Refraction",
+  "version": "2.0",
+  "description": "Light crossing from one medium into another: it bends by Snell's law and is partly reflected, as the refractive indices of the two media say",
+  "license": "MIT",
+  "object": {
+    "class": "Refraction",
+    "style": "none",
+    "params": [
+      {"name": "theta", "kind": "angle", "default": 40, "label": "Incoming angle",
+       "tooltip": "Between the incoming light and the normal, -89 to 89 degrees; below 0 the light comes from the right"},
+      {"name": "source", "kind": "enum", "default": "top", "label": "Light comes from",
+       "choices": [["top", "Top medium"], ["bottom", "Bottom medium"]],
+       "tooltip": "The medium the light starts in"},
+      {"name": "n1", "kind": "float", "default": 1.0, "min": 1, "max": 5, "step": 0.01, "decimals": 3,
+       "label": "Top index",
+       "tooltip": "Refractive index of the top medium: 1 for air or a vacuum, 1.333 water, 1.5 glass, 2.42 diamond"},
+      {"name": "n2", "kind": "float", "default": 1.33, "min": 1, "max": 5, "step": 0.01, "decimals": 3,
+       "label": "Bottom index", "tooltip": "Refractive index of the bottom medium"},
+      {"name": "reflection", "kind": "bool", "default": true, "label": "Partial reflection",
+       "tooltip": "Also draw the share of the light the boundary reflects. Past the critical angle all of it is reflected, and that ray is always drawn"},
+      {"name": "width", "kind": "float", "default": 14.25, "min": 0.5, "max": 30, "step": 0.25, "label": "Width"},
+      {"name": "depth", "kind": "float", "default": 4, "min": 0.5, "max": 20, "step": 0.5, "label": "Depth",
+       "tooltip": "Height of each medium, above and below the boundary. The rays run to the edges of the media"},
+      {"name": "ray_color", "kind": "color", "default": "#FFFF00", "label": "Ray color"},
+      {"name": "ray_width", "kind": "float", "default": 4, "min": 0, "max": 20, "step": 0.5, "label": "Ray width"},
+      {"name": "bottom_color", "kind": "color", "default": "#1B3540", "label": "Bottom color"},
+      {"name": "top_color", "kind": "color", "default": "#000000", "label": "Top color"},
+      {"name": "top_opacity", "kind": "float", "default": 0, "min": 0, "max": 1, "step": 0.05, "slider": true,
+       "label": "Top opacity", "tooltip": "0 leaves the top medium see-through"},
+      {"name": "normal", "kind": "bool", "default": true, "label": "Normal line"},
+      {"name": "normal_length", "kind": "float", "default": 2, "min": 0.1, "max": 20, "step": 0.1,
+       "label": "Normal length", "tooltip": "Length of the normal line on each side of the boundary, at most the depth"},
+      {"name": "line_color", "kind": "color", "default": "#BBBBBB", "label": "Line color",
+       "tooltip": "Color of the normal line and the angle arcs"},
+      {"name": "arcs", "kind": "bool", "default": true, "label": "Angle arcs"},
+      {"name": "arc_radius", "kind": "float", "default": 0.8, "min": 0.1, "max": 5, "step": 0.1, "label": "Arc size"},
+      {"name": "labels", "kind": "bool", "default": true, "label": "Labels",
+       "tooltip": "The angle labels, and each medium's index in its corner"},
+      {"name": "label1", "kind": "str", "default": "\\theta_1", "label": "Top label",
+       "tooltip": "LaTeX, for the angle in the top medium"},
+      {"name": "label2", "kind": "str", "default": "\\theta_2", "label": "Bottom label",
+       "tooltip": "LaTeX, for the angle in the bottom medium"}
+    ]
+  },
+  "animations": [
+    {
+      "class": "Shine", "name": "Shine",
+      "description": "Brings it in: the media fade in, then the light travels in to the boundary, bends and reflects",
+      "introducer": true, "run_time": 2,
+      "params": []
+    },
+    {
+      "class": "SweepAngle", "name": "Sweep angle",
+      "description": "Turns the incoming light to another angle; the bent and reflected rays, arcs and labels follow it",
+      "run_time": 2,
+      "params": [
+        {"name": "to", "kind": "angle", "default": 70, "label": "To angle",
+         "tooltip": "The incoming angle it ends at, -89 to 89 degrees. It starts from the angle the light has"}
+      ]
+    }
+  ]
+}

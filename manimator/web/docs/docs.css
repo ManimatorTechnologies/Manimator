@@ -28,7 +28,7 @@
   --accent: #3291ff;
   --font: "Geist", "Inter Variable", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Cascadia Mono", monospace; /* Consolas: lighter than Cascadia */
-  --top: 64px;
+  --top: 52px; /* the app's bar */
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -43,25 +43,27 @@ button { font: inherit; color: inherit; }
 /* ------------------------------------------------------------------ top bar */
 .d-top {
   position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  height: var(--top); padding: 0 24px; background: var(--bg);
+  height: var(--top); padding: 0 12px; background: var(--bg); /* the app's bar, so the name sits where the app's does */
+  /* the other pages' bar font (landing.css --font): they load no Geist, so it draws in the system's font */
+  font-family: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
 }
-.d-crumbs { display: flex; align-items: center; gap: 10px; min-width: 0; font-size: 18px; line-height: 27px;
-  font-weight: 600; letter-spacing: -0.03em; white-space: nowrap; }
-.d-crumbs a { text-decoration: none; border-radius: 4px; }
-.d-brand { color: var(--white); }
-.d-slash { color: #3d3c39; font-weight: 400; }
-.d-section { color: var(--text-2); }
-.d-section:hover { color: var(--white); }
-.d-account { display: flex; gap: 12px; }
+.d-brand { /* the app's .brand, as on the other pages' bar (landing.css .lp-brand) */
+  display: block; margin-left: -2px; padding: 4px 6px; border-radius: 6px; color: var(--white); font-size: 15px;
+  line-height: 1.4; font-weight: 600; letter-spacing: -0.02em; text-decoration: none; white-space: nowrap;
+}
+.d-brand:hover { background: #262626; }
+.d-account { display: flex; gap: 4px; }
 .d-btn {
-  display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 10px; border-radius: 6px;
-  background: var(--bg-1); box-shadow: 0 0 0 1px var(--line-2); color: var(--white); font-size: 14px; line-height: 21px;
+  display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 12px; border-radius: 6px;
+  border: 1px solid var(--line-2); background: var(--bg-1); color: var(--white); font-size: 14px; line-height: 21px;
   font-weight: 500; text-decoration: none; white-space: nowrap; transition: background .12s;
 }
 .d-btn span { display: inline-block; } /* center.js moves the words for the eye */
 .d-btn:hover { background: var(--bg-3); }
-.d-btn.primary { background: var(--white); box-shadow: none; color: #111; }
-.d-btn.primary:hover { background: #fff; }
+.d-btn.primary { border-color: var(--white); background: var(--white); color: #111; }
+.d-btn.primary:hover { border-color: #fff; background: #fff; }
+.d-btn.ghost { border-color: transparent; background: none; color: #898781; } /* landing.css --text-2 */
+.d-btn.ghost:hover { border-color: #262626; background: #262626; color: var(--white); }
 
 /* the phone's bar under the top bar: the sidebar opens from it */
 .d-bar { display: none; }
@@ -217,7 +219,6 @@ kbd {
 @media (max-width: 1023px) { /* the sidebar opens from a Menu button */
   :root { --bar: 48px; }
   html { scroll-padding-top: calc(var(--top) + var(--bar) + 16px); }
-  .d-top { padding: 0 16px; }
   .d-bar {
     position: sticky; top: var(--top); z-index: 15; display: flex; align-items: center; gap: 12px; height: var(--bar);
     padding: 0 16px; background: var(--bg); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);

@@ -176,6 +176,24 @@ function PropertiesTab({ m }) {
   </div>`;
 }
 
+/** A newer version of this customization the visitor can add (the one the editor's Custom group offers), if the
+ *  object is an older one: updating moves the whole project's uses of it to that version (a project holds one
+ *  version of each, and a version's animations play only on its own object). */
+function NewerKit({ m }) {
+  const kit = store.specs.mobjects[m.type]?.kit;
+  const newer = kit && store.kits.mobjects.find((s) => s.kit?.id === kit.id && s.kit.version > kit.version)?.kit;
+  if (!newer) return null;
+  const update = async () => {
+    const done = await run("update_kit", { kit_id: newer.id, version: newer.version });
+    if (done) status(`This project now uses ${newer.name} ${newer.label || `#${newer.version}`}.`);
+  };
+  return html`<div class="kit-newer">
+    <span>Version ${newer.label || `#${newer.version}`} is available.</span>
+    <button class="btn small" title="Use it for every ${newer.name} in this project, with its new animations"
+      onClick=${update}><span class="lbl">Update</span></button>
+  </div>`;
+}
+
 export function Inspector() {
   const m = selected();
   if (!m) return html`<div class="panel-body"><${SceneInspector} /></div>`;
@@ -191,6 +209,7 @@ export function Inspector() {
         <div class="s" title=${spec.description || ""}>${spec.description || "Manim object"}</div>
       </div>
     </div>
+    <${NewerKit} m=${m} />
     <${Section}>
       <div class="form">
         <label>Name</label>

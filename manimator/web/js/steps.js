@@ -8,8 +8,8 @@ import { openAnimPicker, SCENE_TARGET } from "./animpicker.js";
 import { emit, mk, names, scene, selectStep, sop, status, store } from "./store.js";
 import { Dropdown, Icon } from "./ui.js";
 import {
-  CATEGORY_COLORS, CATEGORY_ICONS, animCategory, animName, animParams, animSummary, clamp, isAction, newGesture, refChoices,
-  round, sceneActions,
+  CATEGORY_COLORS, CATEGORY_ICONS, animCategory, animName, animParams, animSummary, clamp, isAction, newGesture, playsOn,
+  refChoices, round, sceneActions,
 } from "./util.js";
 
 const TICK_STEPS = [0.1, 0.25, 0.5, 1, 2, 5, 10, 15, 30, 60, 120, 300];
@@ -194,10 +194,11 @@ function ActionCard({ sc, si, ai, a }) {
   </div>`;
 }
 
-/** The Custom section of the animation dropdown: the visitor's customizations, and the step's own if it is one
- *  they can't add any more (so it still shows its name). */
-function customAnimOptions(current) {
-  const list = [...store.kits.animations];
+/** The Custom section of the animation dropdown: the visitor's customizations that play on the target (a custom
+ *  object's animations play only on it), and the step's own if it is one they can't add any more (so it still shows
+ *  its name). */
+function customAnimOptions(current, targetType) {
+  const list = store.kits.animations.filter((x) => playsOn(x, targetType));
   const own = store.specs.animations[current];
   if ((own?.kit || own?.blocked) && !list.some((x) => x.key === current)) list.push(own);
   return list.length ? [{ section: `${CATEGORY_ICONS.Custom} Custom` }, ...list.map((x) => [x.key, x.label])] : [];
@@ -209,6 +210,8 @@ function AnimCard({ sc, si, ai, a }) {
   const params = animParams(a);
   const isAnimate = a.anim === catalog.animate;
   const desc = isAnimate ? specs.methods[a.method]?.description : specs.animations[a.anim]?.description;
+  const own = specs.animations[a.anim];
+  const targets = sc.mobjects.filter((m) => m.id === a.target || !own?.kit || playsOn(own, m.type));
   return html`<div class="card">
     <div class="ch" style="gap:8px">
       <div class="ctl" style="flex:1">
@@ -217,12 +220,12 @@ function AnimCard({ sc, si, ai, a }) {
             const anims = catalog.animations.filter((x) => x.category === cat && !x.sceneKinds.length);
             return anims.length ? [{ section: `${CATEGORY_ICONS[cat]} ${cat}` },
               ...anims.map((x) => [x.key, x.key === catalog.animate ? "Animate a method" : x.key])] : [];
-          }), ...customAnimOptions(a.anim)]}
+          }), ...customAnimOptions(a.anim, sc.mobjects.find((m) => m.id === a.target)?.type)]}
           onChange=${(anim) => sop("change_animation", { step: si, index: ai, anim,
             // .animate needs a method; start from the current one (or the first) and let the Method field change it
             method: anim === catalog.animate ? a.method ?? catalog.methods[0]?.key : undefined })} />
         <span class="tag">on</span>
-        <${Dropdown} value=${a.target} title="Which object" options=${sc.mobjects.map((m) => [m.id, m.name])}
+        <${Dropdown} value=${a.target} title="Which object" options=${targets.map((m) => [m.id, m.name])}
           onChange=${(target_id) => sop("set_animation_target", { step: si, index: ai, target_id })} />
       </div>
       <button class="btn small icon ghost danger" title="Remove this animation"

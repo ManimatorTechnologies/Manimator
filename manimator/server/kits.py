@@ -1,19 +1,26 @@
-"""Customizations: custom objects and animations, uploaded as code packages (.manimkit).
+"""Customizations: custom objects and their animations, uploaded as code packages (.manimkit).
 
-A package is a zip:
-    manifest.json   what it is: {"manimkit": 1, "name", "kind": "object" | "animation", "class", "version",
-                    "description", "license", "params": [...], and "style" (objects) or "introducer",
-                    "remover", "run_time" (animations)}
-    kit.js          the browser engine's version: `export default class <class> extends ...`, importing only from
-                    "manimator" (web/js/engine/KitApi.js). On the site it runs only in the sandboxed frame (web/sandbox/);
-                    the chat player (web/mcp/player.html) runs it in its own page, as chats allow no nested frame.
-    kit.py          the Manim CE version, for the zip download (manimator/export.py): `class <class>(...)`.
+A package is one object and the animations made for it (none or more), in a zip:
+    manifest.json   what it is: {"manimkit": 2, "name", "version", "description", "license",
+                    "object": {"class", "style", "params": [...]},
+                    "animations": [{"class", "name", "description", "params", "introducer", "remover",
+                                    "run_time"}, ...]}
+    kit.js          the browser engine's version: `export class <class> extends ...` for each class, importing only
+                    from "manimator" (web/js/engine/KitApi.js). On the site it runs only in the sandboxed frame
+                    (web/sandbox/); the chat player (web/mcp/player.html) runs it in its own page, as chats allow no
+                    nested frame.
+    kit.py          the Manim CE version, for the zip download (manimator/export.py): `class <class>(...)` for each.
     README.md       optional.
 
-The server never runs package code: kit.py is only parsed (ast) to check it defines the class, kit.js only read.
+The object is the type "kit:<id>:<version>", each animation "kit:<id>:<version>:<class>", and an animation plays only
+on its own package's object (AnimSpec.only). Packages uploaded before format 2 held one class, an object or an
+animation for any object ({"manimkit": 1, "kind", "class", "params", ...} at the top level, `export default` in
+kit.js): those versions still load and play, but new uploads must be format 2.
+
+The server never runs package code: kit.py is only parsed (ast) to check it defines the classes, kit.js only read.
 Each version a user uploads is kept for good (a project pins "kit:<id>:<version>"), so a project never breaks
-because its author changed or deleted the package: deleting one only takes it off the lists. Every version is a
-spec in MOBJECTS or ANIMATIONS (registry/custom.py) from the moment the server starts.
+because its author changed or deleted the package: deleting one only takes it off the lists. Every version's classes
+are specs in MOBJECTS and ANIMATIONS (registry/custom.py) from the moment the server starts.
 """
 
 from __future__ import annotations
@@ -43,23 +50,30 @@ from ..registry.params import (
 from ..registry.reserved import MANIM_NAMES
 from .session import OpError, coerce
 
-FORMAT = 1
+FORMAT = 2  # manifest.json's "manimkit": an object and its animations
+OLD_FORMAT = 1  # one object or one animation: versions stored before format 2 load, uploads don't
+UPLOAD_FORMATS = (FORMAT,)
 SUFFIX = ".manimkit"
 MAX_PACKAGE = 1024 * 1024  # the .manimkit file
 MAX_UNPACKED = 2 * 1024 * 1024
-FILE_LIMITS = {"manifest.json": 32 * 1024, "kit.js": 256 * 1024, "kit.py": 256 * 1024, "README.md": 64 * 1024}
+FILE_LIMITS = {"manifest.json": 64 * 1024, "kit.js": 256 * 1024, "kit.py": 256 * 1024, "README.md": 64 * 1024}
 REQUIRED = ("manifest.json", "kit.js", "kit.py")
 KINDS = ("object", "animation")
 STYLES = {"none": NONE, "shape": SHAPE, "line": LINE, "text": TEXTISH}
 PARAM_KINDS = (FLOAT, INT, BOOL, COLOR, STR, TEXT, DIRECTION, ENUM, ANGLE, POINT, VECTOR, FONT)
 MAX_PARAMS = 20
+MAX_ANIMATIONS = 10
+DESCRIPTION_WORDS = 25  # the package's description, shown whole on its card
 CLASS_RE = re.compile(r"^[A-Z][A-Za-z0-9]{0,39}$")
 PARAM_RE = re.compile(r"^[a-z][a-z0-9_]{0,31}$")
 # Arguments a package's class mustn't take as settings: Manim passes or uses these itself.
 RESERVED_PARAMS = {"mobject", "mobjects", "run_time", "rate_func", "lag_ratio", "name", "self", "args", "kwargs",
                    "target", "dim", "z_index", "introducer", "remover", "suspend_mobject_updating"}
-MANIFEST_FIELDS = {"manimkit", "name", "kind", "class", "version", "description", "license", "params", "style",
-                   "introducer", "remover", "run_time"}
+MANIFEST_FIELDS = {"manimkit", "name", "version", "description", "license", "object", "animations"}
+OBJECT_FIELDS = {"class", "style", "params"}
+ANIMATION_FIELDS = {"class", "name", "description", "params", "introducer", "remover", "run_time"}
+OLD_MANIFEST_FIELDS = {"manimkit", "name", "kind", "class", "version", "description", "license", "params", "style",
+                       "introducer", "remover", "run_time"}
 _JUNK = re.compile(r"(^|/)(__MACOSX/|\.DS_Store$|Thumbs\.db$|desktop\.ini$)")
 # import "x" / import a, { b } from "x" / export { a } from "x" / export * from "x"
 _STATIC_IMPORT = re.compile(r"""(?:^|[;\n])\s*(?:import\s*(?:[\w*${}\s,]+?\s*from\s*)?|export\s*[\w*${}\s,]+?\s*from\s*)"""
@@ -149,8 +163,7 @@ _DEFAULTS = {FLOAT: 0.0, INT: 0, BOOL: False, COLOR: "#FFFFFF", STR: "", TEXT: "
              POINT: [0.0, 0.0], VECTOR: [1.0, 0.0], FONT: ""}
 
 
-def _param(raw, i: int) -> Param:
-    where = f"params[{i}]"
+def _param(raw, where: str) -> Param:
     if not isinstance(raw, dict):
         raise KitError(f"manifest.json: {where} must be an object like {{\"name\": \"charge\", \"kind\": \"float\"}}.")
     unknown = set(raw) - {"name", "kind", "default", "label", "tooltip", "min", "max", "step", "decimals", "slider",
@@ -208,79 +221,172 @@ def _param(raw, i: int) -> Param:
     return replace(p, default=value)
 
 
-def read_manifest(text: str, taken_names=frozenset()) -> dict:
-    """The manifest, checked: {"name", "kind", "class", "version", "description", "license", "params" (Params),
-    "style", "introducer", "remover", "run_time"}."""
+def _class(value, where: str, taken) -> str:
+    if not isinstance(value, str) or not CLASS_RE.match(value):
+        raise KitError(f"manifest.json: {where} must be a PascalCase Python class name, like \"Battery\".")
+    if value in MANIM_NAMES or value in MOBJECTS or value in ANIMATIONS or value in taken:
+        raise KitError(f"manifest.json: \"{value}\" is already a Manim or Manimator name, or another of your "
+                       "customizations' classes; choose another class name.")
+    return value
+
+
+def _params(raw, where: str) -> tuple[Param, ...]:
+    params = raw if raw is not None else []
+    if not isinstance(params, list) or len(params) > MAX_PARAMS:
+        raise KitError(f"manifest.json: {where} must be a list of up to {MAX_PARAMS} settings.")
+    built = tuple(_param(p, f"{where}[{i}]") for i, p in enumerate(params))
+    if len({p.name for p in built}) != len(built):
+        raise KitError(f"manifest.json: two settings in {where} have the same name.")
+    return built
+
+
+def _fields(raw: dict, allowed: set, where: str) -> None:
+    unknown = set(raw) - allowed
+    if unknown:
+        raise KitError(f"manifest.json: {where}unknown fields {', '.join(sorted(unknown))}. "
+                       f"Fields: {', '.join(sorted(allowed))}.")
+
+
+def _style(raw: dict, where: str) -> str:
+    style = raw.get("style", "none")
+    if style not in STYLES:
+        raise KitError(f"manifest.json: {where}\"style\" must be one of {', '.join(STYLES)}.")
+    return style
+
+
+def _animation(raw: dict, where: str, cls: str, name: str, description: str, params) -> dict:
+    """An animation's fields after its class, name and settings: whether it brings its object in or takes it away,
+    and its usual length."""
+    out = {"class": cls, "name": name, "description": description, "params": params,
+           "introducer": bool(raw.get("introducer")), "remover": bool(raw.get("remover"))}
+    if out["introducer"] and out["remover"]:
+        raise KitError(f"manifest.json: {where}an animation can't both bring in and take away its object.")
+    out["run_time"] = _number(raw.get("run_time"), f"{where}run_time", 1.0)
+    if not 0.05 <= out["run_time"] <= 60:
+        raise KitError(f"manifest.json: {where}\"run_time\" must be between 0.05 and 60 seconds.")
+    return out
+
+
+def _spaced(cls: str) -> str:
+    """"SweepAngle" -> "Sweep angle": an animation's name when the manifest gives none."""
+    words = re.sub(r"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", cls).split()
+    return " ".join([words[0], *(w if w.isupper() else w.lower() for w in words[1:])])
+
+
+def _description(value, stored: bool) -> str:
+    """The package's description: its card shows all of it, so a new upload keeps it to DESCRIPTION_WORDS words (a
+    version kept from before may have more)."""
+    text = _text(value, "description", 200)
+    if not stored and len(text.split()) > DESCRIPTION_WORDS:
+        raise KitError(f"manifest.json: description can be up to {DESCRIPTION_WORDS} words.")
+    return text
+
+
+def read_manifest(text: str, taken_names=frozenset(), stored: bool = False) -> dict:
+    """The manifest, checked: {"format", "name", "version", "description", "license",
+    "object": {"class", "style", "params" (Params)} or None, "animations": [{"class", "name", "description",
+    "params", "introducer", "remover", "run_time"}], "classes": every class name, the object's first}.
+    `taken_names`: classes the uploader's other packages have. `stored`: a version kept from before, which may be in
+    the first format (one object, or one animation for any object: "object" None)."""
     try:
         raw = json.loads(text)
     except ValueError as e:
         raise KitError(f"manifest.json isn't valid JSON ({e}).") from None
     if not isinstance(raw, dict):
         raise KitError("manifest.json must be a JSON object.")
-    unknown = set(raw) - MANIFEST_FIELDS
-    if unknown:
-        raise KitError(f"manifest.json: unknown fields {', '.join(sorted(unknown))}. "
-                       f"Fields: {', '.join(sorted(MANIFEST_FIELDS))}.")
-    if raw.get("manimkit") != FORMAT:
-        raise KitError(f"manifest.json: \"manimkit\" must be {FORMAT} (this version of the format).")
-    kind = raw.get("kind")
-    if kind not in KINDS:
-        raise KitError("manifest.json: \"kind\" must be \"object\" or \"animation\".")
-    cls = raw.get("class")
-    if not isinstance(cls, str) or not CLASS_RE.match(cls):
-        raise KitError("manifest.json: \"class\" must be a PascalCase Python class name, like \"Battery\".")
-    if cls in MANIM_NAMES or cls in MOBJECTS or cls in ANIMATIONS or cls in taken_names:
-        raise KitError(f"manifest.json: \"{cls}\" is already a Manim or Manimator name; choose another class name.")
-    params = raw.get("params") or []
-    if not isinstance(params, list) or len(params) > MAX_PARAMS:
-        raise KitError(f"manifest.json: \"params\" must be a list of up to {MAX_PARAMS} settings.")
-    built = tuple(_param(p, i) for i, p in enumerate(params))
-    if len({p.name for p in built}) != len(built):
-        raise KitError("manifest.json: two settings have the same name.")
-    out = {"name": _text(raw.get("name"), "name", 40, required=True), "kind": kind, "class": cls,
+    form = raw.get("manimkit")
+    if form == OLD_FORMAT and (stored or OLD_FORMAT in UPLOAD_FORMATS):
+        return _read_old_manifest(raw, taken_names)
+    if form != FORMAT:
+        hint = (" The first format (one object or one animation on its own) isn't uploaded any more: put the object "
+                "in \"object\" and the animations made for it in \"animations\"." if form == OLD_FORMAT else "")
+        raise KitError(f"manifest.json: \"manimkit\" must be {FORMAT} (this version of the format).{hint}")
+    _fields(raw, MANIFEST_FIELDS, "")
+    obj = raw.get("object")
+    if not isinstance(obj, dict):
+        raise KitError("manifest.json: give the \"object\": {\"class\": \"Battery\", \"params\": [...]}. Every "
+                       "customization is one object, with the animations made for it in \"animations\".")
+    _fields(obj, OBJECT_FIELDS, "object: ")
+    taken = set(taken_names)
+    cls = _class(obj.get("class"), "object.class", taken)
+    taken.add(cls)
+    out = {"format": FORMAT, "name": _text(raw.get("name"), "name", 40, required=True),
            "version": _text(raw.get("version") or "1.0", "version", 20),
-           "description": _text(raw.get("description"), "description", 200),
-           "license": _text(raw.get("license"), "license", 60), "params": built}
-    if kind == "object":
-        if raw.get("style", "none") not in STYLES:
-            raise KitError(f"manifest.json: \"style\" must be one of {', '.join(STYLES)}.")
-        if any(k in raw for k in ("introducer", "remover", "run_time")):
-            raise KitError("manifest.json: \"introducer\", \"remover\" and \"run_time\" are for animations.")
-        out["style"] = raw.get("style", "none")
-    else:
-        if "style" in raw:
-            raise KitError("manifest.json: \"style\" is for objects.")
-        out["introducer"], out["remover"] = bool(raw.get("introducer")), bool(raw.get("remover"))
-        if out["introducer"] and out["remover"]:
-            raise KitError("manifest.json: an animation can't both bring in and take away its object.")
-        out["run_time"] = _number(raw.get("run_time"), "run_time", 1.0)
-        if not 0.05 <= out["run_time"] <= 60:
-            raise KitError("manifest.json: \"run_time\" must be between 0.05 and 60 seconds.")
+           "description": _description(raw.get("description"), stored),
+           "license": _text(raw.get("license"), "license", 60),
+           "object": {"class": cls, "style": _style(obj, "object."), "params": _params(obj.get("params"),
+                                                                                         "object.params")},
+           "animations": []}
+    animations = raw.get("animations")
+    animations = [] if animations is None else animations
+    if not isinstance(animations, list) or len(animations) > MAX_ANIMATIONS:
+        raise KitError(f"manifest.json: \"animations\" must be a list of up to {MAX_ANIMATIONS} animations.")
+    for i, a in enumerate(animations):
+        where = f"animations[{i}]"
+        if not isinstance(a, dict):
+            raise KitError(f"manifest.json: {where} must be an object like {{\"class\": \"PopIn\", \"params\": []}}.")
+        _fields(a, ANIMATION_FIELDS, f"{where}: ")
+        name = _class(a.get("class"), f"{where}.class", taken)
+        taken.add(name)
+        out["animations"].append(_animation(
+            a, f"{where}.", name, _text(a.get("name"), f"{where}.name", 40) or _spaced(name),
+            _text(a.get("description"), f"{where}.description", 200), _params(a.get("params"), f"{where}.params")))
+    out["classes"] = [cls, *(a["class"] for a in out["animations"])]
     return out
 
 
-def check_python(source: str, cls: str) -> None:
-    """kit.py must parse and define the class at its top level. It is parsed, never run."""
+def _read_old_manifest(raw: dict, taken_names) -> dict:
+    """A first-format manifest (one class), in read_manifest's shape."""
+    _fields(raw, OLD_MANIFEST_FIELDS, "")
+    kind = raw.get("kind")
+    if kind not in KINDS:
+        raise KitError("manifest.json: \"kind\" must be \"object\" or \"animation\".")
+    cls = _class(raw.get("class"), "\"class\"", taken_names)
+    params = _params(raw.get("params"), "params")
+    out = {"format": OLD_FORMAT, "name": _text(raw.get("name"), "name", 40, required=True),
+           "version": _text(raw.get("version") or "1.0", "version", 20),
+           "description": _text(raw.get("description"), "description", 200),
+           "license": _text(raw.get("license"), "license", 60), "object": None, "animations": [], "classes": [cls]}
+    if kind == "object":
+        if any(k in raw for k in ("introducer", "remover", "run_time")):
+            raise KitError("manifest.json: \"introducer\", \"remover\" and \"run_time\" are for animations.")
+        out["object"] = {"class": cls, "style": _style(raw, ""), "params": params}
+    else:
+        if "style" in raw:
+            raise KitError("manifest.json: \"style\" is for objects.")
+        out["animations"].append(_animation(raw, "", cls, out["name"], out["description"], params))
+    return out
+
+
+def check_python(source: str, classes) -> None:
+    """kit.py must parse and define the classes at its top level. It is parsed, never run."""
     try:
         tree = ast.parse(source, filename="kit.py")
     except SyntaxError as e:
         raise KitError(f"kit.py has a syntax error on line {e.lineno}: {e.msg}.") from None
     except (RecursionError, MemoryError, ValueError):
         raise KitError("kit.py can't be read.") from None
-    if not any(isinstance(n, ast.ClassDef) and n.name == cls for n in tree.body):
-        raise KitError(f"kit.py must define class {cls} at the top level (as manifest.json names it).")
+    defined = {n.name for n in tree.body if isinstance(n, ast.ClassDef)}
+    for cls in [classes] if isinstance(classes, str) else classes:
+        if cls not in defined:
+            raise KitError(f"kit.py must define class {cls} at the top level (as manifest.json names it).")
 
 
-def check_javascript(source: str) -> None:
-    """kit.js may import only from "manimator" (it runs in a sandbox that has nothing else) and must have a
-    default export (the class)."""
+def check_javascript(source: str, classes=None) -> None:
+    """kit.js may import only from "manimator" (it runs in a sandbox that has nothing else) and must export each
+    class by its name (`classes`; None: the first format's one class, as its default export)."""
     for spec in _STATIC_IMPORT.findall(source):
         if spec != "manimator":
             raise KitError(f"kit.js imports {spec[:60]!r}: packages may import only from \"manimator\".")
     if _DYNAMIC_IMPORT.search(source):
         raise KitError("kit.js can't use import(): packages may import only from \"manimator\".")
-    if not _DEFAULT_EXPORT.search(source):
-        raise KitError("kit.js must `export default` its class.")
+    if classes is None:
+        if not _DEFAULT_EXPORT.search(source):
+            raise KitError("kit.js must `export default` its class.")
+        return
+    for cls in classes:
+        if not re.search(rf"\bexport\s+class\s+{cls}\b|\bexport\s*{{[^}}]*\b{cls}\b[^}}]*}}", source):
+            raise KitError(f"kit.js must export class {cls} by its name: `export class {cls} extends ...`.")
 
 
 def module_name(cls: str) -> str:
@@ -300,22 +406,35 @@ def _blocked(_a):
     raise Unavailable(UNAVAILABLE)
 
 
-def make_spec(kit: dict, version: int, manifest: dict, meta: dict, blocked: bool = False):
-    """The MobjectSpec or AnimSpec a package version adds to the registry."""
-    key = kit_type(kit["id"], version)
+def make_specs(kit: dict, version: int, manifest: dict, meta: dict, blocked: bool = False) -> list:
+    """The specs a package version adds to the registry: its object's MobjectSpec, then an AnimSpec for each of its
+    animations, which play only on that object. (A first-format version: its one class's spec, under the plain
+    "kit:<id>:<version>"; an animation of those plays on any object.)"""
+    old = manifest["format"] == OLD_FORMAT
+    module = module_name(manifest["classes"][0])
     info = {"id": kit["id"], "version": version, "label": manifest["version"], "name": manifest["name"],
-            "class": manifest["class"], "kind": manifest["kind"], "module": module_name(manifest["class"]),
-            "author": kit["owner_name"], "license": manifest["license"], **meta}
-    description = UNAVAILABLE if blocked else manifest["description"]
-    if manifest["kind"] == "object":
-        style = STYLES[manifest["style"]]
+            "module": module, "author": kit["owner_name"], "license": manifest["license"], **meta}
+    out = []
+    obj = manifest["object"]
+    owner = kit_type(kit["id"], version) if obj else None
+    if obj:
         # no style set at first: the package's own colors show until the user picks others
-        return MobjectSpec(key, "Custom", "✦", module_name(manifest["class"]), style, {}, manifest["params"],
-                           build=_blocked if blocked else _build(manifest["class"]), description=description,
-                           kit=info, blocked=blocked)
-    return AnimSpec(key, "Custom", manifest["params"], introducer=manifest["introducer"],
-                    remover=manifest["remover"], run_time=manifest["run_time"], description=description,
-                    label=manifest["name"], call_name=manifest["class"], kit=info, blocked=blocked)
+        out.append(MobjectSpec(owner, "Custom", "✦", module, STYLES[obj["style"]], {}, obj["params"],
+                               build=_blocked if blocked else _build(obj["class"]),
+                               description=UNAVAILABLE if blocked else manifest["description"],
+                               kit={**info, "class": obj["class"], "kind": "object",
+                                    "export": "default" if old else obj["class"]},
+                               blocked=blocked))
+    for a in manifest["animations"]:
+        key = kit_type(kit["id"], version, "" if old else a["class"])
+        out.append(AnimSpec(key, "Custom", a["params"], introducer=a["introducer"], remover=a["remover"],
+                            run_time=a["run_time"], only=(owner,) if owner else (),
+                            description=UNAVAILABLE if blocked else a["description"], label=a["name"],
+                            call_name=a["class"],
+                            kit={**info, "class": a["class"], "kind": "animation",
+                                 "export": "default" if old else a["class"], "object": owner},
+                            blocked=blocked))
+    return out
 
 
 def register(spec) -> None:
@@ -334,6 +453,7 @@ class KitStore:
         self._db = sqlite3.connect(str(root / "kits.db"), check_same_thread=False, isolation_level=None)
         self._lock = threading.RLock()
         self._by_sha: dict[str, tuple[str, int]] = {}  # kit.js sha256 -> (kit id, version)
+        self._keys: dict[tuple[str, int], list[str]] = {}  # (kit id, version) -> its types, the object's first
         for sql in (
             "CREATE TABLE IF NOT EXISTS kits (id TEXT PRIMARY KEY, owner TEXT NOT NULL, owner_name TEXT NOT NULL, "
             "kind TEXT NOT NULL, class TEXT NOT NULL, name TEXT NOT NULL, created REAL NOT NULL, "
@@ -347,6 +467,9 @@ class KitStore:
             "user TEXT NOT NULL, reason TEXT NOT NULL, created REAL NOT NULL, handled INTEGER NOT NULL DEFAULT 0)",
         ):
             self._db.execute(sql)
+        if "description" not in {r[1] for r in self._q("PRAGMA table_info(kits)")}:
+            # the description its author wrote on the site (NULL: each version's manifest has its own)
+            self._db.execute("ALTER TABLE kits ADD COLUMN description TEXT")
         for kit_id, version in self._q("SELECT kit_id, version FROM versions"):
             try:
                 self._register(kit_id, version)
@@ -381,11 +504,19 @@ class KitStore:
         kit = self.kit(kit_id)
         row = self._version(kit_id, version)
         folder = self.folder(kit_id, version)
-        manifest = read_manifest((folder / "manifest.json").read_text(encoding="utf-8"))
+        manifest = read_manifest((folder / "manifest.json").read_text(encoding="utf-8"), stored=True)
+        written = self.written_description(kit_id)
+        if written is not None:
+            manifest["description"] = written
+            if manifest["object"] is None:  # a first-format animation: its one animation is the package
+                manifest["animations"][0]["description"] = written
         js = (folder / "kit.js").read_bytes()
         meta = {"js_sha256": hashlib.sha256(js).hexdigest(), "status": row["status"]}
         self._by_sha[meta["js_sha256"]] = (kit_id, version)
-        register(make_spec(kit, version, manifest, meta, blocked=row["status"] == "taken_down"))
+        specs = make_specs(kit, version, manifest, meta, blocked=row["status"] == "taken_down")
+        for spec in specs:
+            register(spec)
+        self._keys[(kit_id, int(version))] = [s.key for s in specs]
 
     # ------------------------------------------------------------------ reading
     @staticmethod
@@ -422,22 +553,56 @@ class KitStore:
         rows = self._q(sql + (" AND listed = 1" if listed_only else "") + " ORDER BY created DESC", (owner,))
         return [self._kit_row(r) for r in rows]
 
-    def summary(self, kit: dict, viewer: str | None = None) -> dict:
-        """A package as the Customizations page lists it."""
-        latest = self.latest(kit["id"])
-        spec = self.spec(kit["id"], latest) if latest else None
+    def summary(self, kit: dict, viewer: str | None = None, shown: int = 0) -> dict:
+        """A package as the Customizations page lists it, as of version `shown` (default: the newest usable one):
+        its object's type and description, and the animations made for it."""
+        shown = shown or self.latest(kit["id"])
+        spec = self.spec(kit["id"], shown) if shown else None
         versions = self.versions(kit["id"])
+        animations = [{"type": s.key, "class": s.kit["class"], "name": s.label, "description": s.description}
+                      for s in self.specs(kit["id"], shown)[1:]] if spec is not None and spec.kit["kind"] == "object" \
+            else []
         return {"id": kit["id"], "name": kit["name"], "kind": kit["kind"], "class": kit["class"],
                 "author": kit["owner_name"], "mine": viewer == kit["owner"], "created": kit["created"],
                 "listed": kit["listed"], "type": spec.key if spec else None,
-                "description": spec.description if spec else "",
+                "description": spec.description if spec else "", "animations": animations,
                 "versions": [{"version": v["version"], "label": v["manifest"].get("version", ""),
                               "status": v["status"], "reason": v["reason"], "created": v["created"]}
                              for v in versions]}
 
     def spec(self, kit_id: str, version: int):
+        """A version's main spec: its object (or a first-format version's one class)."""
         key = kit_type(kit_id, version)
         return MOBJECTS.custom.get(key) or ANIMATIONS.custom.get(key)
+
+    def specs(self, kit_id: str, version: int) -> list:
+        """Every spec of a version: its object's, then its animations'."""
+        keys = self._keys.get((kit_id, int(version)), [])
+        return [s for s in (MOBJECTS.custom.get(k) or ANIMATIONS.custom.get(k) for k in keys) if s is not None]
+
+    def classes(self, kit_id: str) -> set[str]:
+        """The class names of a package's newest version."""
+        return {s.kit["class"] for s in self.specs(kit_id, self.latest_any(kit_id))}
+
+    def written_description(self, kit_id: str) -> str | None:
+        """The description the author wrote on the site, which every version shows; None if they haven't."""
+        rows = self._q("SELECT description FROM kits WHERE id = ?", (kit_id,))
+        return rows[0][0] if rows else None
+
+    def describe(self, owner: str, kit_id: str, text) -> None:
+        """The author changes the package's description: every version shows it, until a new version's manifest.json
+        brings a different one."""
+        kit = self.kit(kit_id)
+        if kit is None or kit["owner"] != owner or not kit["listed"]:
+            raise KitError("That customization isn't yours to change.")
+        if not isinstance(text, str):
+            raise KitError("The description must be text.")
+        text = " ".join(text.split())
+        if len(text) > 200 or len(text.split()) > DESCRIPTION_WORDS:
+            raise KitError(f"A description can be up to {DESCRIPTION_WORDS} words.")
+        self._q("UPDATE kits SET description = ? WHERE id = ?", (text, kit_id))
+        for v in self.versions(kit_id):
+            self._register(kit_id, v["version"])
 
     # ------------------------------------------------------------------ adding
     def add(self, owner: str, owner_name: str, data: bytes, limit: int, kit_id: str | None = None,
@@ -455,17 +620,22 @@ class KitStore:
             if kit is None and len(self.owned(owner)) >= limit:
                 raise KitError(f"You can keep up to {limit} customization{'s' if limit != 1 else ''}. "
                                f"Delete one first{', or upgrade' if upgrade else ''}.")
-            taken = {k["class"] for k in self.owned(owner) if k["id"] != kit_id}
+            taken = set().union(*(self.classes(k["id"]) for k in self.owned(owner) if k["id"] != kit_id))
             manifest = read_manifest(files["manifest.json"], taken)
-            if kit is not None and (manifest["kind"] != kit["kind"] or manifest["class"] != kit["class"]):
-                raise KitError(f"A new version must stay an {kit['kind']} named {kit['class']} (start a new "
-                               "customization to change that).")
-            check_python(files["kit.py"], manifest["class"])
-            check_javascript(files["kit.js"])
+            obj = manifest["object"]
+            if kit is not None and kit["kind"] != "object":
+                raise KitError("This customization is an animation on its own (the first .manimkit format), so it "
+                               "can't get new versions: animations now come in their object's customization. Upload "
+                               "it with the object it is for, as a new customization.")
+            if kit is not None and (obj is None or obj["class"] != kit["class"]):
+                raise KitError(f"A new version must keep the object {kit['class']} (start a new customization to "
+                               "change that). Its animations may change.")
+            check_python(files["kit.py"], manifest["classes"])
+            check_javascript(files["kit.js"], None if manifest["format"] == OLD_FORMAT else manifest["classes"])
             if kit is None:
                 kit = {"id": secrets.token_hex(6), "owner": owner, "owner_name": owner_name,
-                       "kind": manifest["kind"], "class": manifest["class"], "name": manifest["name"],
-                       "created": time.time(), "listed": True}
+                       "kind": "object" if obj else "animation", "class": manifest["classes"][0],
+                       "name": manifest["name"], "created": time.time(), "listed": True}
                 self._db.execute("INSERT INTO kits (id, owner, owner_name, kind, class, name, created, listed) "
                                  "VALUES (?, ?, ?, ?, ?, ?, ?, 1)",
                                  (kit["id"], owner, owner_name, kit["kind"], kit["class"], kit["name"],
@@ -473,6 +643,12 @@ class KitStore:
             else:
                 self._db.execute("UPDATE kits SET name = ?, owner_name = ? WHERE id = ?",
                                  (manifest["name"], owner_name, kit["id"]))
+                before = self._version(kit["id"], self.latest_any(kit["id"]))
+                if before and manifest["description"] != " ".join(str(before["manifest"].get("description") or "").split()):
+                    # the author changed it in manifest.json: each version shows its own again
+                    self._db.execute("UPDATE kits SET description = NULL WHERE id = ?", (kit["id"],))
+                    for v in self.versions(kit["id"]):
+                        self._register(kit["id"], v["version"])
             version = self.latest_any(kit["id"]) + 1
             folder = self.folder(kit["id"], version)
             folder.mkdir(parents=True, exist_ok=True)
@@ -513,15 +689,11 @@ class KitStore:
         specs = []
         for kit in self.owned(owner):
             latest = self.latest(kit["id"])
-            spec = self.spec(kit["id"], latest) if latest else None
-            if spec is not None and not spec.blocked:
-                specs.append(spec)
+            specs += [s for s in self.specs(kit["id"], latest) if not s.blocked] if latest else []
         for kit in self.library(owner):
             if kit["owner"] == owner:
                 continue
-            spec = self.spec(kit["id"], self.latest_public(kit["id"]))
-            if spec is not None and not spec.blocked:
-                specs.append(spec)
+            specs += [s for s in self.specs(kit["id"], self.latest_public(kit["id"])) if not s.blocked]
         return specs
 
     def check_use(self, owner: str, allowed: int, key: str) -> None:
@@ -533,7 +705,7 @@ class KitStore:
         if allowed <= 0:
             raise OpError("Custom objects and animations aren't part of this plan.")
         kit, row = self.kit(m.group(1)), self._version(m.group(1), int(m.group(2)))
-        if kit is None or row is None:
+        if kit is None or row is None or key not in self._keys.get((kit["id"], row["version"]), []):
             raise OpError("That customization doesn't exist.")
         if row["status"] == "taken_down":
             raise OpError("That customization was taken down.")
@@ -605,8 +777,10 @@ class KitStore:
         q = " ".join(str(query or "").lower().split())
         for r in rows:
             kit = self._kit_row(r[:8])
-            spec = self.spec(kit["id"], self.latest_public(kit["id"]) or self.latest(kit["id"]))
-            text = f"{kit['name']} {kit['owner_name']} {kit['class']} {spec.description if spec else ''}".lower()
+            shown = self.latest_public(kit["id"]) or self.latest(kit["id"])
+            spec = self.spec(kit["id"], shown)
+            extra = " ".join(f"{s.kit['class']} {s.label}" for s in self.specs(kit["id"], shown)[1:])
+            text = f"{kit['name']} {kit['owner_name']} {kit['class']} {spec.description if spec else ''} {extra}".lower()
             if not q or all(word in text for word in q.split()):
                 out.append(kit)
         return out
@@ -657,15 +831,22 @@ class KitStore:
 
 
 
-def demo_project(key: str):
-    """A small scene that shows a package off (its preview): an object fading in, or the animation on a square."""
+def demo_project(key: str, still: bool = False):
+    """A small scene that shows a package off (its preview): an object fading in (`still`: on screen from the start,
+    for a picture of it), one of its animations playing on it, or (a first-format animation) the animation on a
+    square."""
     from .session import Session
 
     s = Session(kits=lambda _key: None)
     sid = s.project.scenes[0].id
+    anim = ANIMATIONS.custom.get(key)
     if key in MOBJECTS.custom:
         mob = s.apply("add_mobject", {"scene_id": sid, "type": key})
-        s.apply("add_play_step", {"scene_id": sid, "anim": "FadeIn", "target_id": mob})
+        if not still:
+            s.apply("add_play_step", {"scene_id": sid, "anim": "FadeIn", "target_id": mob})
+    elif anim is not None and anim.only:
+        mob = s.apply("add_mobject", {"scene_id": sid, "type": anim.only[0]})
+        s.apply("add_play_step", {"scene_id": sid, "anim": key, "target_id": mob})
     else:
         mob = s.apply("add_mobject", {"scene_id": sid, "type": "Square"})
         s.apply("set_style", {"scene_id": sid, "mob_id": mob, "name": "fill_opacity", "value": 0.5})

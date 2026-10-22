@@ -428,14 +428,18 @@ class McpServer:
     @staticmethod
     def _kit_code(plan: dict, ctx: dict | None) -> dict:
         """kit.js of each customization the plan uses (type -> text), for the player's sandbox: it can't fetch them
-        (no cookies). Only versions this account may read, at most MAX_KIT_CODE in all."""
+        (no cookies). Only versions this account may read, at most MAX_KIT_CODE in all. A version's code comes once,
+        under its first type: its other types (an object's animations) share it (the plan's js_sha256 says so)."""
         ws = ctx["workspace"] if ctx else None
-        out, total = {}, 0
+        out, total, sent = {}, 0, set()
         for kit in plan.get("kits") or []:
             m = KIT_TYPE_RE.match(kit.get("type") or "")
             if ws is None or ws.kits is None or m is None:
                 continue
             kid, version = m.group(1), int(m.group(2))
+            if (kid, version) in sent:
+                continue
+            sent.add((kid, version))
             path = ws.kits.file(kid, version, "kit.js") if ws.kits.readable(ws.owner_key, kid, version) else None
             if path is None:
                 continue

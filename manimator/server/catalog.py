@@ -68,6 +68,19 @@ def animation_json(a) -> dict:
     return out
 
 
+def kit_part_json(s) -> dict:
+    """One class of a customization as its page shows it: its object or one of its animations, what it does and the
+    settings it offers."""
+    kit = s.kit or {}
+    out = {"type": s.key, "kind": kit.get("kind", ""), "class": kit.get("class", ""), "description": s.description,
+           "settings": [param_json(p) for p in s.params]}
+    if kit.get("kind") == "animation":
+        out.update(name=s.title, introducer=s.introducer, remover=s.remover, runTime=s.run_time)
+    else:
+        out["name"] = kit.get("name", "")
+    return out
+
+
 def _kit_json(kit: dict | None) -> dict | None:
     """What the editor may know about a custom type's package (never where its files are on the server)."""
     if kit is None:

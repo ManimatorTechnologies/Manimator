@@ -553,7 +553,8 @@ class _Builder:
                 return None
             item = self.scene.mob(target)
             if spec.only and item.type not in spec.only:
-                self.problem(where, f"{key} only works on {_names(spec.only)} (not on a {item.type})")
+                self.problem(where, f"{_label(key)} only works on {_names(map(_label, spec.only))} (not on a "
+                                    f"{_label(item.type)})")
                 return None
         if spec.blocked:  # a customization that isn't available any more: kept as it was
             return AnimationItem(key, target, _kept_values(given))
@@ -594,14 +595,14 @@ class _Builder:
 
 
 def kit_clash(project: Project) -> str:
-    """Why the project can't hold its customizations together ("" if it can): two different packages (or versions)
-    with the same class name, which the Python download can't import side by side."""
+    """Why the project can't hold its customizations together ("" if it can): two different packages (or versions of
+    one) with the same class name or Python module, which the Python download can't import side by side."""
     for key in ops.kit_types_in(project):
-        cls = ops.kit_class_clash(project, key)
-        if cls:
-            used = [k for k in ops.kit_types_in(project) if _label(k) == cls]
-            return (f"two different customizations called {cls} ({', '.join(used)}): a project can use only one; "
-                    f"use the same type everywhere")
+        clashes = ops.kit_clashes(project, key)
+        if clashes:
+            used = [key, *(k for k, _name in clashes)]
+            return (f"two different customizations called {clashes[0][1]} ({', '.join(used)}): a project can use "
+                    "only one version of one; use the same version's types everywhere")
     return ""
 
 
@@ -1005,8 +1006,9 @@ Changing a saved project:
 
 GUIDE_KITS = """## The user's customizations
 Custom objects and animations the user made in Manimator or added from its gallery. Use them like the built-in ones:
-the name below as "type" (objects) or "anim" (animations), with "params". GetProject shows scenes that have them with
-their exact type ("kit:<id>:<version>"): keep it as it is.
+the name below as "type" (objects) or "anim" (animations), with "params". An animation marked "only on X" was made for
+the custom object X and plays only on it. GetProject shows scenes that have them with their exact type
+("kit:<id>:<version>", or "kit:<id>:<version>:<Class>" for an object's animation): keep it as it is.
 - In the chat the player runs their code and plays them.
 - PreviewAnimation and the layout checks can't draw them (their code runs only in the user's browser): the frames
   leave them out, custom animations show as nothing happening, and the report says where they are. Leave room for
@@ -1021,6 +1023,7 @@ def _kit_line(spec) -> str:
     else:
         what = f"animation, {spec.run_time:g} s"
         what += ", brings its object in" if spec.introducer else ", takes its object away" if spec.remover else ""
+        what += f", only on {_names(map(_label, spec.only))}" if spec.only else ""
     line = f"- {k['class']}({_param_line(spec.params)}) ({what}; by {k['author']}; type {spec.key})"
     return line + (f": {spec.description}" if spec.description else "")
 

@@ -5,7 +5,7 @@
 import { html, useRef, useState } from "./lib.js";
 import { emit, scene, store } from "./store.js";
 import { Icon } from "./ui.js";
-import { CATEGORY_COLORS, CATEGORY_ICONS, sceneActions } from "./util.js";
+import { CATEGORY_COLORS, CATEGORY_ICONS, playsOn, sceneActions } from "./util.js";
 
 export const SCENE_TARGET = "scene"; // the window animates the scene itself
 const METHODS = "Animate a method";
@@ -62,10 +62,14 @@ function AnimPicker({ target, onPick, oneStep }) {
         return html`<${Tile} name=${a.key} desc=${specs.animations[a.key].description} color=${CATEGORY_COLORS[cat]}
           blocked=${blocked} onClick=${() => pick(a.key)} />`;
       }), CATEGORY_COLORS[cat]]);
-    // customizations (Customizations page), by their own names
-    sections.push(["Custom", store.kits.animations.filter((a) => matches(a.label, a.description, "custom"))
+    // customizations (Customizations page), by their own names: a custom object's animations only for it, and
+    // first, as they were made for it
+    const custom = ["Custom", store.kits.animations
+      .filter((a) => playsOn(a, typeKey) && matches(a.label, a.description, "custom"))
       .map((a) => html`<${Tile} name=${a.label} desc=${a.description} color=${CATEGORY_COLORS.Custom}
-        onClick=${() => pick(a.key)} />`), CATEGORY_COLORS.Custom]);
+        onClick=${() => pick(a.key)} />`), CATEGORY_COLORS.Custom];
+    if (store.kits.animations.some((a) => a.only?.includes(typeKey))) sections.unshift(custom);
+    else sections.push(custom);
   }
   const moveColor = CATEGORY_COLORS[specs.animations[catalog.animate]?.category] ?? CATEGORY_COLORS.Move;
   const methodGroups = target === SCENE_TARGET ? [] : catalog.methodGroups.map((g) => [g, catalog.methods

@@ -24,7 +24,7 @@ from ..model.project import PLAY, WAIT, MobjectItem, Project, Scene, Step
 from ..registry import ANIMATIONS, METHODS, MOBJECTS
 from ..registry.animations import ANIMATE, RATE_FUNCS
 from ..registry.colors import normalize
-from ..registry.custom import is_kit_type
+from ..registry.custom import KIT_TYPE_RE, is_kit_type, kit_type
 from ..registry.exprs import compile_expr
 from ..registry.mobjects import STYLE_FIELDS
 from ..registry.params import (
@@ -676,7 +676,16 @@ def _check_anim(scene: Scene, anim: str, target_id: str | None, method: str | No
         if target_id is not None:
             _mob(scene, target_id)
         return
-    _mob(scene, target_id)
+    _kit_target(scene, anim, _mob(scene, target_id))
+
+
+def _kit_target(scene: Scene, anim: str, target) -> None:
+    """A customization's animation plays only on its own package's object (AnimSpec.only)."""
+    spec = ANIMATIONS.get(anim) if is_kit_type(anim) else None
+    if spec is not None and spec.only and target.type not in spec.only:
+        owner = MOBJECTS[spec.only[0]]
+        name = (owner.kit or {}).get("name") or "its own object"
+        raise OpError(f"{spec.title} plays only on {name}, the object it was made for.")
 
 
 @op("Add animation")
@@ -788,7 +797,7 @@ def set_animation_target(s: Session, scene_id: str, step: int, index: int, targe
     a = _anim(scene, step, index)
     if ops.is_action(a):
         raise OpError("A scene action has no target object.")
-    _mob(scene, target_id)
+    _kit_target(scene, a.anim, _mob(scene, target_id))
     a.target = target_id
     ops.apply_visibility_rules(scene, step, a)
 
@@ -820,6 +829,82 @@ def remove_animation(s: Session, scene_id: str, step: int, index: int) -> bool:
         scene.steps.pop(step)
         return True
     return False
+
+
+# ---------------------------------------------------------------------- customizations
+
+
+def _refit(params, values, scene: Scene, assets) -> dict:
+    """`values` for another version's settings: the ones it still has keep their values (if it can take them), the
+    rest start at their defaults."""
+    out = ops.default_params(params)
+    for p in params:
+        if isinstance(values, dict) and p.name in values:
+            try:
+                out[p.name] = coerce(p, values[p.name], scene, None, assets=assets)
+            except Exception:  # noqa: BLE001 - a value the new setting can't take starts over
+                pass
+    return out
+
+
+@op("Update customization")
+def update_kit(s: Session, kit_id: str, version: int) -> dict:
+    """Move every use of one customization in the project to another of its versions (the newest the editor offers):
+    a project holds one version of a package, and a version's animations play only on its own object. Objects become
+    that version's object and animations its animation of the same class; settings it still has keep their values,
+    new ones start at their defaults. Refused when a step plays an animation that version doesn't have."""
+    version = _int(version, 1, 9999)
+    ours = lambda key: (m := KIT_TYPE_RE.match(key) if isinstance(key, str) else None) and m.group(1) == kit_id  # noqa: E731
+    objects = {m.type for sc in s.project.scenes for m in sc.mobjects if ours(m.type)}
+    animations = {a.anim for sc in s.project.scenes for st in sc.steps for a in st.animations if ours(a.anim)}
+    if not objects and not animations:
+        raise OpError("This project doesn't use that customization.")
+    if s.kits is None:
+        raise OpError("Custom objects and animations aren't available here.")
+    moved = {key: kit_type(kit_id, version, KIT_TYPE_RE.match(key).group(3) or "") for key in objects | animations}
+    moved = {old: new for old, new in moved.items() if old != new}
+    if not moved:
+        return {"objects": 0, "animations": 0}
+    exists = kit_type(kit_id, version) in MOBJECTS.custom or kit_type(kit_id, version) in ANIMATIONS.custom
+    for old, new in moved.items():
+        table = MOBJECTS if old in objects else ANIMATIONS
+        if new in table.custom:
+            continue
+        spec = ops.kit_spec(old)
+        name = spec.kit.get("name") if spec is not None and spec.kit else "this customization"
+        if old in objects or not exists:
+            raise OpError(f"That version of {name} can't be used here.")
+        where = next(f"step {i + 1} of {sc.name}" for sc in s.project.scenes for i, st in enumerate(sc.steps)
+                     if any(a.anim == old for a in st.animations))
+        raise OpError(f"That version of {name} has no {spec.title if spec else 'such'} animation, and {where} plays "
+                      "it. Remove it there first.")
+    for new in moved.values():
+        s.kits(new)  # may this visitor use that version (theirs, or approved and in their library)?
+    count = {"objects": 0, "animations": 0}
+    for scene in s.project.scenes:
+        for m in scene.mobjects:
+            if m.type in moved:
+                m.type = moved[m.type]
+                spec = MOBJECTS[m.type]
+                m.params = _refit(spec.params, m.params, scene, s.assets)
+                # only the style the user set (none at first: the package's own colors show), if it still applies
+                fields = {p.name: p for p in STYLE_FIELDS[spec.style_kind]}
+                kept = _refit(fields.values(), m.style, scene, s.assets)
+                m.style = {k: kept[k] for k in (m.style if isinstance(m.style, dict) else {}) if k in fields}
+                count["objects"] += 1
+        for i, step in enumerate(scene.steps):
+            for a in step.animations:
+                if a.anim in moved:
+                    a.anim = moved[a.anim]
+                    a.params = _refit(ANIMATIONS[a.anim].params, a.params, scene, s.assets)
+                    ops.apply_visibility_rules(scene, i, a)
+                    count["animations"] += 1
+    for new in moved.values():
+        clash = ops.kit_class_clash(s.project, new)
+        if clash:
+            raise OpError(f"This project also uses another customization called {clash}, which that version can't "
+                          "go with.")
+    return count
 
 
 def operation_names() -> list[str]:

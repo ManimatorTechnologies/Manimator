@@ -119,12 +119,13 @@ def folder_name(name: str) -> str:
 
 
 def used_kits(project: Project) -> list[dict]:
-    """The packages (server/kits.py) the project uses that are available: each one's kit info, one per class."""
+    """The packages (server/kits.py) the project uses that are available: each one's kit info, one per module (an
+    object's animations are in its module)."""
     out: dict[str, dict] = {}
     for key in kit_types_in(project):
         spec = kit_spec(key)
         if spec is not None and spec.kit and not spec.blocked:
-            out.setdefault(spec.kit["class"], spec.kit)
+            out.setdefault(spec.kit["module"], spec.kit)
     return list(out.values())
 
 

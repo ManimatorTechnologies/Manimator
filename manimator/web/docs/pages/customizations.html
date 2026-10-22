@@ -1,33 +1,37 @@
         <p class="d-note">Customizations need an account.</p>
 
         <h2 id="using">Using customizations</h2>
-        <p>A customization is one object or one animation, written in code. Upload a <code>.manimkit</code> file on the
-          <strong>Customizations</strong> page, and it appears in the editor's <strong>Custom</strong> group, next to
-          Manim's own objects and animations.</p>
+        <p>A customization is one object written in code, with the animations made for it. Upload a
+          <code>.manimkit</code> file on the <strong>Customizations</strong> page, and its object appears in the
+          editor's <strong>Custom</strong> group, next to Manim's own objects. Its animations appear in the
+          <strong>Custom</strong> group of the animation list, but only for that object: they play on nothing else.</p>
         <ul>
           <li>Add other people's customizations from the <strong>Gallery</strong>.</li>
+          <li>A customization's page plays a preview of its object and of each of its animations.</li>
           <li>A customization's <strong>More</strong> menu uploads a new version of it (projects keep the version they
             were made with) or makes it public. Each one is reviewed before it joins the gallery.</li>
         </ul>
 
         <h2 id="limits">Limits</h2>
-        <p>Free keeps up to 5 customizations, Pro up to 20 and Max up to 100 (each with all its versions). Deleting one
-          takes it off your list and out of the editor, but projects that already use it keep working.</p>
+        <p>Free keeps up to 5 customizations, Pro up to 20 and Max up to 100 (each with all its versions and
+          animations). Deleting one takes it off your list and out of the editor, but projects that already use it
+          keep working.</p>
 
         <h2 id="writing">Writing a customization</h2>
         <p>You write a customization twice: in JavaScript, which Manimator runs to draw it in your browser, and in
           Python, which Manim runs when you download a project as Python. Both are written the way Manim's own classes
           are.</p>
-        <p>Start from an example: <a href="/static/kits/battery.manimkit" download>Battery</a> (an object) or
-          <a href="/static/kits/PopIn.manimkit" download>Pop in</a> (an animation). A <code>.manimkit</code> file is a
-          zip file; unzip one to see its parts.</p>
+        <p>Start from the example, <a href="/static/kits/Battery.manimkit" download>Battery</a> (with a Pop in
+          animation). A <code>.manimkit</code> file is a zip file; unzip it to see its parts.</p>
 
         <h3 id="files">What's in a .manimkit file</h3>
         <table>
           <tr><th>File</th><th>What it is</th></tr>
-          <tr><td><code>manifest.json</code></td><td>Its name, kind, class name and settings (below).</td></tr>
-          <tr><td><code>kit.js</code></td><td>The class Manimator draws, in JavaScript (up to 256 KB).</td></tr>
-          <tr><td><code>kit.py</code></td><td>The same class for Manim, in Python (up to 256 KB).</td></tr>
+          <tr><td><code>manifest.json</code></td><td>Its name, its object's and animations' class names, and their
+            settings (below).</td></tr>
+          <tr><td><code>kit.js</code></td><td>The classes Manimator draws and plays, in JavaScript (up to
+            256 KB).</td></tr>
+          <tr><td><code>kit.py</code></td><td>The same classes for Manim, in Python (up to 256 KB).</td></tr>
           <tr><td><code>README.md</code></td><td>Optional: how to use it.</td></tr>
         </table>
         <p>Zip the files (or a folder holding them) and give the file the <code>.manimkit</code> extension. The whole
@@ -35,37 +39,51 @@
 
         <h3 id="manifest">manifest.json</h3>
 <pre data-label="manifest.json">{
-  "manimkit": 1,
+  "manimkit": 2,
   "name": "Battery",
-  "kind": "object",
-  "class": "Battery",
-  "version": "1.0",
+  "version": "1.1",
   "description": "A battery whose fill shows its charge",
   "license": "MIT",
-  "style": "none",
-  "params": [
-    {"name": "charge", "kind": "float", "default": 0.7,
-     "min": 0, "max": 1, "step": 0.05, "slider": true, "label": "Charge"}
+  "object": {
+    "class": "Battery",
+    "style": "none",
+    "params": [
+      {"name": "charge", "kind": "float", "default": 0.7,
+       "min": 0, "max": 1, "step": 0.05, "slider": true, "label": "Charge"}
+    ]
+  },
+  "animations": [
+    {
+      "class": "PopIn", "name": "Pop in",
+      "description": "Grow from nothing, a little past full size, and settle",
+      "introducer": true, "run_time": 0.8,
+      "params": [
+        {"name": "bounce", "kind": "float", "default": 1.7, "min": 0, "max": 5, "label": "Bounce"}
+      ]
+    }
   ]
 }</pre>
         <ul>
-          <li><code>kind</code>: <code>"object"</code> or <code>"animation"</code>.</li>
-          <li><code>class</code>: the class name in both files, in PascalCase. It can't be one of Manim's own
-            names.</li>
-          <li><code>version</code>: your label for this version.</li>
-          <li><code>params</code>: the settings the editor shows, up to 20. Each is passed to your class by its
-            <code>name</code>. Kinds: <code>float</code>, <code>int</code> (with <code>min</code>, <code>max</code>,
-            <code>step</code>, <code>slider</code>), <code>bool</code>, <code>color</code>, <code>str</code>,
-            <code>text</code>, <code>font</code>, <code>angle</code> (degrees), <code>point</code> and
-            <code>vector</code> (<code>[x, y]</code>), <code>direction</code> (<code>"UP"</code>,
-            <code>"DL"</code>…), and <code>enum</code> (with <code>choices</code>). Each may have a
-            <code>default</code>, a <code>label</code> and a <code>tooltip</code>.</li>
-          <li>Objects: <code>style</code> is which color controls the editor shows: <code>"none"</code> (your object
-            keeps its own colors), <code>"shape"</code> (stroke and fill), <code>"line"</code> or
-            <code>"text"</code>.</li>
-          <li>Animations: <code>run_time</code> (seconds), and <code>"introducer": true</code> if it brings its object
-            onto the screen (like FadeIn) or <code>"remover": true</code> if it takes it away (like FadeOut). Your class
-            must do the same (<code>introducer=True</code> in Python).</li>
+          <li><code>name</code>, <code>description</code>: what the Customizations page and the editor show. The description is up to 25 words.
+            <code>version</code> is your label for this version.</li>
+          <li><code>object</code>: the object. <code>class</code> is its class name in both files, in PascalCase; it
+            can't be one of Manim's own names. <code>style</code> is which color controls the editor shows:
+            <code>"none"</code> (your object keeps its own colors), <code>"shape"</code> (stroke and fill),
+            <code>"line"</code> or <code>"text"</code>.</li>
+          <li><code>animations</code>: up to 10 animations for the object (or none). Each has its own
+            <code>class</code>, a <code>name</code> and <code>description</code> for the editor, its
+            <code>run_time</code> (seconds), and <code>"introducer": true</code> if it brings its object onto the screen
+            (like FadeIn) or <code>"remover": true</code> if it takes it away (like FadeOut). Your class must do the
+            same (<code>introducer=True</code> in Python).</li>
+          <li><code>params</code>: the settings the editor shows, up to 20 for the object and for each animation. Each
+            is passed to your class by its <code>name</code>. Kinds: <code>float</code>, <code>int</code> (with
+            <code>min</code>, <code>max</code>, <code>step</code>, <code>slider</code>), <code>bool</code>,
+            <code>color</code>, <code>str</code>, <code>text</code>, <code>font</code>, <code>angle</code> (degrees in
+            the manifest and the editor, radians in your code), <code>point</code> and <code>vector</code>
+            (<code>[x, y]</code>), <code>direction</code> (<code>"UP"</code>, <code>"DL"</code>…), and
+            <code>enum</code> (with <code>choices</code>). Each may have a <code>default</code>, a <code>label</code>
+            and a <code>tooltip</code>.</li>
+          <li>A new version must keep the object's class. Its animations and settings may change.</li>
         </ul>
 
         <h3 id="kit-js">kit.js</h3>
@@ -75,10 +93,10 @@
           functions, and vector helpers for what Python writes with operators: <code>mul(RIGHT, 2)</code> for
           <code>RIGHT * 2</code>, <code>add(a, b)</code> for <code>a + b</code>.</p>
 <pre data-label="kit.js">import {
-  GREEN, LEFT, RIGHT, Rectangle, RoundedRectangle, VGroup, WHITE, mul,
+  Animation, GREEN, LEFT, RIGHT, Rectangle, RoundedRectangle, VGroup, WHITE, mul,
 } from "manimator";
 
-export default class Battery extends VGroup {
+export class Battery extends VGroup {
   static SIG = ["charge"]; // Battery(0.5) means charge=0.5, as in Python
 
   __init__({ charge = 0.7, ...kw } = {}) {
@@ -93,16 +111,32 @@ export default class Battery extends VGroup {
     this.add(body, fill);
     return this;
   }
+}
+
+export class PopIn extends Animation {
+  __init__({ mobject = null, bounce = 1.7, ...kw } = {}) {
+    this.bounce = bounce;
+    return super.__init__({ ...kw, mobject, introducer: true });
+  }
+
+  interpolate_mobject(alpha) {
+    const t = this.rate_func(alpha) - 1;
+    const size = 1 + (this.bounce + 1) * t ** 3 + this.bounce * t ** 2;
+    this.mobject.become(this.starting_mobject);
+    this.mobject.scale(Math.max(size, 0.001));
+  }
 }</pre>
         <ul>
-          <li>Export the class as <code>export default</code>.</li>
+          <li>Export each class by its name: <code>export class Battery</code>, <code>export class PopIn</code>.</li>
           <li>Classes are made like Python's: <code>Circle.make({ radius: 2 })</code> is
             <code>Circle(radius=2)</code>. Their setup goes in <code>__init__</code>, which takes the arguments as one
             object and returns <code>this</code>. Methods take the same arguments as in Python, in the same order:
             <code>a.next_to(b, RIGHT, 0.5)</code>.</li>
           <li>An animation extends <code>Animation</code> and changes <code>this.mobject</code> in
-            <code>interpolate_mobject(alpha)</code>; apply <code>this.rate_func(alpha)</code> yourself, as in Manim. See
-            the Pop in example.</li>
+            <code>interpolate_mobject(alpha)</code>; apply <code>this.rate_func(alpha)</code> yourself, as in Manim.
+            <code>this.mobject</code> is always your object, made by your own class, so an animation can use what
+            the object keeps (its parts, or the settings it was made with) and can make it again with other
+            settings.</li>
           <li>kit.js runs in a sandbox that can't reach the network, the page or the account: it can only draw.</li>
         </ul>
 
@@ -118,7 +152,25 @@ class Battery(VGroup):
             width=1.8 * charge, height=0.8, stroke_width=0, fill_color=GREEN, fill_opacity=1
         )
         fill.align_to(body, LEFT).shift(RIGHT * 0.1)
-        self.add(body, fill)</pre>
-        <p>It goes into the <code>customizations</code> folder of a project's Python download, and scene.py imports it.
-          Manimator never runs it. Keep both files drawing the same thing: what you see in Manimator is the
+        self.add(body, fill)
+
+
+class PopIn(Animation):
+    def __init__(self, mobject, bounce=1.7, **kwargs):
+        self.bounce = bounce
+        super().__init__(mobject, introducer=True, **kwargs)
+
+    def interpolate_mobject(self, alpha):
+        t = self.rate_func(alpha) - 1
+        size = 1 + (self.bounce + 1) * t**3 + self.bounce * t**2
+        self.mobject.become(self.starting_mobject)
+        self.mobject.scale(max(size, 0.001))</pre>
+        <p>It goes into the <code>customizations</code> folder of a project's Python download, and scene.py imports
+          its classes. Manimator never runs it. Keep both files drawing the same thing: what you see in Manimator is the
           JavaScript, what Manim renders is the Python.</p>
+
+        <h3 id="older">Customizations from before</h3>
+        <p>Customizations used to hold one object or one animation each (<code>"manimkit": 1</code>, with
+          <code>export default</code> in kit.js). The ones uploaded then keep working in projects, and an animation
+          from then still plays on any object. New uploads use the format above: put an old animation in the
+          customization of the object it is for.</p>

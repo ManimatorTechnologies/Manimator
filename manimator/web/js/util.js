@@ -104,6 +104,10 @@ export const isAction = (a) => (store.specs.animations[a.anim]?.sceneKinds.lengt
 /** An object type's name as the editor shows it: a customization's own name ("Battery"), else the key. */
 export const typeLabel = (key) => store.specs.mobjects[key]?.label ?? key;
 
+/** Whether a customization's animation plays on an object of this type: a custom object's animations play only on
+ *  it (their spec's `only`). */
+export const playsOn = (spec, type) => !spec?.only?.length || spec.only.includes(type);
+
 /** A method's name as people read it ("To corner"), not as Python writes it. */
 export const methodLabel = (key) => store.specs.methods[key]?.label ?? key;
 
