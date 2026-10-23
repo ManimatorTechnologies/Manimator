@@ -21,7 +21,10 @@ import weakref
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from ..model import ops
 from ..model.project import FILE_SUFFIX, OLD_FILE_SUFFIX, Project
+from ..registry.custom import KIT_TYPE_RE
+from .kits import kit_versions_in
 from .plans import Plan, local_plan
 from .session import OpError, ProjectLimits, Session
 
@@ -122,6 +125,9 @@ class Bucket:
 
 # per kind of request: (requests per second, burst)
 RATES = {"op": (40, 120), "upload": (0.4, 6), "auth": (0.1, 8), "plan": (10, 40), "thumb": (0.5, 10)}
+# how often the sweeper looks for customization versions no project uses (sooner when told: kits_changed), about
+# when an idle editor's undo steps are let go (memory_ttl)
+KIT_PRUNE_EVERY = 1800
 
 
 def rename_old_files(projects_dir: Path) -> None:
@@ -356,7 +362,9 @@ class Workspace:
             except (OSError, ValueError):
                 history = []
             history = (history + [{"label": label, "before": before}])[-20:]
-            history_file.write_text(json.dumps(history), encoding="utf-8")
+            tmp = history_file.with_suffix(".tmp")
+            tmp.write_text(json.dumps(history), encoding="utf-8")
+            os.replace(tmp, history_file)
             return project, result
 
     def read_project(self, pid: str) -> Project:
@@ -584,11 +592,16 @@ class Workspace:
         """Who owns the customizations made here: the account, or (without accounts) this visitor."""
         return self.user["id"] if self.user else self.id
 
-    def check_kit(self, key: str) -> None:
-        """Raise unless this visitor may add the custom type `key` to a project now (the Session asks)."""
+    def check_kit(self, key: str, project: Project | None = None) -> None:
+        """Raise unless this visitor may add the custom type `key` to `project` now (the Session asks about the open
+        one): a version the project uses already stays usable in it, anything new takes the newest."""
         if self.kits is None:
             raise OpError("Customizations aren't switched on here.")
-        self.kits.check_use(self.owner_key, self.plan.kits, key)
+        m = KIT_TYPE_RE.match(key) if isinstance(key, str) else None
+        project = self.session.project if project is None else project
+        used = m is not None and any(KIT_TYPE_RE.match(k).group(1, 2) == m.group(1, 2)
+                                     for k in ops.kit_types_in(project))
+        self.kits.check_use(self.owner_key, self.plan.kits, key, used)
 
     # ------------------------------------------------------------------ uploaded files
     def check_asset(self, name: str) -> str:
@@ -947,6 +960,9 @@ class WorkspaceStore:
         self._evicted: weakref.WeakValueDictionary[str, Workspace] = weakref.WeakValueDictionary()
         self._lock = threading.RLock()
         self._creations: dict[str, Bucket] = {}
+        self._prune_due = True  # customizations' versions to look over (prune_kits): at start, then when told
+        self._pruned = 0.0
+        self._unused: set[tuple[str, int]] = set()  # versions the last look found unneeded and unused (prune_kits)
         self._stop = threading.Event()
         self._thread = threading.Thread(target=self._sweeper, args=(sweep_every,), name="manimator-sweeper", daemon=True)
         self._thread.start()
@@ -1058,8 +1074,65 @@ class WorkspaceStore:
         while not self._stop.wait(every):
             try:
                 self.sweep()
+                if self._prune_due or time.time() - self._pruned > KIT_PRUNE_EVERY:
+                    self.prune_kits()
             except Exception:  # noqa: BLE001 - cleanup must never take the server down
                 pass
+
+    # ------------------------------------------------------------------ customizations' old versions
+    def kits_changed(self) -> None:
+        """Something may have left a customization version unused (a project deleted or opened, a newer version,
+        a project moved to it): the sweeper looks within a minute (prune_kits)."""
+        self._prune_due = True
+
+    def kit_versions_in_use(self) -> set[tuple[str, int]] | None:
+        """Every customization version a project names: the projects on disk with the changes made to them while
+        closed, and the editors open now (their projects and undo steps). None when a file couldn't be read."""
+        with self._lock:
+            open_now = [*self._by_id.values(), *self._evicted.values()]
+        found: set[tuple[str, int]] = set()
+        for ws in open_now:
+            for state in ws.session.kept_states():
+                found |= kit_versions_in(state)
+        for folder in [*self.root.glob("*/projects"), *self.root.glob("u/*/projects")]:
+            try:
+                files = list(folder.iterdir())
+            except FileNotFoundError:  # a visitor's workspace swept meanwhile
+                continue
+            except OSError:
+                return None
+            for path in files:
+                if path.suffix not in (FILE_SUFFIX, OLD_FILE_SUFFIX, ".json"):
+                    continue
+                try:
+                    found |= kit_versions_in(path.read_bytes())
+                except FileNotFoundError:  # deleted meanwhile
+                    continue
+                except OSError:
+                    return None
+        return found
+
+    def prune_kits(self) -> int:
+        """Delete for good the customization versions nothing offers any more (KitStore.unneeded) that no project
+        uses, once two looks in a row found them so: a look reads the editors and then the files one by one, so a
+        project's state that moved meanwhile (its changes from a chat brought into the editor as undo steps, a chat's
+        change written to its file and then to its history) can be missed by one look, never by the next. Returns
+        how many went."""
+        self._prune_due, self._pruned = False, time.time()
+        unneeded = set(self.kits.unneeded()) if self.kits is not None else set()
+        used = self.kit_versions_in_use() if unneeded else set()
+        if used is None:  # a project couldn't be read: nothing goes, and the next sweep tries again
+            self._unused = set()
+            self._prune_due = True
+            return 0
+        unused = unneeded - used
+        gone = sorted(unused & self._unused)
+        self._unused = unused - set(gone)
+        if self._unused:  # the next look lets them go, if it finds them unused too
+            self._prune_due = True
+        for kit_id, version in gone:
+            self.kits.forget(kit_id, version)
+        return len(gone)
 
     def close(self) -> None:
         self._stop.set()

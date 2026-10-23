@@ -331,9 +331,12 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
     def apply_op(body: dict = Body(...), ws=Depends(current)):
         throttle(ws, "op")
         merge_key = body.get("merge_key")
-        result = ws.session.apply(str(body.get("op", "")), body.get("args") or {},
+        name = str(body.get("op", ""))
+        result = ws.session.apply(name, body.get("args") or {},
                                   str(merge_key)[:200] if merge_key not in (None, "") else None)
         ws.save_soon()
+        if name == "update_kit":  # the version it left may go once nothing can bring it back
+            store.kits_changed()
         return {"result": result, "state": state(ws)}
 
     @app.post("/api/undo")
@@ -386,12 +389,14 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
         """A new project next to the others."""
         throttle(ws, "op")
         ws.create()
+        store.kits_changed()  # the project left behind can't be undone into any more
         return {"state": state(ws)}
 
     @app.post("/api/projects/open")
     def open_project(body: dict = Body(...), ws=Depends(current)):
         throttle(ws, "op")
         notes = ws.switch(body.get("id"))
+        store.kits_changed()  # the project left behind can't be undone into any more
         return {"state": state(ws), "notes": notes}
 
     @app.post("/api/projects/rename")
@@ -404,6 +409,7 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
     def delete_project(body: dict = Body(...), ws=Depends(current)):
         throttle(ws, "op")
         ws.delete(body.get("id"))
+        store.kits_changed()  # a customization version only it used goes too
         return {"state": state(ws)}
 
     # ------------------------------------------------------------------ files
@@ -666,6 +672,7 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
             raise Refused(why, 401 if "Sign in" in why else 403)
         data = await read_kit_body(request)
         kit = await run_in_threadpool(kits.add, ws.owner_key, kit_owner_name(ws), data, ws.plan.kits, kid)
+        store.kits_changed()  # older versions no project uses go
         return {"kit": kits.summary(kit, ws.owner_key), **kits_listing(ws)}
 
     def visible_kit(ws, kid: str) -> dict:
@@ -726,6 +733,7 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
         """Takes a customization off the lists; projects that use it keep working."""
         throttle(ws, "op")
         kits.unlist(ws.owner_key, kid)
+        store.kits_changed()
         return kits_listing(ws)
 
     @app.post("/api/kits/{kid}/describe")
@@ -812,6 +820,7 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
         if action not in ("approve", "reject"):
             raise Refused("Approve or reject.", 400)
         kits.decide(kid, version, action == "approve", str(body.get("reason") or ""))
+        store.kits_changed()  # an approved version replaces the gallery's older one
         return review_queue()
 
     @app.post("/api/admin/kits/{kid}/take_down")

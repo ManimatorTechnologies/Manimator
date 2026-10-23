@@ -1068,7 +1068,6 @@ textarea.input { height: auto; min-height: 64px; padding: 8px 10px; resize: vert
 /* the side column's boxes */
 .cz-box { padding: 14px 10px 10px; border: 1px solid var(--line); border-radius: 16px; background: var(--bg-1); }
 .cz-box > .cz-h { margin: 0 6px 10px; font-size: 12px; font-weight: 500; color: var(--text-3); }
-.cz-box > .cz-h.split { margin: 14px -10px 10px; padding: 14px 16px 0; border-top: 1px solid var(--line); }
 .cz-about { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px 16px; margin: 0; padding: 0 6px 4px; font-size: 13px; }
 .cz-about dt { color: var(--text-3); }
 .cz-about dd { margin: 0; color: var(--text); text-align: right; overflow-wrap: anywhere; user-select: text; }
@@ -1077,18 +1076,6 @@ textarea.input { height: auto; min-height: 64px; padding: 8px 10px; resize: vert
   text-decoration-color: var(--line-3); text-underline-offset: 3px; }
 .cz-about a:hover { color: var(--white); text-decoration-color: currentColor; }
 .cz-about a + a { margin-left: 12px; }
-.cz-versions { list-style: none; margin: 0; padding: 0; }
-.cz-ver {
-  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; width: 100%;
-  padding: 7px 8px; border: 0; border-radius: 8px; background: none; color: inherit; font-size: 13px; text-align: left;
-}
-button.cz-ver { cursor: pointer; }
-button.cz-ver:hover { background: var(--bg-2); }
-.cz-ver.on { background: var(--bg-3); }
-.cz-ver:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
-.cz-ver b { font-weight: 500; color: var(--white); font-variant-numeric: tabular-nums; }
-.cz-ver .dim { color: var(--text-3); font-size: 12px; white-space: nowrap; }
-.cz-ver-why { margin: 0 8px 6px; color: var(--text-3); font-size: 12px; line-height: 1.45; }
 
 .cz-readme { padding-top: 32px; border-top: 1px solid var(--line); }
 .cz-readme .md { margin-top: 14px; }

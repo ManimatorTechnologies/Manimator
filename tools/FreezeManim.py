@@ -14,6 +14,7 @@ The server then runs without Manim: Manim is only needed to run the exported Pyt
 
 from __future__ import annotations
 
+import enum
 import inspect
 import json
 import pprint
@@ -43,11 +44,13 @@ def _plain(value):
         return [_plain(v) for v in value]
     if isinstance(value, dict):
         return {str(k): _plain(v) for k, v in value.items()}
+    if isinstance(value, enum.Enum):  # before int: an IntEnum (PIL's Resampling) is one, and its repr isn't Python
+        return {"name": f"{type(value).__name__}.{value.name}"}
     if isinstance(value, (bool, int, float, str)) or value is None:
         return value
     if inspect.isclass(value) or inspect.isfunction(value) or inspect.isbuiltin(value):
         return {"name": value.__name__}
-    if hasattr(value, "name") and hasattr(value, "value"):  # an enum member
+    if hasattr(value, "name") and hasattr(value, "value"):  # an enum-like member
         return {"name": f"{type(value).__name__}.{value.name}"}
     if hasattr(value, "__dict__"):  # an object such as LinearBase(): its class and settings
         return {"instance": type(value).__name__,
@@ -94,8 +97,6 @@ def colors() -> dict:
 
 def js_constants() -> str:
     """manim/constants.py's numbers and vectors, and every named Manim colour, for the browser engine."""
-    import enum
-
     import manim.constants as c
     import numpy as np
     from manim.utils.color import ManimColor, manim_colors

@@ -253,6 +253,14 @@ class Session:
                 self.project = _unpack(entry.after)
                 self._undo.append(entry)
 
+    def kept_states(self) -> list[bytes]:
+        """The project and every state undo or redo can bring back, as JSON (server/web.py looks in them for the
+        customization versions still in use)."""
+        with self.lock:
+            now = _dumps(self.project.to_dict()).encode()
+            blobs = {id(b): b for e in [*self._undo, *self._redo] for b in (e.before, e.after)}
+        return [now, *(zlib.decompress(b) for b in blobs.values())]
+
 
 # ---------------------------------------------------------------------- lookups and validation
 

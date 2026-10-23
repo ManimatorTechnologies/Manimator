@@ -22,7 +22,7 @@ from manimator.server.kits import (
     KitError, KitStore, check_javascript, check_python, demo_project, read_manifest, read_package,
 )
 from manimator.server.session import OpError, Session
-from manimator.server.web import WebConfig
+from manimator.server.web import WebConfig, WorkspaceStore
 from tests.TestWeb import HEADERS
 
 EXAMPLES = Path(__file__).resolve().parent / "Kits"  # copies of the example kits in the ManimKit repo
@@ -510,12 +510,7 @@ def test_updating_keeps_settings_and_refuses_a_missing_animation(tmp_path):
         m["object"]["params"][0].update(max=0.2, default=0.1)  # charge 0.3 is past the new max
         m["animations"][0]["params"].append({"name": "twist", "kind": "angle", "default": 30})
     store.add("owner-1", "Ada", package(manifest_json=manifest(version="1.2", edit=more_settings)), 5, kid)
-    store.add("owner-1", "Ada", package(manifest_json=manifest(version="1.3", animations=[])), 5, kid)
 
-    before = s.project.to_dict()
-    with pytest.raises(OpError, match="has no Pop in animation, and step 1 of Scene1 plays it"):
-        s.apply("update_kit", {"kit_id": kid, "version": 3})
-    assert s.project.to_dict() == before  # nothing moved
     assert s.apply("update_kit", {"kit_id": kid, "version": 2}) == {"objects": 2, "animations": 1}
     first, second = s.project.scenes
     assert {m.type for sc in (first, second) for m in sc.mobjects} == {kit_type(kid, 2)}
@@ -524,6 +519,14 @@ def test_updating_keeps_settings_and_refuses_a_missing_animation(tmp_path):
     assert anim.anim == kit_type(kid, 2, "PopIn") and anim.params == {"bounce": 2.5, "twist": 30.0}
     assert not first.mobjects[0].on_screen_at_start  # Pop in still brings it in
     assert s.apply("update_kit", {"kit_id": kid, "version": 2}) == {"objects": 0, "animations": 0}  # already
+
+    store.add("owner-1", "Ada", package(manifest_json=manifest(version="1.3", animations=[])), 5, kid)
+    before = s.project.to_dict()
+    with pytest.raises(OpError, match="has no Pop in animation, and step 1 of Scene1 plays it"):
+        s.apply("update_kit", {"kit_id": kid, "version": 3})
+    assert s.project.to_dict() == before  # nothing moved
+    with pytest.raises(OpError, match=f"older version of Battery: .* newest version, kit:{kid}:3"):
+        s.apply("update_kit", {"kit_id": kid, "version": 1})  # never back to an older one
 
 
 def test_only_versions_the_user_may_use_and_only_ones_the_project_has(tmp_path):
@@ -538,7 +541,9 @@ def test_only_versions_the_user_may_use_and_only_ones_the_project_has(tmp_path):
     ada = Session(kits=lambda key: store.check_use("owner-1", 10, key))
     with pytest.raises(OpError, match="doesn't use that customization"):
         ada.apply("update_kit", {"kit_id": kid, "version": 2})
-    ada.apply("add_mobject", {"scene_id": ada.project.scenes[0].id, "type": battery})
+    with pytest.raises(OpError, match="older version of Battery"):  # nothing new takes an older version
+        ada.apply("add_mobject", {"scene_id": ada.project.scenes[0].id, "type": battery})
+    ada.project.scenes[0].mobjects.append(bo.project.scenes[0].mobjects[0])  # a project from before version 2
     with pytest.raises(OpError, match="That version of Battery can't be used here"):
         ada.apply("update_kit", {"kit_id": kid, "version": 7})
     with pytest.raises(OpError, match="aren't available here"):
@@ -650,3 +655,216 @@ def test_the_guest_mcp_cant_use_customizations(tmp_path):
         build_project({"objects": [{"name": "b", "type": battery}], "steps": []})
     with pytest.raises(SceneSpecError, match="signed in to the user's account"):
         build_project({"objects": [{"name": "c", "type": "Circle"}], "steps": [{"play": [{"anim": pop, "target": "c"}]}]})
+
+
+# ---------------------------------------------------------------------- letting old versions go
+
+
+def test_only_versions_nothing_offers_any_more_may_go(tmp_path):
+    store = KitStore(tmp_path)
+    kid = store.add("owner-1", "Ada", package(), 5)["id"]
+    for label in ("1.1", "1.2", "1.3"):
+        store.add("owner-1", "Ada", package(manifest_json=manifest(version=label)), 5, kid)
+    store.submit("owner-1", kid)
+    store.decide(kid, 4, True)  # 4 public
+    store.add("owner-1", "Ada", package(manifest_json=manifest(version="1.4")), 5, kid)
+    assert store.unneeded() == [(kid, 1), (kid, 2), (kid, 3)]  # 5 is the newest, 4 the gallery's
+    store.submit("owner-1", kid)  # 5 waits for review: still kept, like 4
+    assert store.unneeded() == [(kid, 1), (kid, 2), (kid, 3)]
+    gone = store.add("owner-2", "Bo", package(), 5)["id"]
+    store.add("owner-2", "Bo", package(manifest_json=manifest(version="1.1")), 5, gone)
+    store.unlist("owner-2", gone)  # deleted: none of its versions is offered
+    assert [k for k in store.unneeded() if k[0] == gone] == [(gone, 1), (gone, 2)]
+    store.take_down(kid)  # taken down: all of it stays, for the record
+    assert store.unneeded() == [(gone, 1), (gone, 2)]
+
+
+def kit_store_and_workspaces(tmp_path):
+    kits = KitStore(tmp_path / "kits")
+    return kits, WorkspaceStore(WebConfig(data_dir=tmp_path), sweep_every=3600, kits=kits)
+
+
+def test_an_older_version_goes_for_good_once_no_project_or_undo_step_uses_it(tmp_path):
+    kits, workspaces = kit_store_and_workspaces(tmp_path)
+    ws, _ = workspaces.resolve(None, "1.1.1.1")
+    kid = kits.add(ws.owner_key, "Ada", package(), 5)["id"]
+    sid = ws.session.project.scenes[0].id
+    ws.session.apply("add_mobject", {"scene_id": sid, "type": kit_type(kid, 1)})
+    ws.flush_now()
+    kits.add(ws.owner_key, "Ada", package(manifest_json=manifest(version="1.1")), 5, kid)  # the same code
+    sha = MOBJECTS[kit_type(kid, 2)].kit["js_sha256"]
+    assert workspaces.prune_kits() == 0  # the project uses version 1
+    ws.session.apply("update_kit", {"kit_id": kid, "version": 2})
+    ws.save_soon()  # as the editor's edits are written
+    ws.flush_now()
+    assert workspaces.prune_kits() == 0  # undo can still bring it back
+    ws.session.undo()
+    assert MOBJECTS.is_available(ws.session.project.scenes[0].mobjects[0].type)
+    ws.session.redo()
+    ws.create()  # another project: the first one's undo steps are let go
+    assert workspaces.prune_kits() == 0 and workspaces.prune_kits() == 1  # on the second look that finds it unused
+    assert [v["version"] for v in kits.versions(kid)] == [2]
+    assert not (tmp_path / "kits" / kid / "1").exists() and kit_type(kid, 1) not in MOBJECTS.custom
+    assert not MOBJECTS.is_available(kit_type(kid, 1)) and MOBJECTS.is_available(kit_type(kid, 2))
+    assert kits.js_by_sha(sha) == tmp_path / "kits" / kid / "2" / "kit.js"  # version 2's, the same code
+    for pid in [p["id"] for p in ws.list_projects()]:
+        ws.delete(pid)
+    assert workspaces.prune_kits() == 0 and kits.latest(kid) == 2  # the newest stays without projects
+    workspaces.close()
+    kits.close()
+
+
+def test_a_closed_project_or_another_visitors_keeps_an_old_version_till_it_is_deleted(tmp_path):
+    kits, workspaces = kit_store_and_workspaces(tmp_path)
+    ada, _ = workspaces.resolve(None, "1.1.1.1")
+    bo, _ = workspaces.resolve(None, "2.2.2.2")
+    kid = kits.add(ada.owner_key, "Ada", package(), 5)["id"]
+    kits.submit(ada.owner_key, kid)
+    kits.decide(kid, 1, True)
+    kits.set_library(bo.owner_key, kid, True)
+    bo.session.apply("add_mobject", {"scene_id": bo.session.project.scenes[0].id, "type": kit_type(kid, 1)})
+    used = bo.current_id
+    bo.create()  # Bo's project with version 1 is closed now, on disk
+    kits.add(ada.owner_key, "Ada", package(manifest_json=manifest(version="1.1")), 5, kid)
+    kits.submit(ada.owner_key, kid)
+    kits.decide(kid, 2, True)  # the gallery gives version 2 now
+    assert kits.unneeded() == [(kid, 1)] and workspaces.prune_kits() == 0
+    workspaces._evict(bo)  # not in memory any more: only its files tell
+    assert workspaces.prune_kits() == 0
+    bo, _ = workspaces.resolve(bo.id, "2.2.2.2")
+    bo.delete(used)
+    assert workspaces.prune_kits() == 0 and workspaces.prune_kits() == 1
+    assert [v["version"] for v in kits.versions(kid)] == [2]
+    workspaces.close()
+    kits.close()
+
+
+def test_a_deleted_customization_goes_with_the_last_project_that_used_it(tmp_path):
+    kits, workspaces = kit_store_and_workspaces(tmp_path)
+    ws, _ = workspaces.resolve(None, "1.1.1.1")
+    kid = kits.add(ws.owner_key, "Ada", package(), 5)["id"]
+    ws.session.apply("add_mobject", {"scene_id": ws.session.project.scenes[0].id, "type": kit_type(kid, 1)})
+    kits.unlist(ws.owner_key, kid)
+    assert workspaces.prune_kits() == 0 and kits.kit(kid) is not None  # the open project still uses it
+    ws.delete(ws.current_id)
+    assert workspaces.prune_kits() == 0 and workspaces.prune_kits() == 1
+    assert kits.kit(kid) is None and kits.versions(kid) == [] and not (tmp_path / "kits" / kid).exists()
+    workspaces.close()
+    kits.close()
+
+
+def test_an_unreadable_project_lets_nothing_go(tmp_path, monkeypatch):
+    kits, workspaces = kit_store_and_workspaces(tmp_path)
+    ws, _ = workspaces.resolve(None, "1.1.1.1")
+    kid = kits.add(ws.owner_key, "Ada", package(), 5)["id"]
+    kits.add(ws.owner_key, "Ada", package(manifest_json=manifest(version="1.1")), 5, kid)
+    ws.flush_now()
+    real = Path.read_bytes
+    monkeypatch.setattr(Path, "read_bytes", lambda p: (_ for _ in ()).throw(PermissionError(p)) if
+                        p.suffix == ".manimator" else real(p))
+    assert workspaces.prune_kits() == 0 and kits.latest_any(kid) == 2 and len(kits.versions(kid)) == 2
+    monkeypatch.undo()
+    assert workspaces.prune_kits() == 0 and workspaces.prune_kits() == 1  # two looks that could read everything
+    workspaces.close()
+    kits.close()
+
+
+def test_one_look_that_misses_a_use_lets_nothing_go(tmp_path, monkeypatch):
+    """A look reads the editors, then the files one by one: a project's state that moves meanwhile (a chat's changes
+    brought into the editor as undo steps) can slip past it, so a version goes only when two looks in a row agree."""
+    kits, workspaces = kit_store_and_workspaces(tmp_path)
+    ws, _ = workspaces.resolve(None, "1.1.1.1")
+    kid = kits.add(ws.owner_key, "Ada", package(), 5)["id"]
+    ws.session.apply("add_mobject", {"scene_id": ws.session.project.scenes[0].id, "type": kit_type(kid, 1)})
+    kits.add(ws.owner_key, "Ada", package(manifest_json=manifest(version="1.1")), 5, kid)
+    real = workspaces.kit_versions_in_use
+    monkeypatch.setattr(workspaces, "kit_versions_in_use", lambda: set())  # this look missed the open project
+    assert workspaces.prune_kits() == 0
+    monkeypatch.setattr(workspaces, "kit_versions_in_use", real)
+    assert workspaces.prune_kits() == 0 and workspaces.prune_kits() == 0
+    assert [v["version"] for v in kits.versions(kid)] == [1, 2] and MOBJECTS.is_available(kit_type(kid, 1))
+    workspaces.close()
+    kits.close()
+
+
+def test_the_same_code_in_two_packages_is_found_by_its_hash_till_both_go(tmp_path):
+    """Two people may upload the same example: the chat player still finds the code of the one that stays."""
+    kits, workspaces = kit_store_and_workspaces(tmp_path)
+    ada, _ = workspaces.resolve(None, "1.1.1.1")
+    bo, _ = workspaces.resolve(None, "2.2.2.2")
+    first = kits.add(ada.owner_key, "Ada", package(), 5)["id"]
+    second = kits.add(bo.owner_key, "Bo", package(), 5)["id"]  # the same files, so the same kit.js
+    sha = MOBJECTS[kit_type(first, 1)].kit["js_sha256"]
+    assert MOBJECTS[kit_type(second, 1)].kit["js_sha256"] == sha
+    kits.unlist(bo.owner_key, second)  # deleted, and no project uses it: it goes for good
+    assert workspaces.prune_kits() == 0 and workspaces.prune_kits() == 1 and kits.kit(second) is None
+    assert kits.js_by_sha(sha) == tmp_path / "kits" / first / "1" / "kit.js"
+    kits.unlist(ada.owner_key, first)
+    assert workspaces.prune_kits() == 0 and workspaces.prune_kits() == 1 and kits.js_by_sha(sha) is None
+    workspaces.close()
+    kits.close()
+
+
+def test_a_taken_down_packages_code_isnt_given_by_its_hash(tmp_path):
+    kits = KitStore(tmp_path)
+    first = kits.add("owner-1", "Ada", package(), 5)["id"]
+    sha = MOBJECTS[kit_type(first, 1)].kit["js_sha256"]
+    kits.take_down(first)  # its code runs nowhere, the chat player's either
+    assert kits.js_by_sha(sha) is None
+    other = kits.add("owner-2", "Bo", package(), 5)["id"]  # the same code in a package still up
+    assert kits.js_by_sha(sha) == tmp_path / other / "1" / "kit.js"
+    kits.close()
+    again = KitStore(tmp_path)  # after a restart too
+    assert again.js_by_sha(sha) == tmp_path / other / "1" / "kit.js"
+    again.close()
+
+
+def test_a_chat_means_the_projects_version_by_an_animations_class_name_too(tmp_path):
+    """A project made with Battery 1.1 gets 1.1's Pop in from a chat that writes "PopIn": the newest version's plays
+    only on the newest version's battery."""
+    from manimator.server.McpScene import KitAccess, Rules, SceneSpecError, build_project
+
+    store = KitStore(tmp_path)
+    kid = store.add("owner-1", "Ada", package(), 5)["id"]  # 1.1
+    store.add("owner-1", "Ada", package(manifest_json=manifest(version="1.2")), 5, kid)
+    used = Project.new()
+    used.scenes[0].mobjects.append(ops.create_mobject(used.scenes[0], kit_type(kid, 1)))
+    usable = {s.kit["class"]: s.key for s in reversed(store.usable("owner-1"))}
+    assert usable == {"Battery": kit_type(kid, 2), "PopIn": kit_type(kid, 2, "PopIn")}
+    scene = {"objects": [{"name": "b", "type": "Battery"}], "steps": [{"play": [{"anim": "PopIn", "target": "b"}]}]}
+    project_rules = Rules(kits=KitAccess(check=lambda key: store.check_use("owner-1", 5, key, key.startswith(
+        f"kit:{kid}:1")), usable=usable, prefer=frozenset(ops.kit_types_in(used))))
+    built = build_project(scene, project_rules).scenes[0]
+    assert (built.mobjects[0].type, built.steps[0].animations[0].anim) == (kit_type(kid, 1), kit_type(kid, 1, "PopIn"))
+    mixed = {"objects": [{"name": "b", "type": kit_type(kid, 1)}],
+             "steps": [{"play": [{"anim": kit_type(kid, 2, "PopIn"), "target": "b"}]}]}
+    with pytest.raises(SceneSpecError, match=r"PopIn only works on Battery 1\.2 \(not on a Battery 1\.1\)"):
+        build_project(mixed, project_rules)  # the versions told apart
+    fresh = build_project(scene, Rules(kits=KitAccess(check=lambda key: store.check_use("owner-1", 5, key),
+                                                      usable=usable))).scenes[0]
+    assert (fresh.mobjects[0].type, fresh.steps[0].animations[0].anim) == (kit_type(kid, 2), kit_type(kid, 2, "PopIn"))
+    store.close()
+
+
+def test_new_uses_take_the_newest_version_and_projects_keep_theirs(tmp_path):
+    kits, workspaces = kit_store_and_workspaces(tmp_path)
+    ws, _ = workspaces.resolve(None, "1.1.1.1")
+    kid = kits.add(ws.owner_key, "Ada", package(), 5)["id"]
+    sid = ws.session.project.scenes[0].id
+    b = ws.session.apply("add_mobject", {"scene_id": sid, "type": kit_type(kid, 1)})
+    kits.add(ws.owner_key, "Ada", package(manifest_json=manifest(version="1.1")), 5, kid)
+    # the project has version 1: its battery still gets version 1's Pop in, and another battery of it
+    ws.session.apply("add_play_step", {"scene_id": sid, "anim": kit_type(kid, 1, "PopIn"), "target_id": b})
+    ws.session.apply("add_mobject", {"scene_id": sid, "type": kit_type(kid, 1)})
+    ws.create()  # a new project takes only the newest
+    sid = ws.session.project.scenes[0].id
+    with pytest.raises(OpError, match=f"older version of Battery: .* newest version, kit:{kid}:2"):
+        ws.session.apply("add_mobject", {"scene_id": sid, "type": kit_type(kid, 1)})
+    ws.session.apply("add_mobject", {"scene_id": sid, "type": kit_type(kid, 2)})
+    kits.unlist(ws.owner_key, kid)  # deleted: it stays in the projects that have it, and goes in no other
+    ws.session.apply("add_mobject", {"scene_id": sid, "type": kit_type(kid, 2)})
+    ws.create()
+    with pytest.raises(OpError, match="was deleted"):
+        ws.session.apply("add_mobject", {"scene_id": ws.session.project.scenes[0].id, "type": kit_type(kid, 2)})
+    workspaces.close()
+    kits.close()

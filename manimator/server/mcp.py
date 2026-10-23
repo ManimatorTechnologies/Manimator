@@ -419,7 +419,10 @@ class McpServer:
         ws = ctx["workspace"]
         kits = None
         if ws.kits is not None:
-            kits = KitAccess(check=ws.check_kit, usable={s.kit["class"]: s.key for s in reversed(_usable(ws))},
+            # a version the project uses already stays usable in it; anything new takes the newest
+            into = project if project is not None else Project(scenes=[])
+            kits = KitAccess(check=lambda key: ws.check_kit(key, into),
+                             usable={s.kit["class"]: s.key for s in reversed(_usable(ws))},
                              keep=frozenset(ops.kit_types_in(Project(scenes=[scene]))) if scene else frozenset(),
                              prefer=frozenset(ops.kit_types_in(project)) if project else frozenset())
         return Rules(max_objects=ws.cfg.limits.max_objects, max_steps=ws.cfg.limits.max_steps, assets=ws.check_asset,

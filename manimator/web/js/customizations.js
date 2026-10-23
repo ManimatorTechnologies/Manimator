@@ -308,7 +308,6 @@ function Detail({ id, version, back, show, busy, actions, isPublic }) {
   const shown = kit.versions.find((v) => v.version === kit.shown_version) ?? latest(kit);
   const newest = latest(kit);
   const review = kit.review; // only for the site's owner, who reviews: { version waiting (0: none), reports }
-  const theirs = kit.mine || !!review; // the author and the reviewer see every version and how it stands
   const canSubmit = kit.mine && isPublic && ["private", "rejected"].includes(newest?.status);
   const waiting = review?.version ? kit.versions.find((v) => v.version === review.version) : null;
   const inGallery = kit.versions.some((v) => v.status === "public");
@@ -360,8 +359,7 @@ function Detail({ id, version, back, show, busy, actions, isPublic }) {
       </div>
       <aside class="cz-side">
         <section class="cz-box cz-about-box">
-          <${About} kit=${kit} />
-          <${Versions} kit=${kit} shown=${shown} theirs=${theirs} pick=${theirs && kit.versions.length > 1 ? show : null} />
+          <${About} kit=${kit} shown=${shown} />
         </section>
       </aside>
     </div>
@@ -408,31 +406,18 @@ function Callouts({ kit, shown, newest, waiting, inGallery, busy, actions, show 
   return out.length ? html`<div class="cz-callouts">${out}</div>` : null;
 }
 
-/** Who made it, its license and class. */
-function About({ kit }) {
+/** Who made it, the version shown and when it came, its license and class. Older versions aren't listed: one that no
+ *  project uses any more is deleted (server/kits.py KitStore.unneeded). */
+function About({ kit, shown }) {
   const rows = [
     ["Made by", kit.mine ? "You" : kit.author || "Someone"],
+    shown && ["Version", shown.label || `#${shown.version}`],
+    shown && ["Updated", ago(shown.created)],
     kit.license && ["License", kit.license],
     ["Class", html`<code>${kit.class}</code>`],
   ].filter(Boolean);
   return html`<h2 class="cz-h">About</h2>
     <dl class="cz-about">${rows.map(([k, v]) => html`<dt>${k}</dt><dd>${v}</dd>`)}</dl>`;
-}
-
-/** Every version (others see the approved ones); the author and the reviewer can show an older one. Shares About's box. */
-function Versions({ kit, shown, theirs, pick }) {
-  return html`<h2 class="cz-h split">Versions</h2>
-    <ul class="cz-versions">
-      ${[...kit.versions].reverse().map((v) => {
-        const on = v.version === shown?.version;
-        const body = html`<b>${v.label || `#${v.version}`}</b><span /><span class="dim">${ago(v.created)}</span>`;
-        return html`<li key=${v.version}>
-          ${pick ? html`<button class=${`cz-ver ${on ? "on" : ""}`} aria-current=${on ? "true" : null}
-              onClick=${() => pick(v.version)}>${body}</button>` : html`<div class="cz-ver">${body}</div>`}
-          ${theirs && v.reason && html`<p class="cz-ver-why">${v.reason}</p>`}
-        </li>`;
-      })}
-    </ul>`;
 }
 
 /** The customization's object drawn in the sandbox, standing still. */

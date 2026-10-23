@@ -20,7 +20,7 @@ from ..model import ops
 from ..model.project import PLAY, WAIT, AnimationItem, MethodCall, MobjectItem, Project, Scene, Step, new_id
 from ..registry import ANIMATIONS, METHODS, MOBJECTS
 from ..registry.animations import ANIMATE, RATE_FUNCS
-from ..registry.custom import is_kit_type
+from ..registry.custom import is_kit_type, kit_type
 from ..registry.mobjects import SHAPE, STYLE_FIELDS
 from ..registry.params import (
     ANGLE, BOOL, COLOR, DIRECTION, DIRECTION_VECTORS, ENUM, EXPR, FILE, FLOAT, FONT, GRID, INT, MOBREF, MOBREFS,
@@ -68,10 +68,22 @@ def _names(items) -> str:
     return ", ".join(items) if items else "none"
 
 
-def _label(key) -> str:
-    """How a type is named in messages: a customization by its class name."""
+def _label(key, version: str = "") -> str:
+    """How a type is named in messages: a customization by its class name, and (`version` "label" or "number") by its
+    version too, to tell two versions of one apart ("Battery 1.1", "Battery #2")."""
     spec = ops.kit_spec(key) if is_kit_type(key) else None
-    return spec.kit["class"] if spec is not None and spec.kit else str(key)
+    if spec is None or not spec.kit:
+        return str(key)
+    k = spec.kit
+    if not version:
+        return k["class"]
+    return f"{k['class']} {k['label']}" if version == "label" and k.get("label") else f"{k['class']} #{k['version']}"
+
+
+def _apart(keys) -> str:
+    """How to name these types so that no two read the same (_label's `version`)."""
+    keys = list(dict.fromkeys(keys))
+    return next((how for how in ("", "label") if len({_label(k, how) for k in keys}) == len(keys)), "number")
 
 
 def _find(params, name) -> Param | None:
@@ -126,8 +138,15 @@ class KitAccess:
     def named(self, name: str) -> str | None:
         for key in sorted(self.prefer):
             spec = ops.kit_spec(key)
-            if spec is not None and spec.kit and spec.kit.get("class") == name:
+            if spec is None or not spec.kit:
+                continue
+            if spec.kit.get("class") == name:
                 return key
+            # an animation of that version the project doesn't play yet: the newest version's plays only on its own
+            # object, not on the project's
+            animation = kit_type(spec.kit["id"], spec.kit["version"], name)
+            if animation in ANIMATIONS.custom:
+                return animation
         return self.usable.get(name)
 
     def listing(self, kind: str | None = None) -> str:
@@ -553,8 +572,9 @@ class _Builder:
                 return None
             item = self.scene.mob(target)
             if spec.only and item.type not in spec.only:
-                self.problem(where, f"{_label(key)} only works on {_names(map(_label, spec.only))} (not on a "
-                                    f"{_label(item.type)})")
+                how = _apart([*spec.only, item.type])  # its own object from another version: by version, then
+                self.problem(where, f"{_label(key)} only works on {_names(_label(k, how) for k in spec.only)} "
+                                    f"(not on a {_label(item.type, how)})")
                 return None
         if spec.blocked:  # a customization that isn't available any more: kept as it was
             return AnimationItem(key, target, _kept_values(given))

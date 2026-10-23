@@ -6,7 +6,7 @@ MANIM_VERSION = '0.21.0'
 DEFAULTS = {'AbstractImageMobject': {'bases': ['Mobject'],
                           'init': {'scale_to_resolution': {'required': True},
                                    'pixel_array_dtype': 'uint8',
-                                   'resampling_algorithm': <Resampling.BICUBIC: 3>}},
+                                   'resampling_algorithm': {'name': 'Resampling.BICUBIC'}}},
  'AddTextLetterByLetter': {'bases': ['ShowIncreasingSubsets'],
                            'init': {'text': {'required': True},
                                     'suspend_mobject_updating': False,

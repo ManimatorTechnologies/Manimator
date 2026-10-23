@@ -139,6 +139,28 @@ test("a first-format package's class is its default export", async () => {
     () => Promise.resolve(mod)), /code didn't arrive/);
 });
 
+test("an object built for one package is never another package's of the same class name", async () => {
+  // as the shared sandbox draws the customization cards: two people's Battery, or two versions of one
+  const { BuildCache } = await import("../../manimator/web/js/engine/plan/build.js");
+  const source = exampleSource("Battery");
+  const wider = source.replace("width: 2, height: 1", "width: 3, height: 1");
+  assert.notEqual(wider, source);
+  const kit = (id) => ({ type: `kit:${id.repeat(12)}:1`, class: "Battery", kind: "object", export: "Battery",
+    js_sha256: id.repeat(64) });
+  const cache = new BuildCache();
+  const width = async (k, text) => {
+    await registerKits([k], { [k.type]: text }, moduleFrom);
+    const plan = { objects: [{ id: "x", var: "battery", type: k.type, call: { call: "Battery" }, post: [], deps: [],
+      error: null }] };
+    return (await buildObjects(plan, { cache })).get("x").mobject.width;
+  };
+  const [a, b] = [kit("a"), kit("b")];
+  const narrow = await width(a, source);
+  assert.ok(Math.abs((await width(b, wider)) - narrow - 1) < 1e-9, "the other package's battery, 1 wider");
+  assert.ok(Math.abs((await width(a, source)) - narrow) < 1e-9, "and the first one's again");
+  for (const k of plan.kits) registerKitClass(k, battery[k.export ?? "default"]); // as the other tests had it
+});
+
 test("only a class of the right kind can be registered", () => {
   assert.throws(() => registerKitClass({ kind: "object", class: "Bad", type: "kit:x:1" }, class {}), /extends a Manim object/);
   assert.throws(() => registerKitClass({ kind: "animation", class: "Bad", type: "kit:x:1" }, Object), /extends Animation/);

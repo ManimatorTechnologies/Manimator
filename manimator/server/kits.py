@@ -33,6 +33,7 @@ import keyword
 import math
 import re
 import secrets
+import shutil
 import sqlite3
 import threading
 import time
@@ -441,6 +442,14 @@ def register(spec) -> None:
     (MOBJECTS if isinstance(spec, MobjectSpec) else ANIMATIONS).custom[spec.key] = spec
 
 
+KIT_REF_RE = re.compile(rb"kit:([0-9a-f]{12}):([1-9][0-9]{0,3})")
+
+
+def kit_versions_in(data: bytes) -> set[tuple[str, int]]:
+    """The customization versions a project (as JSON) names, as {(kit id, version)}."""
+    return {(m.group(1).decode(), int(m.group(2))) for m in KIT_REF_RE.finditer(data)}
+
+
 # ---------------------------------------------------------------------- the store
 
 
@@ -452,7 +461,9 @@ class KitStore:
         root.mkdir(parents=True, exist_ok=True)
         self._db = sqlite3.connect(str(root / "kits.db"), check_same_thread=False, isolation_level=None)
         self._lock = threading.RLock()
-        self._by_sha: dict[str, tuple[str, int]] = {}  # kit.js sha256 -> (kit id, version)
+        # kit.js sha256 -> the versions with that code that may still run, {(kit id, version)}: several versions, or
+        # several people's packages (two uploads of the same example), can have the same kit.js
+        self._by_sha: dict[str, set[tuple[str, int]]] = {}
         self._keys: dict[tuple[str, int], list[str]] = {}  # (kit id, version) -> its types, the object's first
         for sql in (
             "CREATE TABLE IF NOT EXISTS kits (id TEXT PRIMARY KEY, owner TEXT NOT NULL, owner_name TEXT NOT NULL, "
@@ -495,28 +506,41 @@ class KitStore:
         return path if path.is_file() else None
 
     def js_by_sha(self, sha: str) -> Path | None:
-        """The kit.js whose sha256 is `sha`. Only someone who has the code already knows it: the chat player gets
-        it with the code, and loads it from here when the chat's policy lets it run no code it was handed."""
-        hit = self._by_sha.get(sha)
-        return self.file(hit[0], hit[1], "kit.js") if hit else None
+        """The kit.js whose sha256 is `sha`, of a version that wasn't taken down (its code runs nowhere any more). Only
+        someone who has the code already knows it: the chat player gets it with the code, and loads it from here when
+        the chat's policy lets it run no code it was handed."""
+        with self._lock:
+            hits = sorted(self._by_sha.get(sha, ()))
+        for kit_id, version in hits:
+            path = self.file(kit_id, version, "kit.js")
+            if path is not None:
+                return path
+        return None
 
     def _register(self, kit_id: str, version: int) -> None:
-        kit = self.kit(kit_id)
-        row = self._version(kit_id, version)
-        folder = self.folder(kit_id, version)
-        manifest = read_manifest((folder / "manifest.json").read_text(encoding="utf-8"), stored=True)
-        written = self.written_description(kit_id)
-        if written is not None:
-            manifest["description"] = written
-            if manifest["object"] is None:  # a first-format animation: its one animation is the package
-                manifest["animations"][0]["description"] = written
-        js = (folder / "kit.js").read_bytes()
-        meta = {"js_sha256": hashlib.sha256(js).hexdigest(), "status": row["status"]}
-        self._by_sha[meta["js_sha256"]] = (kit_id, version)
-        specs = make_specs(kit, version, manifest, meta, blocked=row["status"] == "taken_down")
-        for spec in specs:
-            register(spec)
-        self._keys[(kit_id, int(version))] = [s.key for s in specs]
+        version = int(version)
+        with self._lock:  # forget() changes the same tables
+            kit = self.kit(kit_id)
+            row = self._version(kit_id, version)
+            folder = self.folder(kit_id, version)
+            manifest = read_manifest((folder / "manifest.json").read_text(encoding="utf-8"), stored=True)
+            written = self.written_description(kit_id)
+            if written is not None:
+                manifest["description"] = written
+                if manifest["object"] is None:  # a first-format animation: its one animation is the package
+                    manifest["animations"][0]["description"] = written
+            js = (folder / "kit.js").read_bytes()
+            meta = {"js_sha256": hashlib.sha256(js).hexdigest(), "status": row["status"]}
+            taken_down = row["status"] == "taken_down"
+            same_code = self._by_sha.setdefault(meta["js_sha256"], set())
+            if taken_down:
+                same_code.discard((kit_id, version))
+            else:
+                same_code.add((kit_id, version))
+            specs = make_specs(kit, version, manifest, meta, blocked=taken_down)
+            for spec in specs:
+                register(spec)
+            self._keys[(kit_id, version)] = [s.key for s in specs]
 
     # ------------------------------------------------------------------ reading
     @staticmethod
@@ -696,9 +720,10 @@ class KitStore:
             specs += [s for s in self.specs(kit["id"], self.latest_public(kit["id"])) if not s.blocked]
         return specs
 
-    def check_use(self, owner: str, allowed: int, key: str) -> None:
+    def check_use(self, owner: str, allowed: int, key: str, used: bool = False) -> None:
         """Raise unless this user may add this custom type to a project now (`allowed`: their plan's limit): one of
-        their own packages, or an approved version of one in their library."""
+        their own packages, or an approved version of one in their library. Something new gets the newest version
+        they can add, never a deleted package's; `used`: the project has this version already, and may keep it."""
         m = KIT_TYPE_RE.match(key) if isinstance(key, str) else None
         if m is None:
             raise OpError("Unknown custom object or animation.")
@@ -709,10 +734,17 @@ class KitStore:
             raise OpError("That customization doesn't exist.")
         if row["status"] == "taken_down":
             raise OpError("That customization was taken down.")
-        if kit["owner"] == owner:
-            return
-        if row["status"] != "public" or not any(k["id"] == kit["id"] for k in self.library(owner)):
+        if kit["owner"] != owner and (row["status"] != "public"
+                                      or not any(k["id"] == kit["id"] for k in self.library(owner))):
             raise OpError("That customization isn't yours or in your library. Add it from the gallery first.")
+        if used:
+            return
+        if not kit["listed"]:
+            raise OpError("That customization was deleted.")
+        newest = self.latest(kit["id"]) if kit["owner"] == owner else self.latest_public(kit["id"])
+        if row["version"] != newest:
+            raise OpError(f"That is an older version of {kit['name']}: new objects and animations use its newest "
+                          f"version, {kit_type(kit['id'], newest, m.group(3) or '')}.")
 
     def readable(self, viewer: str, kit_id: str, version: int, admin: bool = False) -> bool:
         """Whether someone may read a version's files: its author, the reviewer, or anyone once it is approved. (An
@@ -828,6 +860,45 @@ class KitStore:
         version = self._q("SELECT MAX(version) FROM versions WHERE kit_id = ? AND status = 'pending'", (kit_id,))[0][0]
         rows = self._q("SELECT reason, created FROM reports WHERE kit_id = ? AND handled = 0 ORDER BY created", (kit_id,))
         return {"version": version or 0, "reports": [{"reason": r, "created": c} for r, c in rows]}
+
+    # ------------------------------------------------------------------ letting old versions go
+    def unneeded(self) -> list[tuple[str, int]]:
+        """The versions nothing offers any more: every version of a package but its newest and its newest approved
+        one (the gallery's and libraries'), and every version of a deleted package. Versions waiting for review stay,
+        and so does all of a package that was taken down. Each goes for good once no project uses it
+        (server/web.py WorkspaceStore.prune_kits)."""
+        listed = dict(self._q("SELECT id, listed FROM kits"))
+        by_kit: dict[str, list[tuple[int, str]]] = {}
+        for kit_id, version, status in self._q("SELECT kit_id, version, status FROM versions"):
+            by_kit.setdefault(kit_id, []).append((version, status))
+        out = []
+        for kit_id, versions in by_kit.items():
+            if any(status == "taken_down" for _, status in versions):
+                continue
+            keep = {v for v, status in versions if status == "pending"}
+            if listed.get(kit_id):
+                keep.add(max(v for v, _ in versions))
+                keep.add(max((v for v, status in versions if status == "public"), default=0))
+            out += [(kit_id, v) for v, _ in versions if v not in keep]
+        return sorted(out)
+
+    def forget(self, kit_id: str, version: int) -> None:
+        """Delete a version for good: its row, its files and its types (a project that still named it would show
+        the object as unavailable). A deleted package goes with its last version."""
+        version = int(version)
+        with self._lock:
+            self._q("DELETE FROM versions WHERE kit_id = ? AND version = ?", (kit_id, version))
+            for key in self._keys.pop((kit_id, version), []):
+                MOBJECTS.custom.pop(key, None)
+                ANIMATIONS.custom.pop(key, None)
+            for same_code in self._by_sha.values():  # other versions with the same kit.js answer for it (js_by_sha)
+                same_code.discard((kit_id, version))
+            self._by_sha = {sha: hits for sha, hits in self._by_sha.items() if hits}
+            shutil.rmtree(self.folder(kit_id, version), ignore_errors=True)
+            if not self._q("SELECT 1 FROM versions WHERE kit_id = ?", (kit_id,)):
+                for table, column in (("kits", "id"), ("library", "kit_id"), ("reports", "kit_id")):
+                    self._q(f"DELETE FROM {table} WHERE {column} = ?", (kit_id,))
+                shutil.rmtree(self.root / kit_id, ignore_errors=True)
 
 
 

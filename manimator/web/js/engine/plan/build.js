@@ -72,7 +72,9 @@ export function objectContext(built, extra = {}) {
 }
 
 /** A cache of constructor results for objects that don't use other objects (as the server preview had), so moving
- *  a formula or a graph doesn't make it again: the call (as JSON) -> the object, copied on each use. */
+ *  a formula or a graph doesn't make it again: the object's type and call (as JSON) -> the object, copied on each
+ *  use. The type tells customizations apart (server/kits.py "kit:<id>:<version>"): two packages, or two versions of
+ *  one, may call the same class name with the same settings and draw different things. */
 export class BuildCache {
   constructor(limit = 300) {
     this.limit = limit;
@@ -81,7 +83,7 @@ export class BuildCache {
 
   make(obj, call, ctx) {
     if (obj.deps?.length) return evalCall(call, ctx);
-    const key = JSON.stringify(call);
+    const key = JSON.stringify([obj.type ?? null, call]);
     let cached = this.map.get(key);
     if (cached === undefined) {
       const misses = texMisses();

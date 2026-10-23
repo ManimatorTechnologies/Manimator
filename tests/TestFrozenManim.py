@@ -47,3 +47,12 @@ def test_frozen_data_matches_manim():
 
     for path, text in FreezeManim.files().items():
         assert path.read_text(encoding="utf-8") == text, f"{path.name} is stale: run tools/FreezeManim.py"
+
+
+def test_the_frozen_python_files_load():
+    """Every value is written as plain data (an enum by its name, even one that is also a number)."""
+    from manimator.registry import ColorTable, ManimDefaults, reserved
+
+    image = ManimDefaults.DEFAULTS["AbstractImageMobject"]["init"]
+    assert image["resampling_algorithm"] == {"name": "Resampling.BICUBIC"}
+    assert ColorTable.HEX["BLUE"] == "#58C4DD" and "Circle" in reserved.MANIM_NAMES
