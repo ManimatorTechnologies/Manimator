@@ -4,6 +4,7 @@ __pycache__/
 .pytest_cache/
 media/
 .env
+.env.live
 # your own editor and assistant settings
 .claude/
 # the hosted site's private add-on: a repository of its own (see manimator/server/addon.py)
