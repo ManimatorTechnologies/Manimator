@@ -68,7 +68,7 @@ function NeedPlan({ why }) {
 }
 
 /** Card pictures, made in one sandbox shared by the cards (customizations' code never runs on this page), kept for
- *  the visit: "id:version" -> a promise of an image URL (null if it couldn't be drawn). */
+ *  the visit: "id:version" -> a promise of {url, background} (the scene's colour), or null if it couldn't be drawn. */
 const pictures = new Map();
 let sandbox = null;
 let queue = Promise.resolve();
@@ -82,7 +82,7 @@ function picture(kitId, version) {
       try {
         const { plan } = await get(`/api/kits/${kitId}/demo?still=1${version ? `&version=${version}` : ""}`);
         sandbox ??= await (await import("./sandboxed.js")).openSandbox();
-        return URL.createObjectURL(await sandbox.thumbnail(plan));
+        return { url: URL.createObjectURL(await sandbox.thumbnail(plan)), background: plan.background };
       } catch {
         sandbox?.close(); // a stuck or broken one: the next card gets a fresh sandbox
         sandbox = null;
@@ -97,15 +97,16 @@ function picture(kitId, version) {
   return pictures.get(key);
 }
 
+/** The card's picture: the whole 16:9 frame, in the card's 4:3 box with the scene's colour above and below it. */
 function Thumb({ kit, version }) {
-  const [src, setSrc] = useState(null);
+  const [shot, setShot] = useState(null);
   useEffect(() => {
     let alive = true;
-    picture(kit.id, version).then((url) => alive && setSrc(url));
+    picture(kit.id, version).then((made) => alive && setShot(made));
     return () => { alive = false; };
   }, [kit.id, version]);
-  return html`<div class=${`pthumb ${src ? "ready" : ""}`}>
-    ${src && html`<img src=${src} alt="" draggable=${false} />`}
+  return html`<div class=${`pthumb ${shot ? "ready" : ""}`} style=${shot ? `background:${shot.background}` : ""}>
+    ${shot && html`<img src=${shot.url} alt="" draggable=${false} />`}
   </div>`;
 }
 
@@ -431,7 +432,7 @@ function Preview({ kitId, version }) {
     setProblem("");
     setEarly(null);
     const card = pictures.get(`${kitId}:${version ?? ""}`) ?? pictures.get(`${kitId}:`);
-    card?.then((url) => alive && setEarly(url));
+    card?.then((made) => alive && setEarly(made?.url ?? null));
     (async () => {
       try {
         const query = new URLSearchParams({ ...(version ? { version } : {}), still: 1 }).toString();

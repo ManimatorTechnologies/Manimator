@@ -782,6 +782,7 @@ textarea.input { height: auto; min-height: 64px; padding: 8px 10px; resize: vert
 /* customization cards: narrower and taller than projects', the whole description shown (it is at most 25 words) */
 .cz-grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
 .cz-card .pthumb { aspect-ratio: 4 / 3; }
+.cz-card .pthumb img { object-fit: contain; } /* the whole frame: nothing near its sides is cut off */
 .cz-card .pbody { flex: 1; padding: 12px 6px 6px; }
 .cz-card .psub { margin-top: 4px; line-height: 1.45; white-space: normal; overflow-wrap: anywhere; }
 .cz-card .meta { margin-top: auto; padding-top: 8px; }
