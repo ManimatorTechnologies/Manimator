@@ -387,10 +387,6 @@ function FilesTab() {
         <button class="btn icon ghost small" title="More" onClick=${(e) => fileMenu(e, f)}><${Icon} name="more" size=${14} /></button>
       </div>`)}
     </div>
-    <div class="cv-drop" onClick=${chooseDataFiles}>
-      <div>Drop data files here</div>
-      <div class="sub">CSV, TSV, JSON or TXT. Your code opens them by name.</div>
-    </div>
   </div>`;
 }
 
