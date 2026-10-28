@@ -43,7 +43,7 @@ export function NumberInput({ value, min = -1e9, max = 1e9, step = 0.1, decimals
   };
   return html`<div class=${`num ${short ? "short" : ""}`} title=${title || ""}>
     ${prefix && html`<span class="prefix">${prefix}</span>`}
-    <input value=${draft ?? fmt(value, decimals)} spellcheck="false"
+    <input value=${draft ?? fmt(value, decimals)} spellcheck=${false}
       onFocus=${(e) => e.target.select()}
       onInput=${(e) => update(e.target.value)}
       onBlur=${commit}
@@ -103,7 +103,7 @@ export function TextInput({ value, onChange, list, placeholder, title }) {
     if (d !== null && d !== value) onChange(d);
   };
   return html`<input class="input" list=${list} placeholder=${placeholder || ""} title=${title || ""}
-    value=${draft ?? value ?? ""} spellcheck="false"
+    value=${draft ?? value ?? ""} spellcheck=${false}
     onInput=${(e) => update(e.target.value)} onBlur=${commit}
     onKeyDown=${(e) => {
       if (e.key === "Enter") e.target.blur();
@@ -121,7 +121,7 @@ function TextArea({ value, onChange, rows = 2, hint }) {
     if (d !== null && d !== value) onChange(d);
   };
   return html`<div class="textfield">
-    <textarea class="input" rows=${rows} spellcheck="false" value=${draft ?? value ?? ""}
+    <textarea class="input" rows=${rows} spellcheck=${false} value=${draft ?? value ?? ""}
       onInput=${(e) => update(e.target.value)} onBlur=${commit}
       onKeyDown=${(e) => { if (e.key === "Enter" && e.ctrlKey) { e.preventDefault(); commit(); } }} />
     <div class="bar"><span>${draft !== null && draft !== value ? "Ctrl+Enter or click away to apply" : hint || ""}</span>
@@ -215,7 +215,7 @@ function ColorPicker({ value, optional, onPick }) {
         <div class="cp-row">
           ${"EyeDropper" in window && html`<button class="btn small icon" title="Pick a colour from the screen" onClick=${eyedrop}>
             <${Icon} name="dropper" /></button>`}
-          <input class="input cp-hex" value=${text ?? draft} spellcheck="false" maxlength="7" title="Hex colour"
+          <input class="input cp-hex" value=${text ?? draft} spellcheck=${false} maxlength="7" title="Hex colour"
             onInput=${(e) => { setText(e.target.value); setFromHex(e.target.value); }}
             onBlur=${() => setText(null)}
             onKeyDown=${(e) => { if (e.key === "Enter") { const h = setFromHex(e.target.value) ?? draft; setText(null); onPick(h); } }} />

@@ -85,7 +85,7 @@ export function Palette() {
     </nav>
     <div class="pal-main" ref=${mainRef} onScroll=${onScroll}>
       <div class="pal-search">
-        <input class="input" type="search" placeholder="Search objects…" spellcheck="false" value=${query}
+        <input class="input" type="search" placeholder="Search objects…" spellcheck=${false} value=${query}
           ref=${(el) => { if (el && !el.dataset.f) { el.dataset.f = "1"; setTimeout(() => el.isConnected && el.focus(), 0); } }}
           onInput=${(e) => { setQuery(e.target.value); mainRef.current.scrollTop = 0; }} />
       </div>

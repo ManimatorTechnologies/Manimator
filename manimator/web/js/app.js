@@ -16,6 +16,9 @@ import { AnimWindow, closeAnimPicker } from "./animpicker.js";
 import { closeMethodPicker, MethodWindow } from "./methodpicker.js";
 import { Stage } from "./stage.js";
 import { closeStepEditor, StepsPanel, StepTools } from "./steps.js";
+import {
+  CodeView, codeRunning, codeViewOn, openCodeView, openVisualView, playCode, runCode,
+} from "./codeview.js";
 import { emit, project, redo, run, select, stopPlayback, store, subscribe, togglePlay, undo } from "./store.js";
 import {
   alertDialog, closeMenu, closePopover, Icon, MenuLayer, ModalLayer, openMenuAt, PopoverLayer, Toast,
@@ -24,10 +27,11 @@ import {
 const BOTTOM_BARS_H = 38; // the scene tabs; keep in sync with --sheets in style.css
 
 const SHORTCUTS = `Ctrl+N  New Project        Ctrl+S  Download Project
-Ctrl+E  Export Python      Ctrl+Z  Undo        Ctrl+Y  Redo
+Ctrl+E  Download Python    Ctrl+Z  Undo        Ctrl+Y  Redo
 Ctrl+D  Duplicate          Del     Delete      Esc     Cancel / deselect
 Arrows  Nudge 0.1 (Shift: 0.5)                 Ctrl+G  Grid
 F5 / Space  Play           F6  Render scene    F7  Render all scenes
+In the Code view: Ctrl+Enter  Run    F5  Play    Tab / Shift+Tab  Indent    Ctrl+/  Comment
 Drag a number's label sideways to change it. Hold Shift while placing or dragging to flip snapping.`;
 
 const toggleGrid = () => { store.grid = !store.grid; emit(); };
@@ -47,7 +51,9 @@ function onKey(e) {
     if (ctrl && lower === "r") return handle(() => {});
     return;
   }
-  if (k === "F5") return handle(togglePlay);
+  const code = codeViewOn();
+  if (code && ctrl && k === "Enter") return handle(runCode);
+  if (k === "F5") return handle(code ? playCode : togglePlay);
   if (k === "F6") return handle(() => startRender("scene"));
   if (k === "F7") return handle(() => startRender("all"));
   if (ctrl && lower === "s") return handle(save);
@@ -69,6 +75,11 @@ function onKey(e) {
     return select(null);
   }
   if (typing) return;
+  if (code) { // the script has its own keys; the visual editor's don't apply
+    if (ctrl && lower === "z") return handle(() => (e.shiftKey ? redo() : undo()));
+    if (ctrl && lower === "y") return handle(redo);
+    return;
+  }
   if (k === " " && !/^(BUTTON|A)$/.test(e.target.tagName)) return handle(togglePlay);
   if (ctrl && lower === "z") return handle(() => (e.shiftKey ? redo() : undo()));
   if (ctrl && lower === "y") return handle(redo);
@@ -175,6 +186,7 @@ function buildMenus() {
 function Topbar() {
   const s = store.server;
   const running = renderActive();
+  const code = codeViewOn();
   return html`<header class="topbar">
     <div class="group">
       <button class="brand link" title="All Projects" onClick=${showHome}><span class="lbl">Manimator</span></button>
@@ -186,11 +198,16 @@ function Topbar() {
         onClick=${save}><${Icon} name="export" /><span class="lbl">Download</span></button>
     </div>
     <div class="group end">
+      ${code && html`<button class="btn primary collapse" title="Run the code and play its scene (Ctrl+Enter)"
+        disabled=${codeRunning()} onClick=${runCode}><${Icon} name="play" /><span class="lbl">${codeRunning() ? "Running…" : "Run"}</span></button>`}
       <button class="btn ghost collapse" title="Render this scene at the chosen quality (F6)" disabled=${running}
         onClick=${() => startRender("scene")}><${Icon} name="film" /><span class="lbl">Render scene</span></button>
       <button class="btn ghost collapse" title="Render every scene (F7)" disabled=${running}
         onClick=${() => startRender("all")}><${Icon} name="layers" /><span class="lbl">Render all</span></button>
-      <button class="btn ghost collapse" title="Download the scenes as Python for Manim, with their pictures and fonts (.zip, Ctrl+E)" onClick=${exportPython}><${Icon} name="export" /><span class="lbl">Python</span></button>
+      ${code ? html`<button class="btn ghost collapse" title="Back to building scenes with buttons" onClick=${openVisualView}>
+          <${Icon} name="layers" /><span class="lbl">Visual</span></button>`
+        : html`<button class="btn ghost collapse" title="Write the animation as Manim Python code, with your own data files"
+          onClick=${openCodeView}><${Icon} name="code" /><span class="lbl">Code</span></button>`}
     </div>
   </header>`;
 }
@@ -226,6 +243,19 @@ export function App() {
       <${AuthDialog} />
       <${PricingDialog} />
       <${MenuLayer} />
+      <${ModalLayer} />
+    </div>`;
+  }
+  if (codeViewOn()) {
+    return html`<div class="shell code-shell">
+      <${Topbar} />
+      <${CodeView} />
+      <${Toast} />
+      <${RenderDialog} />
+      <${MenuLayer} />
+      <${PopoverLayer} />
+      <${AuthDialog} />
+      <${PricingDialog} />
       <${ModalLayer} />
     </div>`;
   }

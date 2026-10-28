@@ -13,6 +13,7 @@ from __future__ import annotations
 import copy
 import itertools
 import json
+import re
 import threading
 import time
 import zlib
@@ -522,6 +523,66 @@ def set_setting(s: Session, name: str, value) -> None:
         s.project.settings.quality = value
     else:
         raise OpError(f"Unknown setting {name!r}.")
+
+
+# ---------------------------------------------------------------------- code (the Code view)
+MAX_CODE = 200_000  # characters of the script
+MAX_CODE_FILES = 50
+DATA_EXTENSIONS = (".csv", ".tsv", ".json", ".txt")
+CODE_FILE_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 ._-]{0,79}$")
+
+
+def _code(s: Session) -> dict:
+    if s.project.code is None:
+        s.project.code = {"text": "", "files": []}
+    return s.project.code
+
+
+def _code_file_name(name) -> str:
+    name = str(name or "").strip()
+    if not CODE_FILE_RE.match(name) or not name.lower().endswith(DATA_EXTENSIONS):
+        raise OpError("Name data files with letters, digits, spaces, dots, _ or -, ending in .csv, .tsv, .json or .txt.")
+    return name
+
+
+@op("Edit code")
+def set_code(s: Session, text: str) -> None:
+    text = str(text)
+    if len(text) > MAX_CODE:
+        raise OpError(f"The code is too long (up to {MAX_CODE:,} characters).")
+    _code(s)["text"] = text
+
+
+@op("Add data file")
+def add_code_file(s: Session, name: str, asset: str) -> str:
+    """Adds an uploaded file under `name` (the script opens it by that name); a file of that name is replaced."""
+    name = _code_file_name(name)
+    if s.assets is not None:
+        asset = s.assets(asset)
+    files = [f for f in _code(s)["files"] if f["name"] != name]
+    if len(files) >= MAX_CODE_FILES:
+        raise OpError(f"A project can have up to {MAX_CODE_FILES} data files.")
+    s.project.code["files"] = [*files, {"name": name, "asset": str(asset)}]
+    return name
+
+
+@op("Remove data file")
+def remove_code_file(s: Session, name: str) -> None:
+    code = _code(s)
+    code["files"] = [f for f in code["files"] if f["name"] != name]
+
+
+@op("Rename data file")
+def rename_code_file(s: Session, name: str, new_name: str) -> str:
+    code = _code(s)
+    new_name = _code_file_name(new_name)
+    if new_name != name and any(f["name"] == new_name for f in code["files"]):
+        raise OpError(f"There is already a file named {new_name}.")
+    found = next((f for f in code["files"] if f["name"] == name), None)
+    if found is None:
+        raise OpError("That file is already gone.")
+    found["name"] = new_name
+    return new_name
 
 
 # ---------------------------------------------------------------------- objects

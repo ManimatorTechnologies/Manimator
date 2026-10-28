@@ -39,8 +39,10 @@ IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp"}
 IMAGE_FORMATS = {"PNG", "JPEG", "GIF", "BMP", "WEBP"}
 MAX_PIXELS = 16_000_000
 VIDEO_TYPES = {".mp4": "video/mp4", ".m4v": "video/mp4", ".webm": "video/webm", ".mov": "video/quicktime"}
+# data files for the Code view's scripts: no size limit of their own, only the plan's storage
+DATA_TYPES = {".csv": "text/csv", ".tsv": "text/tab-separated-values", ".json": "application/json", ".txt": "text/plain"}
 ASSET_TYPES = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif",
-               ".bmp": "image/bmp", ".webp": "image/webp", ".svg": "image/svg+xml", **VIDEO_TYPES}
+               ".bmp": "image/bmp", ".webp": "image/webp", ".svg": "image/svg+xml", **VIDEO_TYPES, **DATA_TYPES}
 MAX_VIDEO_BYTES = 100 * 1024 * 1024  # one uploaded video (presentations play them between scenes)
 MAX_RENDER_BYTES = 200 * 1024 * 1024  # one scene rendered in the browser and kept for presentations
 MAX_KIT_BYTES = 1024 * 1024  # one .manimkit file (server/kits.py)
@@ -660,6 +662,20 @@ class Workspace:
             os.replace(tmp, target)
         return stored
 
+    def add_data(self, filename: str, tmp: Path, digest: str) -> str:
+        """Keep an uploaded data file for the Code view (already written to `tmp`, its sha256 `digest`)."""
+        base = Path(str(filename).replace("\\", "/")).name
+        ext = Path(base).suffix.lower()
+        if ext not in DATA_TYPES:
+            raise OpError("Upload a CSV, TSV, JSON or TXT file.")
+        stem = re.sub(r"[^A-Za-z0-9_-]", "_", Path(base).stem)[:40] or "data"
+        stored = f"{stem}-{digest[:8]}{ext}"
+        target = self.assets_dir / stored
+        if not target.exists():
+            self._room_for(tmp.stat().st_size)
+            os.replace(tmp, target)
+        return stored
+
     def delete_asset(self, name: str) -> None:
         path = self.asset_path(name)
         if path is None:
@@ -693,7 +709,8 @@ class Workspace:
         files = []
         for p in sorted(self.assets_dir.iterdir()) if self.assets_dir.is_dir() else []:
             if p.is_file():
-                kind = "video" if p.suffix.lower() in VIDEO_TYPES else "picture"
+                ext = p.suffix.lower()
+                kind = "video" if ext in VIDEO_TYPES else "data" if ext in DATA_TYPES else "picture"
                 files.append({"name": p.name, "kind": kind, "size": p.stat().st_size, "modified": p.stat().st_mtime})
         scene_names = {}
         for p in sorted(self.renders_dir.iterdir()) if self.renders_dir.is_dir() else []:
@@ -709,9 +726,9 @@ class Workspace:
             project = self._index["projects"].get(pid, {}).get("name", "Deleted project")
             files.append({"name": p.name, "kind": "render", "size": p.stat().st_size, "modified": p.stat().st_mtime,
                           "label": f"{project}: {scene_names[pid].get(sid, 'deleted scene')}"})
-        totals = {k: sum(f["size"] for f in files if f["kind"] == k) for k in ("video", "picture", "render")}
+        totals = {k: sum(f["size"] for f in files if f["kind"] == k) for k in ("video", "picture", "data", "render")}
         return {"used": sum(totals.values()), "quota": self.plan.asset_quota, "videos": totals["video"],
-                "pictures": totals["picture"], "renders": totals["render"], "files": files}
+                "pictures": totals["picture"], "data": totals["data"], "renders": totals["render"], "files": files}
 
     def render_path(self, name: str) -> Path | None:
         if not isinstance(name, str) or not RENDER_RE.match(name):

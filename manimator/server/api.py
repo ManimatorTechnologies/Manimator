@@ -16,6 +16,7 @@ import json
 import mimetypes
 import os
 import re
+import zipfile
 from pathlib import Path
 
 from fastapi import Body, Depends, FastAPI, Request
@@ -23,6 +24,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse, Response
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
+from starlette.background import BackgroundTask
 from starlette.concurrency import run_in_threadpool
 
 from .. import codegen
@@ -39,7 +41,7 @@ from .mcp import USER_PATH, mount_mcp, site_of
 from .plans import local_plan
 from .session import OpError
 from .web import (
-    ASSET_TYPES, COOKIE, MAX_KIT_BYTES, MAX_RENDER_BYTES, MAX_VIDEO_BYTES, THUMB_MAX, THUMB_MAX_BYTES, VIDEO_TYPES,
+    ASSET_TYPES, COOKIE, DATA_TYPES, MAX_KIT_BYTES, MAX_RENDER_BYTES, MAX_VIDEO_BYTES, THUMB_MAX, THUMB_MAX_BYTES, VIDEO_TYPES,
     TooFast,
     WebConfig, WorkspaceStore,
 )
@@ -49,7 +51,11 @@ DEV_DIR = Path(__file__).resolve().parents[2] / "tests" / "browser" / "www"
 CSP = ("default-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; style-src 'self' 'unsafe-inline'; "
        "script-src 'self'; connect-src 'self'; font-src 'self'; frame-ancestors 'none'; base-uri 'none'; "
        "form-action 'self'; object-src 'none'")
+# the code test page (tests/browser/www/code.html) loads Pyodide, which compiles WebAssembly, from its CDN
+DEV_CSP = CSP.replace("script-src 'self'", "script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval' https://cdn.jsdelivr.net")     .replace("connect-src 'self'", "connect-src 'self' https://cdn.jsdelivr.net")
 SANDBOX_PAGE = "/static/sandbox/engine.html"
+CODE_SANDBOX_PAGE = "/static/sandbox/code.html"  # the Code view's Python runs there (web/sandbox/code.js)
+PYODIDE = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/"  # as web/js/code/PyBridge.js loads it
 ICONS = ("/favicon.ico", "/apple-touch-icon.png")  # the site's icons (web/favicon/), also served at the top
 
 
@@ -68,6 +74,15 @@ def sandbox_csp(site: str, chat: bool = False) -> str:
     files = f"{site}/static/"
     return (f"default-src 'none'; script-src {files} blob: {_import_map_hash()}; connect-src {files}; "
             f"img-src blob: data:; style-src 'unsafe-inline'; frame-ancestors {'*' if chat else site}; "
+            "base-uri 'none'; form-action 'none'; sandbox allow-scripts")
+
+
+def code_sandbox_csp(site: str) -> str:
+    """The code sandbox's policy: the site's engine and fonts, and Pyodide (Python compiled to WebAssembly) from its
+    CDN, nothing else. Like the customizations' sandbox, its origin is unique and only this site frames it."""
+    files = f"{site}/static/"
+    return (f"default-src 'none'; script-src {files} {PYODIDE} 'wasm-unsafe-eval'; connect-src {files} {PYODIDE}; "
+            f"img-src blob: data:; style-src 'unsafe-inline'; frame-ancestors {site}; "
             "base-uri 'none'; form-action 'none'; sandbox allow-scripts")
 
 
@@ -187,7 +202,8 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
             return PlainTextResponse("Forbidden", status_code=403)
         if request.method in ("POST", "PUT", "PATCH"):
             # uploads read their bodies themselves, to their own limits (videos and renders are streamed to disk)
-            limit = MAX_RENDER_BYTES + 4096 if path in ("/api/upload", "/api/renders") else web.max_project_bytes + 4096
+            # (/api/upload: each kind of file has its own; data files may fill the plan's storage)
+            limit = None if path == "/api/upload" else MAX_RENDER_BYTES + 4096 if path == "/api/renders"                 else web.max_project_bytes + 4096
             if request.headers.get("transfer-encoding") and path not in ("/api/upload", "/api/renders") \
                     and path not in self_limited:
                 return PlainTextResponse("Length required", status_code=411)
@@ -195,7 +211,7 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
                 length = int(request.headers.get("content-length") or 0)
             except ValueError:
                 return PlainTextResponse("Bad request", status_code=400)
-            if length > limit:
+            if limit is not None and length > limit:
                 return JSONResponse({"error": "That is too large to send."}, status_code=413)
         response = await call_next(request)
         # files named by their content keep the long cache their endpoint gives them (videos are fetched in parts: 206)
@@ -204,15 +220,19 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
             response.headers["Cache-Control"] = "no-cache" if path.startswith("/static/") or path in ICONS else "no-store"
         sandbox = path == SANDBOX_PAGE  # customizations' code runs there (web/sandbox/): framed by this site only,
         chat = sandbox and request.query_params.get("embed") == "chat"  # or by the player in an AI chat (mcp.py)
+        code_sandbox = path == CODE_SANDBOX_PAGE
         if sandbox:
             response.headers["Content-Security-Policy"] = sandbox_csp(site_of(request, web.site_url), chat)
+        elif code_sandbox:
+            response.headers["Content-Security-Policy"] = code_sandbox_csp(site_of(request, web.site_url))
         elif "content-security-policy" not in response.headers:  # an uploaded SVG brings a stricter one
-            response.headers["Content-Security-Policy"] = csp
+            dev = path.startswith("/dev/") and os.environ.get("MANIMATOR_DEV_PAGES") == "1"
+            response.headers["Content-Security-Policy"] = DEV_CSP if dev else csp
         response.headers.update({"X-Content-Type-Options": "nosniff", "Referrer-Policy": "same-origin"})
         if chat:  # framed inside a chat's frame, wherever that is; it holds nothing but what its parent sends it
             response.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
         else:
-            response.headers["X-Frame-Options"] = "SAMEORIGIN" if sandbox else "DENY"
+            response.headers["X-Frame-Options"] = "SAMEORIGIN" if sandbox or code_sandbox else "DENY"
         if path.startswith("/static/"):  # the chat's player (server/mcp.py) loads the engine and fonts from here
             response.headers.update({"Access-Control-Allow-Origin": "*", "Cross-Origin-Resource-Policy": "cross-origin"})
         if web.https:
@@ -440,6 +460,24 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
         return Response(data, media_type="application/zip",
                         headers={"Content-Disposition": f'attachment; filename="{name}"'})
 
+    @app.get("/api/file/code.zip")
+    def download_code_zip(ws=Depends(current)):
+        """The Code view's script (scene.py) with its data files, under the names the script opens them by."""
+        throttle(ws, "plan")
+        with ws.session.lock:
+            code = ws.session.project.code or {"text": "", "files": []}
+            text, files = code["text"], list(code["files"])
+        tmp = ws.tmp_file()
+        with zipfile.ZipFile(tmp, "w") as z:
+            z.writestr("scene.py", text, compress_type=zipfile.ZIP_DEFLATED)
+            for f in files:
+                path = ws.asset_path(f["asset"])
+                if path is not None:
+                    z.write(path, Path(f["name"]).name, compress_type=zipfile.ZIP_DEFLATED)
+        stem = re.sub(r"[^A-Za-z0-9 _-]", "", ws.project_name).strip()[:60] or "project"
+        return FileResponse(tmp, media_type="application/zip", filename=f"{stem}.zip",
+                            background=BackgroundTask(tmp.unlink, missing_ok=True))
+
     @app.get("/api/assets")
     def list_assets(ws=Depends(current)):
         return {"files": ws.asset_names()}
@@ -452,7 +490,7 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
         if path is None:
             return Response(status_code=404)
         headers = {"Cache-Control": "private, max-age=31536000, immutable"}
-        if path.suffix.lower() == ".svg":  # opened on its own, it may not run anything or be shown as a page
+        if path.suffix.lower() in (".svg", *DATA_TYPES):  # opened on its own, it may not run anything or be a page
             headers.update({"Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; sandbox",
                             "Content-Disposition": "attachment"})
         return FileResponse(path, media_type=ASSET_TYPES[path.suffix.lower()], headers=headers)
@@ -495,6 +533,13 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
             tmp, digest = await stream_to_file(request, ws, MAX_VIDEO_BYTES, "video")
             try:
                 stored = await run_in_threadpool(ws.add_video, name, tmp, digest)
+            finally:
+                tmp.unlink(missing_ok=True)
+            return {"name": stored, "files": ws.asset_names()}
+        if Path(name).suffix.lower() in DATA_TYPES:  # the Code view's data: as large as the storage has room for
+            tmp, digest = await stream_to_file(request, ws, ws.plan.asset_quota, "file")
+            try:
+                stored = await run_in_threadpool(ws.add_data, name, tmp, digest)
             finally:
                 tmp.unlink(missing_ok=True)
             return {"name": stored, "files": ws.asset_names()}

@@ -311,7 +311,7 @@ def test_uploading_a_picture(app):
 
 
 @pytest.mark.parametrize("name, data, why", [
-    ("notes.txt", b"hello", "extension"),
+    ("notes.exe", b"hello", "extension"),
     ("evil.png", b"<?php system($_GET[0]); ?>", "content"),
     ("big.png", png((5000, 5000)), "pixels"),
     ("tiff.tif", png(fmt="TIFF"), "format"),

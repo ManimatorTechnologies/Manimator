@@ -75,13 +75,29 @@ export async function makeVideo(plan, q, { signal = null, onProgress = () => {},
   const choice = await chooseCodec(q);
   if (!choice) throw new Error(UNSUPPORTED);
   setQuality(q);
-  const { pixel_width: width, pixel_height: height, frame_rate: fps } = config;
   await loadPlanAssets(plan, fetchAsset);
   const built = await buildObjects(plan, { cache });
   const timeline = new Timeline(plan, built);
   await timeline.prepare();
   if (signal?.aborted) throw abortError();
+  function* pictures() {
+    for (const frame of timeline.frames(config.frame_rate)) {
+      yield { count: frame.count, draw: (ctx, width, height) => timeline.render(ctx, width, height) };
+    }
+  }
+  return encodeVideo(q, pictures(), { estimate: (timeline.duration || 1) * config.frame_rate, signal, onProgress });
+}
 
+/**
+ * Encodes pictures as a video at quality `q`: `pictures` yields { draw(ctx, width, height), count } in order, each
+ * drawn once and written `count` times. Options: estimate (frames expected, for progress), signal, onProgress.
+ * Resolves with { blob, type, ext, frames, seconds }.
+ */
+export async function encodeVideo(q, pictures, { estimate = 1, signal = null, onProgress = () => {} } = {}) {
+  const choice = await chooseCodec(q);
+  if (!choice) throw new Error(UNSUPPORTED);
+  setQuality(q);
+  const { pixel_width: width, pixel_height: height, frame_rate: fps } = config;
   const mp4 = choice.container === "mp4";
   const lib = await (mp4 ? loadMp4Muxer() : loadWebmMuxer());
   const muxer = new lib.Muxer({
@@ -95,17 +111,16 @@ export async function makeVideo(plan, q, { signal = null, onProgress = () => {},
     error: (e) => { failure = e; },
   });
   encoder.configure(choice.config);
-
   const canvas = new OffscreenCanvas(width, height);
   const ctx = canvas.getContext("2d", { alpha: false });
-  const estimate = Math.max(1, Math.round((timeline.duration || 1) * fps));
+  estimate = Math.max(1, Math.round(estimate));
   const frameUs = 1e6 / fps;
   const keyEvery = fps * 2;
   let index = 0;
   let lastYield = performance.now();
   try {
-    for (const frame of timeline.frames(fps)) {
-      timeline.render(ctx, width, height);
+    for (const frame of pictures) {
+      frame.draw(ctx, width, height);
       const picture = new VideoFrame(canvas, { timestamp: Math.round(index * frameUs), duration: Math.round(frameUs) });
       for (let k = 0; k < frame.count; k += 1) {
         const copy = k === 0 ? picture : new VideoFrame(picture, { timestamp: Math.round(index * frameUs) });

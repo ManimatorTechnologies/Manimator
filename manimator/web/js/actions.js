@@ -163,6 +163,13 @@ export function save() {
 /** The project as a zip that renders with Manim: scene.py with the pictures and fonts it uses, and a README. When it
  *  uses other people's customizations, their Python comes with it: say so first. */
 export async function exportPython() {
+  const { codeViewOn } = await import("./codeview.js");
+  if (codeViewOn()) { // the script and its data files
+    const zip = `${store.server.name.replace(/[^A-Za-z0-9 _-]/g, "").trim().slice(0, 60) || "project"}.zip`;
+    downloadFromServer("/api/file/code.zip", zip);
+    status(`Downloaded ${zip}: scene.py and its data files. Render with Manim: manim -pq${project().settings.quality} scene.py`, "ok");
+    return;
+  }
   const kits = store.server?.kits ?? {};
   const others = new Map([...(kits.mobjects ?? []), ...(kits.animations ?? [])]
     .filter((s) => s.kit && s.kit.mine === false && !s.blocked)
@@ -206,7 +213,9 @@ export async function startRender(scope) {
     status(`Render failed: ${err?.message ?? err}`, "error");
     return;
   }
-  const sc = scene();
+  const code = await import("./codeview.js");
+  const coding = code.codeViewOn();
+  const sc = coding ? { name: code.codeSceneName() ?? "the scene" } : scene();
   const label = { preview: `Previewing ${sc.name} (480p)`, scene: `Rendering ${sc.name}`, all: "Rendering all scenes" }[scope];
   revokeVideos();
   if (!exporter.canMakeVideos()) {
@@ -225,6 +234,33 @@ export async function startRender(scope) {
   let lastEmit = 0;
   let sandbox = null;
   try {
+    if (coding) {
+      let n = 0;
+      await code.makeCodeVideos(scope, quality, {
+        signal: renderAbort.signal,
+        onStep: (name, i, total) => {
+          store.render.step = total > 1 ? `${name} (${i + 1} of ${total})` : "Making the video…";
+          emit();
+        },
+        onProgress: (fraction) => {
+          store.render.progress = Math.round(100 * fraction);
+          if (performance.now() - lastEmit > 200) {
+            lastEmit = performance.now();
+            emit();
+          }
+        },
+        onVideo: ({ name, blob, ext }) => {
+          store.render.videos = [...store.render.videos, { index: n, name, url: URL.createObjectURL(blob), blob,
+            filename: `${name}.${ext}` }];
+          n += 1;
+          emit();
+        },
+      });
+      store.render = { ...store.render, state: "done", step: "", progress: 100 };
+      store.renderNonce += 1;
+      status("Render finished.", "ok");
+      return;
+    }
     const res = scope === "all" ? await get("/api/plan?all=1") : await get(`/api/plan?scene_id=${encodeURIComponent(sc.id)}`);
     const plans = scope === "all" ? res.plan.scenes : [res.plan];
     const { BuildCache } = await import("./engine/plan/build.js");

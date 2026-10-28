@@ -51,10 +51,12 @@ async function kitSources(plans, given = null) {
 /** Whether a scene plan uses customizations (and so must go to the sandbox). */
 export const usesKits = (plan) => Array.isArray(plan?.kits) && plan.kits.length > 0;
 
-/** One sandboxed frame. */
-class Box {
-  constructor(fetchAsset = defaultFetchAsset, { page = PAGE, bootMs = BOOT_MS } = {}) {
+/** One sandboxed frame. `title`: what runs in it; `stuck`: the message when it stops answering. The Code view
+ *  (codeview.js) uses one for its Python. */
+export class Box {
+  constructor(fetchAsset = defaultFetchAsset, { page = PAGE, bootMs = BOOT_MS, title = "Customizations", stuck = STUCK } = {}) {
     this.fetchAsset = fetchAsset;
+    this.stuck = stuck;
     this.assets = new Set(); // the uploads the frame may have (the plans' files)
     this.waits = new Map();
     this.progress = new Map();
@@ -65,7 +67,7 @@ class Box {
     this.frame.setAttribute("sandbox", "allow-scripts");
     this.frame.setAttribute("aria-hidden", "true");
     this.frame.tabIndex = -1;
-    this.frame.title = "Customizations";
+    this.frame.title = title;
     // on screen (1 px, invisible), so the browser doesn't slow it down as a hidden frame
     this.frame.style.cssText = "position:fixed;left:0;top:0;width:1px;height:1px;opacity:0;border:0;pointer-events:none";
     this.ready = new Promise((resolve, reject) => {
@@ -91,6 +93,8 @@ class Box {
         if (this.onFrame) this.onFrame(m.bitmap);
         else m.bitmap.close();
       }
+    } else if (m.event === "output") { // print() and errors of the Code view's Python
+      this.onOutput?.(String(m.text ?? "").slice(0, 20000), m.stream === "out" ? "out" : "err");
     } else if (m.event === "progress") {
       this.progress.get(m.job)?.(Math.min(1, Math.max(0, Number(m.fraction) || 0)));
     } else if (m.need === "asset") {
@@ -129,11 +133,11 @@ class Box {
   /** A request to the frame; a frame that doesn't answer within `timeout` ms is stopped (0: no limit). */
   async call(op, args = {}, timeout = CALL_MS) {
     await this.ready;
-    if (this.dead) throw new Error(this.deathReason ?? STUCK);
+    if (this.dead) throw new Error(this.deathReason ?? this.stuck);
     const id = this.nextId;
     this.nextId += 1;
     return new Promise((resolve, reject) => {
-      const timer = timeout ? setTimeout(() => this.kill(STUCK), timeout) : 0;
+      const timer = timeout ? setTimeout(() => this.kill(), timeout) : 0;
       this.waits.set(id, { resolve, reject, timer });
       this.frame.contentWindow.postMessage({ ...args, id, op }, "*");
     });
@@ -143,7 +147,7 @@ class Box {
     if (!this.dead) this.frame.contentWindow?.postMessage(message, "*");
   }
 
-  kill(reason = STUCK) {
+  kill(reason = this.stuck) {
     if (this.dead) return;
     this.dead = true;
     this.deathReason = reason;

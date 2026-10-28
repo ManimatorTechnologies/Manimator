@@ -93,6 +93,9 @@ class Project:
     scenes: list[Scene] = field(default_factory=list)
     settings: Settings = field(default_factory=Settings)
     version: int = FILE_VERSION
+    # the Code view's script and its data files: {"text": str, "files": [{"name": shown name, "asset": stored name}]};
+    # None until the project is first opened as code (and then left out of the file)
+    code: dict | None = None
 
     @classmethod
     def new(cls) -> Project:
@@ -103,7 +106,10 @@ class Project:
 
     # ------------------------------------------------------------------ JSON
     def to_dict(self) -> dict:
-        return asdict(self)
+        data = asdict(self)
+        if data["code"] is None:
+            del data["code"]
+        return data
 
     @classmethod
     def from_dict(cls, data: dict) -> Project:
@@ -141,7 +147,14 @@ class Project:
             scenes.append(Scene(id=s["id"], name=s["name"], mobjects=mobjects, steps=steps, kind=kind,
                                 options=options))
         settings = Settings(**data.get("settings", {}))
-        return cls(scenes=scenes, settings=settings, version=FILE_VERSION)
+        code = data.get("code")
+        if isinstance(code, dict):
+            files = [{"name": str(f["name"]), "asset": str(f["asset"])} for f in code.get("files") or []
+                     if isinstance(f, dict) and f.get("name") and f.get("asset")]
+            code = {"text": str(code.get("text") or ""), "files": files}
+        else:
+            code = None
+        return cls(scenes=scenes, settings=settings, version=FILE_VERSION, code=code)
 
     def save(self, path: str | Path) -> None:
         text = json.dumps(self.to_dict(), indent=2)
