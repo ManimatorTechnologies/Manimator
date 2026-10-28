@@ -17,7 +17,7 @@ import { closeMethodPicker, MethodWindow } from "./methodpicker.js";
 import { Stage } from "./stage.js";
 import { closeStepEditor, StepsPanel, StepTools } from "./steps.js";
 import {
-  CodeView, codeRunning, codeViewOn, openCodeView, openVisualView, playCode, runCode,
+  CodeView, codeViewOn, openCodeView, openVisualView, playCode, runCode,
 } from "./codeview.js";
 import { emit, project, redo, run, select, stopPlayback, store, subscribe, togglePlay, undo } from "./store.js";
 import {
@@ -31,7 +31,7 @@ Ctrl+E  Download Python    Ctrl+Z  Undo        Ctrl+Y  Redo
 Ctrl+D  Duplicate          Del     Delete      Esc     Cancel / deselect
 Arrows  Nudge 0.1 (Shift: 0.5)                 Ctrl+G  Grid
 F5 / Space  Play           F6  Render scene    F7  Render all scenes
-In the Code view: Ctrl+Enter  Run    F5  Play    Tab / Shift+Tab  Indent    Ctrl+/  Comment
+In the Code view: Ctrl+Enter  Run again    F5  Play    Tab / Shift+Tab  Indent    Ctrl+/  Comment
 Drag a number's label sideways to change it. Hold Shift while placing or dragging to flip snapping.`;
 
 const toggleGrid = () => { store.grid = !store.grid; emit(); };
@@ -198,8 +198,6 @@ function Topbar() {
         onClick=${save}><${Icon} name="export" /><span class="lbl">Download</span></button>
     </div>
     <div class="group end">
-      ${code && html`<button class="btn primary collapse" title="Run the code and play its scene (Ctrl+Enter)"
-        disabled=${codeRunning()} onClick=${runCode}><${Icon} name="play" /><span class="lbl">${codeRunning() ? "Running…" : "Run"}</span></button>`}
       <button class="btn ghost collapse" title="Render this scene at the chosen quality (F6)" disabled=${running}
         onClick=${() => startRender("scene")}><${Icon} name="film" /><span class="lbl">Render scene</span></button>
       <button class="btn ghost collapse" title="Render every scene (F7)" disabled=${running}

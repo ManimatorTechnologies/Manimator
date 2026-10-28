@@ -42,6 +42,8 @@ const cv = {
   playing: false,
   raf: 0,
   scene: null, // the scene picked to show (several Scene classes)
+  tab: "console", // the panel under the preview: "console" or "files"
+  ran: null, // the code the shown scene came from
   open: null, // a data file shown instead of the script: { name, text }
   text: null, // the script as typed (saved after a pause)
   sent: null, // the text last sent to the server
@@ -121,7 +123,12 @@ export function stopCode() {
   emit();
 }
 
+/** Whether the scene shown comes from older code than the editor's (or there is none): playing runs it first. */
+const stale = () => !cv.result || cv.result.pid !== store.server?.id || cv.ran !== (cv.text ?? project()?.code?.text ?? "");
+
 export function playCode() {
+  if (cv.running) return;
+  if (!cv.playing && stale()) return runCode();
   const r = cv.result;
   if (!r || !r.frames) return;
   if (cv.playing) return stopCode();
@@ -164,6 +171,8 @@ export async function runCode() {
   stopCode();
   const code = cv.text ?? project()?.code?.text ?? "";
   cv.running = true;
+  cv.ran = code;
+  cv.tab = "console"; // its output and errors
   cv.output = [];
   cv.open = null;
   if (!cv.ready) say("Loading Python (the first run takes a few seconds)…");
@@ -182,7 +191,6 @@ export async function runCode() {
     const seconds = cv.result.frames / cv.result.fps;
     say(`${cv.result.error ? "Stopped" : "Ran"} in ${((Number(res?.ms) || 0) / 1000).toFixed(1)} s`
       + (cv.result.frames ? `: ${seconds.toFixed(1)} s of video` : ""));
-    if (!cv.result.error) playCode();
   } catch (e) {
     say(e?.message === "closed" ? "Stopped." : String(e?.message ?? e), "err");
     if (cv.box?.dead) cv.result = null;
@@ -190,6 +198,7 @@ export async function runCode() {
     cv.running = false;
     emit();
   }
+  if (cv.result && !cv.result.error) playCode();
 }
 
 /** The scene Render scene makes: the one shown, else the first the script defines. */
@@ -202,7 +211,7 @@ export const codeSceneName = () => cv.scene ?? cv.result?.scenes?.[0] ?? null;
 export async function makeCodeVideos(scope, quality, { signal, onProgress = () => {}, onStep = () => {}, onVideo }) {
   await saveNow();
   const code = cv.text ?? project()?.code?.text ?? "";
-  if (!cv.result || cv.result.pid !== store.server?.id) await runCode(); // the scenes it has
+  if (stale()) await runCode(); // the scenes it has
   if (!cv.result) throw new Error("Run the code first.");
   if (cv.result.error) throw new Error("The code stopped with an error: fix it and run it again (see the console).");
   const names = scope === "all" ? cv.result.scenes : [codeSceneName()].filter(Boolean);
@@ -360,7 +369,7 @@ function fileMenu(e, f) {
   ]);
 }
 
-function FilesPanel() {
+function FilesTab() {
   const [over, setOver] = useState(false);
   const drop = (e) => {
     e.preventDefault();
@@ -369,9 +378,6 @@ function FilesPanel() {
   };
   return html`<div class=${`cv-files ${over ? "over" : ""}`} onDragOver=${(e) => { e.preventDefault(); setOver(true); }}
       onDragLeave=${() => setOver(false)} onDrop=${drop}>
-    <div class="panel-head"><span class="grow">Files</span>
-      <button class="btn icon ghost" title="Add data files (CSV, TSV, JSON, TXT)" onClick=${chooseDataFiles}><${Icon} name="plus" /></button>
-    </div>
     <div class="cv-list">
       <button class=${`cv-file ${cv.open ? "" : "on"}`} onClick=${() => { cv.open = null; emit(); }}>
         <${Icon} name="code" size=${14} /><span class="n">scene.py</span></button>
@@ -569,7 +575,7 @@ function Preview() {
       ${!r && cv.running && html`<div class="cv-empty"><span>Running…</span></div>`}
     </div>
     <div class="cv-bar">
-      <button class="vp-btn" title=${cv.playing ? "Pause" : "Play"} disabled=${!frames} onClick=${playCode}>
+      <button class="vp-btn" title=${cv.playing ? "Pause" : "Play"} disabled=${cv.running} onClick=${playCode}>
         <${Icon} name=${cv.playing ? "pause" : "play"} /></button>
       <input class="cv-seek" type="range" min="0" max=${Math.max(0, frames - 1)} value=${cv.frame} disabled=${!frames}
         onInput=${scrub} aria-label="Time" />
@@ -605,11 +611,16 @@ function Console() {
     parts.push(text.slice(last));
     return parts;
   };
+  const tab = (name, label) => html`<button class=${`cv-tab ${cv.tab === name ? "on" : ""}`}
+    onClick=${() => { cv.tab = name; emit(); }}>${label}${name === "files" && files().length ? html`<span class="n">${files().length}</span>` : ""}</button>`;
   return html`<div class="cv-console">
-    <div class="panel-head"><span class="grow">Console</span>
-      <button class="btn small ghost" disabled=${!cv.output.length} onClick=${() => { cv.output = []; emit(); }}><span class="lbl">Clear</span></button>
+    <div class="panel-head"><span class="grow">${tab("console", "Console")}${tab("files", "Files")}</span>
+      ${cv.tab === "files"
+        ? html`<button class="btn icon ghost" title="Add data files (CSV, TSV, JSON, TXT)" onClick=${chooseDataFiles}><${Icon} name="plus" /></button>`
+        : html`<button class="btn small ghost" disabled=${!cv.output.length} onClick=${() => { cv.output = []; emit(); }}><span class="lbl">Clear</span></button>`}
     </div>
-    <pre class="cv-out" ref=${pre}>${cv.output.map((o) => html`<span class=${`o-${o.stream}`}>${o.stream === "err" ? linked(o.text) : o.text}${o.text.endsWith("\n") ? "" : "\n"}</span>`)}</pre>
+    ${cv.tab === "files" && html`<${FilesTab} />`}
+    <pre class="cv-out" ref=${pre} hidden=${cv.tab === "files"}>${cv.output.map((o) => html`<span class=${`o-${o.stream}`}>${o.stream === "err" ? linked(o.text) : o.text}${o.text.endsWith("\n") ? "" : "\n"}</span>`)}</pre>
   </div>`;
 }
 
@@ -658,8 +669,6 @@ export function CodeView() {
   const errorLine = cv.result?.error ? errorLineOf(cv.result.error) : lastErr ? errorLineOf(lastErr.text) : 0;
   const right = useRef(null);
   return html`<div class="cv">
-    <${FilesPanel} />
-    <div class="splitter" onPointerDown=${useDrag("code-files", "x", 150, () => 420, (ev) => ev.clientX)} />
     <div class="cv-editor">
       ${cv.open ? html`<${DataView} />` : html`<${CodeEditor} value=${cv.text} errorLine=${errorLine}
         onInput=${(text) => { edited(text); force((n) => n + 1); }} />`}
@@ -674,5 +683,3 @@ export function CodeView() {
   </div>`;
 }
 
-/** The Run button's state, for the top bar. */
-export const codeRunning = () => cv.running;
