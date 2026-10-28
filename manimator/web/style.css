@@ -1150,7 +1150,7 @@ textarea.input { height: auto; min-height: 64px; padding: 8px 10px; resize: vert
   font: 13px/20px var(--mono); letter-spacing: 0; user-select: text; }
 .ce-gutter { position: sticky; left: 0; z-index: 3; margin: 0; padding: 10px 12px 10px 14px; min-height: 100%;
   text-align: right; color: #55534e; background: #0c0c0c; font: inherit; user-select: none; border-right: 1px solid var(--line); }
-.ce-gutter .err { color: var(--danger); font-weight: 600; }
+.ce-gutter .ce-err { color: var(--danger); font-weight: 600; }
 .ce-body { position: relative; min-width: 0; min-height: 100%; }
 .ce-hl, .ce-input { margin: 0; padding: 10px 16px; font: inherit; letter-spacing: 0; white-space: pre; tab-size: 4; border: 0; }
 .ce-hl { position: relative; z-index: 1; min-width: max-content; color: #d6d4cc; pointer-events: none; }

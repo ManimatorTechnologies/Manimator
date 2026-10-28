@@ -512,7 +512,7 @@ function CodeEditor({ value, onInput, errorLine }) {
   };
   return html`<div class="ce" ref=${scroller}>
     <pre class="ce-gutter" aria-hidden="true">${Array.from({ length: lines }, (_, i) => (i + 1 === errorLine
-      ? html`<span class="err">${i + 1}</span>\n` : `${i + 1}\n`))}</pre>
+      ? html`<span class="ce-err">${`${i + 1}\n`}</span>` : `${i + 1}\n`))}</pre>
     <div class="ce-body">
       ${errorLine > 0 && errorLine <= lines && html`<div class="ce-errline" style=${`top:${10 + (errorLine - 1) * LINE_H}px`} />`}
       <pre class="ce-hl" aria-hidden="true" dangerouslySetInnerHTML=${{ __html: highlight(value) }} />

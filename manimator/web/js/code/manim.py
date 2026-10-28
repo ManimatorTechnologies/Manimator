@@ -152,14 +152,30 @@ class _Thing(_Wrap):
         return f"<{_bridge.get(_bridge.get(self._js, 'constructor'), 'name')}>"
 
 
+def _defaults(cls, kwargs):
+    """`kwargs` with the defaults set by set_default on `cls` and the classes it comes from."""
+    merged = {}
+    for c in reversed(cls.__mro__):
+        merged.update(c.__dict__.get("_defaults", {}))
+    return {**merged, **kwargs}
+
+
+def _set_default(cls, **kwargs):
+    """Like Manim's set_default: later objects of this class get these keyword arguments unless they pass their own.
+    With no arguments it clears them."""
+    cls._defaults = {**cls.__dict__.get("_defaults", {}), **kwargs} if kwargs else {}
+
+
 class Mobject(_Wrap):
     _name = "Mobject"
 
     def __init__(self, *args, **kwargs):
-        _adopt(self, _bridge.make(_engine_name(type(self)), _js(list(args)), _kw(kwargs)))
+        _adopt(self, _bridge.make(_engine_name(type(self)), _js(list(args)), _kw(_defaults(type(self), kwargs))))
 
     def __repr__(self):
         return type(self).__name__
+
+    set_default = classmethod(_set_default)
 
     @property
     def animate(self):
@@ -206,10 +222,12 @@ class Animation(_Wrap):
     _name = "Animation"
 
     def __init__(self, *args, **kwargs):
-        _adopt(self, _bridge.make(_engine_name(type(self)), _js(list(args)), _kw(kwargs)))
+        _adopt(self, _bridge.make(_engine_name(type(self)), _js(list(args)), _kw(_defaults(type(self), kwargs))))
 
     def __repr__(self):
         return f"{type(self).__name__}()"
+
+    set_default = classmethod(_set_default)
 
 
 class _Animate:
