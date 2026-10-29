@@ -126,7 +126,7 @@ class GitHubKits:
                     changed.append(f"{folder}: {what}")
             changed += [f"{folder}: removed" for folder in self.kits.drop_missing(self.repo, set(found))]
             self.state.update(commit=commit, checked=time.time(), problems=problems, error="")
-            for line in changed + problems:
+            for line in changed + problems or ["read, nothing changed"]:  # the log shows each commit it took in
                 print(f"manimator: {self.repo} {commit[:7]} {line}", file=sys.stderr, flush=True)
             if changed and self.changed:
                 self.changed()
