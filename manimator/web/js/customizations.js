@@ -1,8 +1,9 @@
 // The Customizations page: custom objects and their animations, written as code and uploaded as .manimkit files
-// (server/kits.py). Mine: the visitor's own (upload, new versions, make public) and the ones they added from the
-// gallery. Gallery: the public ones, which the site's owner approved first; the owner also sees there the ones waiting
-// for review or reported, and reviews each on its own page. Every preview plays in the sandbox (sandboxed.js):
-// customizations' code never runs on this page. The editor's palette and animation window offer the visitor's own and library ones in a Custom group.
+// (server/kits.py). Mine: the visitor's own (upload, new versions) and the ones they added from the gallery. Gallery:
+// the ones in the gallery's GitHub repository (server/github.py), where people add theirs with a pull request; the
+// site's owner also sees there the reported ones, and looks after each on its own page. Every preview plays in the
+// sandbox (sandboxed.js): customizations' code never runs on this page. The editor's palette and animation window
+// offer the visitor's own and library ones in a Custom group.
 
 import { html, useEffect, useRef, useState } from "./lib.js";
 import { chooseLocalFile, get, post } from "./api.js";
@@ -32,7 +33,7 @@ const reportCount = (n) => `${n} report${n === 1 ? "" : "s"}`;
 /** What waits for the site's owner on a customization, in a few words ("" if nothing, or not the owner). */
 function waits(kit) {
   const n = kit.review?.reports.length ?? 0;
-  return kit.review?.version ? "Waiting for review" : n ? reportCount(n) : "";
+  return n ? reportCount(n) : "";
 }
 
 /** Sends a .manimkit file; resolves with the server's answer. */
@@ -157,8 +158,8 @@ export function CustomizationsPage() {
       if (kitId) setOpen({ id: kitId, nonce: Date.now() });
     }),
     remove: (kit) => act(async () => {
-      const ok = await confirmDialog({ title: `Delete ${kit.name}?`, message: "It leaves your list, the gallery and the "
-        + "editor's Custom group. Projects that already use it keep it.", ok: "Delete customization", danger: true });
+      const ok = await confirmDialog({ title: `Delete ${kit.name}?`, message: "It leaves your list and the editor's "
+        + "Custom group. Projects that already use it keep it.", ok: "Delete customization", danger: true });
       if (!ok) return;
       changed(await post(`/api/kits/${kit.id}/delete`), `Deleted ${kit.name}.`);
       setOpen(null);
@@ -170,14 +171,7 @@ export function CustomizationsPage() {
       changed(await post(`/api/kits/${kit.id}/describe`, { description: text }), "Description saved.");
       setOpen((o) => o && { ...o, nonce: Date.now() });
     }),
-    submit: (kit) => act(async () => {
-      const ok = await confirmDialog({ title: `Make ${kit.name} public?`, message: "Manimator looks at its code before "
-        + "it joins the gallery, where anyone with an account can add it to their projects. Its newest version is the "
-        + "one that becomes public.", ok: "Ask to make it public" });
-      if (!ok) return;
-      changed(await post(`/api/kits/${kit.id}/submit`), `${kit.name} is waiting for review.`);
-      setOpen({ id: kit.id, nonce: Date.now() });
-    }),
+    share: () => window.open(data.share, "_blank", "noopener"), // the gallery takes pull requests on GitHub
     library: (kit, add) => act(async () => {
       changed(await post(`/api/kits/${kit.id}/library`, { add }),
         add ? `Added ${kit.name}. Find it in the editor under Custom.` : `Removed ${kit.name} from your library.`);
@@ -190,20 +184,15 @@ export function CustomizationsPage() {
       await post(`/api/kits/${kit.id}/report`, { reason });
       status("Thank you. Manimator will look at it.", "ok");
     }),
-    review: (kit, action, version = 0) => act(async () => { // the site's owner: approve, reject, take_down, dismiss
+    review: (kit, action) => act(async () => { // the site's owner: take_down, dismiss
       let reason = "";
-      if (action === "reject" || action === "take_down") {
-        reason = await promptDialog({ title: action === "reject" ? `Not approve ${kit.name}` : `Take down ${kit.name}`,
-          message: action === "reject" ? "Why (the author reads this)?" : "Why (the author reads this)? Its code stops "
-            + "running everywhere and projects show its objects as unavailable.", value: "",
-          ok: action === "reject" ? "Don't approve" : "Take down" });
+      if (action === "take_down") {
+        reason = await promptDialog({ title: `Take down ${kit.name}`, message: "Why (the author reads this)? Its code "
+          + "stops running everywhere and projects show its objects as unavailable.", value: "", ok: "Take down" });
         if (!reason) return; // cancelled (a reason is needed: the author reads it)
       }
-      const url = action === "take_down" ? `/api/admin/kits/${kit.id}/take_down`
-        : action === "dismiss" ? `/api/admin/kits/${kit.id}/dismiss` : `/api/admin/kits/${kit.id}/${version}/decide`;
-      await post(url, action === "approve" || action === "reject" ? { action, reason } : { reason });
-      changed(null, { approve: `${kit.name} is public.`, reject: `${kit.name} wasn't approved.`,
-        take_down: `${kit.name} was taken down.`, dismiss: "Reports dismissed." }[action]);
+      await post(`/api/admin/kits/${kit.id}/${action}`, { reason });
+      changed(null, { take_down: `${kit.name} was taken down.`, dismiss: "Reports dismissed." }[action]);
       setOpen((o) => ({ ...o, nonce: Date.now() }));
     }),
   };
@@ -211,7 +200,7 @@ export function CustomizationsPage() {
   if (open) {
     return html`<${Detail} key=${`${open.id}:${open.version ?? ""}:${open.nonce ?? ""}`} id=${open.id} version=${open.version}
       back=${() => { setOpen(null); refresh(); }} show=${(version) => setOpen({ id: open.id, version })} busy=${busy}
-      actions=${actions} isPublic=${!!data?.public} />`;
+      actions=${actions} share=${data?.share} />`;
   }
   const tabs = [...(data?.public ? [["gallery", "Gallery"]] : []), ["mine", "Mine"]];
   const tab = picked ?? tabs[0][0];
@@ -243,8 +232,8 @@ function Mine({ data, actions, open }) {
       { label: "Edit description…", onClick: () => actions.describe(kit) },
       ...(latest(kit)?.status === "taken_down" ? [] // it gets no new versions
         : [{ label: "Upload a new version…", onClick: () => actions.upload(kit.id) }]),
-      ...(data.public && ["private", "rejected"].includes(latest(kit)?.status)
-        ? [{ label: "Make public…", onClick: () => actions.submit(kit) }] : []),
+      ...(data.share && latest(kit)?.status !== "taken_down"
+        ? [{ label: "Share in the gallery…", onClick: actions.share }] : []),
       { separator: true },
       { label: "Delete…", onClick: () => actions.remove(kit) },
     ], e.type === "contextmenu" ? e.clientX : r.right - 200, e.type === "contextmenu" ? e.clientY : r.bottom + 4);
@@ -284,17 +273,17 @@ function Gallery({ open }) {
       <input class="input" placeholder="Search customizations" value=${query} spellcheck=${false}
         onInput=${(e) => setQuery(e.currentTarget.value)} /></label>
     ${found && !found.kits.length ? html`<${Blank} icon="spark" title=${query ? `Nothing matches “${query}”` : "Nothing here yet"}>
-        <p>${query ? "Try other words." : "Approved customizations will appear here."}</p><//>`
+        ${query && html`<p>Try other words.</p>`}<//>`
       : found && html`<div class="home-grid cz-grid">
-        ${found.kits.map((k) => html`<${Card} key=${k.id} kit=${k} version=${k.review?.version || newestPublic(k)?.version}
+        ${found.kits.map((k) => html`<${Card} key=${k.id} kit=${k} version=${newestPublic(k)?.version}
           sub=${k.description || k.class}
           meta=${html`${k.author || "someone"}${waits(k) ? html` · <span class="cz-waits">${waits(k)}</span>`
             : k.in_library ? html` · <span class="cz-in">In your library</span>` : ""}`}
-          onOpen=${() => open(k.id, k.review?.version || undefined)} />`)}
+          onOpen=${() => open(k.id)} />`)}
       </div>`}`;
 }
 
-function Detail({ id, version, back, show, busy, actions, isPublic }) {
+function Detail({ id, version, back, show, busy, actions, share }) {
   const [kit, setKit] = useState(null);
   const [missing, setMissing] = useState("");
   useEffect(() => {
@@ -307,13 +296,12 @@ function Detail({ id, version, back, show, busy, actions, isPublic }) {
   if (!kit) return html`<main class="home-body" />`;
   const shown = kit.versions.find((v) => v.version === kit.shown_version) ?? latest(kit);
   const newest = latest(kit);
-  const review = kit.review; // only for the site's owner, who reviews: { version waiting (0: none), reports }
-  const canSubmit = kit.mine && isPublic && ["private", "rejected"].includes(newest?.status);
-  const waiting = review?.version ? kit.versions.find((v) => v.version === review.version) : null;
+  const review = kit.review; // only for the site's owner, who looks after the gallery: { reports }
   const inGallery = kit.versions.some((v) => v.status === "public");
   const down = newest?.status === "taken_down";
   const more = [
-    ...(kit.mine ? [{ label: "Edit description…", onClick: () => actions.describe(kit) }, { separator: true },
+    ...(kit.mine ? [{ label: "Edit description…", onClick: () => actions.describe(kit) },
+      ...(share && !down ? [{ label: "Share in the gallery…", onClick: actions.share }] : []), { separator: true },
       { label: "Delete…", onClick: () => actions.remove(kit) }] : []),
     ...(!kit.mine && !review ? [{ label: "Report…", onClick: () => actions.report(kit) }] : []),
     ...(review && inGallery && !review.reports.length ? [{ label: "Take down…", onClick: () => actions.review(kit, "take_down") }] : []),
@@ -332,9 +320,7 @@ function Detail({ id, version, back, show, busy, actions, isPublic }) {
       <div class="cz-actions">
         ${kit.mine ? html`
           ${!down && html`<button class="btn" disabled=${busy} onClick=${() => actions.upload(kit.id)}>
-            <span class="lbl">Upload new version</span></button>`}
-          ${canSubmit && html`<button class="btn primary" disabled=${busy} onClick=${() => actions.submit(kit)}>
-            <span class="lbl">Make public</span></button>`}`
+            <span class="lbl">Upload new version</span></button>`}`
         : kit.in_library ? html`<button class="btn" disabled=${busy} onClick=${() => actions.library(kit, false)}>
             <span class="lbl">Remove from library</span></button>`
         : kit.can_add ? html`<button class="btn primary" disabled=${busy} onClick=${() => actions.library(kit, true)}>
@@ -346,8 +332,8 @@ function Detail({ id, version, back, show, busy, actions, isPublic }) {
           <${Icon} name="more" /></button>`}
       </div>
     </header>
-    <${Callouts} kit=${kit} shown=${shown} newest=${newest} waiting=${waiting} inGallery=${inGallery} busy=${busy}
-      actions=${actions} show=${show} />
+    <${Callouts} kit=${kit} shown=${shown} newest=${newest} inGallery=${inGallery} busy=${busy} actions=${actions}
+      show=${show} />
     <div class="cz-layout">
       <div class="cz-main">
         ${down ? html`<div class="cz-preview cz-off"><span>Taken down: it doesn't play any more.</span></div>`
@@ -374,28 +360,19 @@ function Callout({ tone = "", icon, title, children, acts }) {
   </div>`;
 }
 
-/** How the customization stands, when something needs saying: for its author (waiting, not approved, taken down), for
- *  the site's owner (a version to review, reports), or when an older version is shown. */
-function Callouts({ kit, shown, newest, waiting, inGallery, busy, actions, show }) {
+/** How the customization stands, when something needs saying: for its author (taken down), for the site's owner
+ *  (reports), or when an older version is shown. */
+function Callouts({ kit, shown, newest, inGallery, busy, actions, show }) {
   const review = kit.review;
   const reports = review?.reports ?? [];
   const label = (v) => v.label || `#${v.version}`;
   const out = [
-    waiting && html`<${Callout} icon="wait" title=${`Version ${label(waiting)} is waiting for your review.`}
-      acts=${html`<button class="btn" disabled=${busy} onClick=${() => actions.review(kit, "reject", waiting.version)}>
-          <span class="lbl">Don't approve</span></button>
-        <button class="btn primary" disabled=${busy} onClick=${() => actions.review(kit, "approve", waiting.version)}>
-          <span class="lbl">Approve</span></button>`} />`,
     reports.length > 0 && html`<${Callout} tone="warn" icon="x" title=${`${reportCount(reports.length)}.`}
       acts=${html`<button class="btn" disabled=${busy} onClick=${() => actions.review(kit, "dismiss")}>
           <span class="lbl">Dismiss reports</span></button>
         ${inGallery && html`<button class="btn danger" disabled=${busy} onClick=${() => actions.review(kit, "take_down")}>
           <span class="lbl">Take down</span></button>`}`}>
       <ul class="cz-reasons">${reports.map((r) => html`<li>${r.reason} <span class="dim">${ago(r.created)}</span></li>`)}</ul><//>`,
-    kit.mine && !waiting && newest?.status === "pending" && html`<${Callout} icon="wait" title="Waiting for review.">
-      Manimator looks at its code before it joins the gallery.<//>`,
-    kit.mine && newest?.status === "rejected" && html`<${Callout} tone="danger" icon="x" title="Not approved.">
-      ${newest.reason && `${newest.reason}. `}Upload a fixed version, then make it public again.<//>`,
     kit.mine && newest?.status === "taken_down" && html`<${Callout} tone="danger" icon="x" title="Taken down.">
       ${newest.reason && `${newest.reason}. `}Its objects don't play any more.<//>`,
     shown && newest && shown.version !== newest.version && newest.status !== "taken_down" && html`<${Callout}
@@ -406,15 +383,17 @@ function Callouts({ kit, shown, newest, waiting, inGallery, busy, actions, show 
   return out.length ? html`<div class="cz-callouts">${out}</div>` : null;
 }
 
-/** Who made it, the version shown and when it came, its license and class. Older versions aren't listed: one that no
- *  project uses any more is deleted (server/kits.py KitStore.unneeded). */
+/** Who made it, the version shown and when it came, its license and class, and (a gallery one) its code on GitHub.
+ *  Older versions aren't listed: one that no project uses any more is deleted (server/kits.py KitStore.unneeded). */
 function About({ kit, shown }) {
+  const link = (href, text) => html`<a href=${href} target="_blank" rel="noopener">${text}</a>`;
   const rows = [
-    ["Made by", kit.mine ? "You" : kit.author || "Someone"],
+    ["Made by", kit.mine ? "You" : kit.author_url ? link(kit.author_url, kit.author) : kit.author || "Someone"],
     shown && ["Version", shown.label || `#${shown.version}`],
     shown && ["Updated", ago(shown.created)],
     kit.license && ["License", kit.license],
     ["Class", html`<code>${kit.class}</code>`],
+    kit.source && ["Code", link(kit.source.url, "GitHub")],
   ].filter(Boolean);
   return html`<h2 class="cz-h">About</h2>
     <dl class="cz-about">${rows.map(([k, v]) => html`<dt>${k}</dt><dd>${v}</dd>`)}</dl>`;

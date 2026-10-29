@@ -21,6 +21,10 @@ The server never runs package code: kit.py is only parsed (ast) to check it defi
 Each version a user uploads is kept for good (a project pins "kit:<id>:<version>"), so a project never breaks
 because its author changed or deleted the package: deleting one only takes it off the lists. Every version's classes
 are specs in MOBJECTS and ANIMATIONS (registry/custom.py) from the moment the server starts.
+
+Uploads stay with the account that made them. The gallery's packages come from a GitHub repository instead
+(server/github.py: one folder per package, added there with a pull request), owned by "repo:<owner>/<name>",
+which no account is, and credited to the GitHub user their manifest names as "author".
 """
 
 from __future__ import annotations
@@ -70,7 +74,10 @@ PARAM_RE = re.compile(r"^[a-z][a-z0-9_]{0,31}$")
 # Arguments a package's class mustn't take as settings: Manim passes or uses these itself.
 RESERVED_PARAMS = {"mobject", "mobjects", "run_time", "rate_func", "lag_ratio", "name", "self", "args", "kwargs",
                    "target", "dim", "z_index", "introducer", "remover", "suspend_mobject_updating"}
-MANIFEST_FIELDS = {"manimkit", "name", "version", "description", "license", "object", "animations"}
+MANIFEST_FIELDS = {"manimkit", "name", "version", "description", "license", "author", "object", "animations"}
+AUTHOR_RE = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$")  # a GitHub user name
+REPO_OWNER = "repo:"  # a repository's packages are owned by "repo:<owner>/<name>" (no account's key looks like it)
+GITHUB = "https://github.com"
 OBJECT_FIELDS = {"class", "style", "params"}
 ANIMATION_FIELDS = {"class", "name", "description", "params", "introducer", "remover", "run_time"}
 OLD_MANIFEST_FIELDS = {"manimkit", "name", "kind", "class", "version", "description", "license", "params", "style",
@@ -81,7 +88,7 @@ _STATIC_IMPORT = re.compile(r"""(?:^|[;\n])\s*(?:import\s*(?:[\w*${}\s,]+?\s*fro
                             r"""["']([^"'\n]+)["']""")
 _DYNAMIC_IMPORT = re.compile(r"""\bimport\s*\(""")
 _DEFAULT_EXPORT = re.compile(r"\bexport\s+default\b")
-STATUSES = ("private", "pending", "public", "rejected", "taken_down")
+STATUSES = ("private", "pending", "public", "rejected", "taken_down")  # pending, rejected: from when uploads were reviewed
 
 
 class KitError(OpError):
@@ -137,6 +144,33 @@ def read_package(data: bytes) -> dict[str, str]:
     if missing:
         raise KitError(f"The package needs {', '.join(missing)}.")
     return files
+
+
+def read_folder(raw: dict[str, bytes]) -> dict[str, str]:
+    """A package's files as a repository's folder holds them (server/github.py), checked as read_package checks a
+    zip's. Other files in the folder are left out."""
+    files: dict[str, str] = {}
+    total = 0
+    for name, data in sorted(raw.items()):
+        limit = FILE_LIMITS.get(name)
+        if limit is None:
+            continue
+        total += len(data)
+        if len(data) > limit or total > MAX_UNPACKED:
+            raise KitError(f"{name} is too large (up to {limit // 1024} KB).")
+        try:
+            files[name] = data.decode("utf-8-sig")
+        except UnicodeDecodeError:
+            raise KitError(f"{name} must be UTF-8 text.") from None
+    missing = [r for r in REQUIRED if r not in files]
+    if missing:
+        raise KitError(f"The package needs {', '.join(missing)}.")
+    return files
+
+
+def files_digest(files: dict[str, str]) -> str:
+    """One hash for a package's files: a repository's folder whose files changed becomes a new version."""
+    return hashlib.sha256(json.dumps(files, sort_keys=True).encode("utf-8")).hexdigest()
 
 
 def _text(value, where: str, most: int, required: bool = False) -> str:
@@ -283,8 +317,17 @@ def _description(value, stored: bool) -> str:
     return text
 
 
+def _author(value) -> str:
+    """Who wrote the package, by their GitHub user name: the gallery credits them with it (an upload is credited to
+    its account instead)."""
+    text = _text(value, "author", 39)
+    if text and not AUTHOR_RE.match(text):
+        raise KitError("manifest.json: author must be a GitHub user name, like \"SavithOnline\".")
+    return text
+
+
 def read_manifest(text: str, taken_names=frozenset(), stored: bool = False) -> dict:
-    """The manifest, checked: {"format", "name", "version", "description", "license",
+    """The manifest, checked: {"format", "name", "version", "description", "license", "author",
     "object": {"class", "style", "params" (Params)} or None, "animations": [{"class", "name", "description",
     "params", "introducer", "remover", "run_time"}], "classes": every class name, the object's first}.
     `taken_names`: classes the uploader's other packages have. `stored`: a version kept from before, which may be in
@@ -314,7 +357,7 @@ def read_manifest(text: str, taken_names=frozenset(), stored: bool = False) -> d
     out = {"format": FORMAT, "name": _text(raw.get("name"), "name", 40, required=True),
            "version": _text(raw.get("version") or "1.0", "version", 20),
            "description": _description(raw.get("description"), stored),
-           "license": _text(raw.get("license"), "license", 60),
+           "license": _text(raw.get("license"), "license", 60), "author": _author(raw.get("author")),
            "object": {"class": cls, "style": _style(obj, "object."), "params": _params(obj.get("params"),
                                                                                          "object.params")},
            "animations": []}
@@ -347,7 +390,8 @@ def _read_old_manifest(raw: dict, taken_names) -> dict:
     out = {"format": OLD_FORMAT, "name": _text(raw.get("name"), "name", 40, required=True),
            "version": _text(raw.get("version") or "1.0", "version", 20),
            "description": _text(raw.get("description"), "description", 200),
-           "license": _text(raw.get("license"), "license", 60), "object": None, "animations": [], "classes": [cls]}
+           "license": _text(raw.get("license"), "license", 60), "author": "", "object": None, "animations": [],
+           "classes": [cls]}
     if kind == "object":
         if any(k in raw for k in ("introducer", "remover", "run_time")):
             raise KitError("manifest.json: \"introducer\", \"remover\" and \"run_time\" are for animations.")
@@ -476,11 +520,18 @@ class KitStore:
             "PRIMARY KEY (user, kit_id))",
             "CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY AUTOINCREMENT, kit_id TEXT NOT NULL, "
             "user TEXT NOT NULL, reason TEXT NOT NULL, created REAL NOT NULL, handled INTEGER NOT NULL DEFAULT 0)",
+            # the gallery's packages: which folder of which repository each one is, and the hash of the files its
+            # newest version came with (files_digest)
+            "CREATE TABLE IF NOT EXISTS sources (kit_id TEXT PRIMARY KEY, repo TEXT NOT NULL, folder TEXT NOT NULL, "
+            "files TEXT NOT NULL, UNIQUE (repo, folder))",
         ):
             self._db.execute(sql)
         if "description" not in {r[1] for r in self._q("PRAGMA table_info(kits)")}:
             # the description its author wrote on the site (NULL: each version's manifest has its own)
             self._db.execute("ALTER TABLE kits ADD COLUMN description TEXT")
+        if "source" not in {r[1] for r in self._q("PRAGMA table_info(versions)")}:
+            # the commit a repository's version came from ('' for an upload)
+            self._db.execute("ALTER TABLE versions ADD COLUMN source TEXT NOT NULL DEFAULT ''")
         for kit_id, version in self._q("SELECT kit_id, version FROM versions"):
             try:
                 self._register(kit_id, version)
@@ -586,13 +637,25 @@ class KitStore:
         animations = [{"type": s.key, "class": s.kit["class"], "name": s.label, "description": s.description}
                       for s in self.specs(kit["id"], shown)[1:]] if spec is not None and spec.kit["kind"] == "object" \
             else []
+        source = self.source(kit["id"], shown)
         return {"id": kit["id"], "name": kit["name"], "kind": kit["kind"], "class": kit["class"],
-                "author": kit["owner_name"], "mine": viewer == kit["owner"], "created": kit["created"],
+                "author": kit["owner_name"], "author_url": f"{GITHUB}/{kit['owner_name']}" if source else "",
+                "mine": viewer == kit["owner"], "created": kit["created"],
                 "listed": kit["listed"], "type": spec.key if spec else None,
-                "description": spec.description if spec else "", "animations": animations,
+                "description": spec.description if spec else "", "animations": animations, "source": source,
                 "versions": [{"version": v["version"], "label": v["manifest"].get("version", ""),
                               "status": v["status"], "reason": v["reason"], "created": v["created"]}
                              for v in versions]}
+
+    def source(self, kit_id: str, version: int = 0) -> dict | None:
+        """Where a gallery package's version came from, {"repo", "folder", "url"} (its folder on GitHub at that
+        commit); None for an upload."""
+        rows = self._q("SELECT s.repo, s.folder, v.source FROM sources s LEFT JOIN versions v "
+                       "ON v.kit_id = s.kit_id AND v.version = ? WHERE s.kit_id = ?", (int(version), kit_id))
+        if not rows:
+            return None
+        repo, folder, commit = rows[0]
+        return {"repo": repo, "folder": folder, "url": f"{GITHUB}/{repo}/tree/{commit or 'HEAD'}/Kits/{folder}"}
 
     def spec(self, kit_id: str, version: int):
         """A version's main spec: its object (or a first-format version's one class)."""
@@ -656,34 +719,99 @@ class KitStore:
                                "change that). Its animations may change.")
             check_python(files["kit.py"], manifest["classes"])
             check_javascript(files["kit.js"], None if manifest["format"] == OLD_FORMAT else manifest["classes"])
-            if kit is None:
-                kit = {"id": secrets.token_hex(6), "owner": owner, "owner_name": owner_name,
-                       "kind": "object" if obj else "animation", "class": manifest["classes"][0],
-                       "name": manifest["name"], "created": time.time(), "listed": True}
-                self._db.execute("INSERT INTO kits (id, owner, owner_name, kind, class, name, created, listed) "
-                                 "VALUES (?, ?, ?, ?, ?, ?, ?, 1)",
-                                 (kit["id"], owner, owner_name, kit["kind"], kit["class"], kit["name"],
-                                  kit["created"]))
-            else:
-                self._db.execute("UPDATE kits SET name = ?, owner_name = ? WHERE id = ?",
-                                 (manifest["name"], owner_name, kit["id"]))
-                before = self._version(kit["id"], self.latest_any(kit["id"]))
-                if before and manifest["description"] != " ".join(str(before["manifest"].get("description") or "").split()):
-                    # the author changed it in manifest.json: each version shows its own again
-                    self._db.execute("UPDATE kits SET description = NULL WHERE id = ?", (kit["id"],))
-                    for v in self.versions(kit["id"]):
-                        self._register(kit["id"], v["version"])
-            version = self.latest_any(kit["id"]) + 1
-            folder = self.folder(kit["id"], version)
-            folder.mkdir(parents=True, exist_ok=True)
-            for name, text in files.items():
-                with open(folder / name, "w", encoding="utf-8", newline="\n") as f:
-                    f.write(text)
-            stored = {k: v for k, v in json.loads(files["manifest.json"]).items()}
-            self._db.execute("INSERT INTO versions (kit_id, version, manifest, status, created) VALUES (?, ?, ?, ?, ?)",
-                             (kit["id"], version, json.dumps(stored), "private", time.time()))
-            self._register(kit["id"], version)
+            kit = self._new_kit(owner, owner_name, manifest) if kit is None else self._renew(kit, owner_name, manifest)
+            self._store(kit["id"], files, "private")
             return self.kit(kit["id"])
+
+    def _new_kit(self, owner: str, owner_name: str, manifest: dict) -> dict:
+        kit = {"id": secrets.token_hex(6), "owner": owner, "owner_name": owner_name,
+               "kind": "object" if manifest["object"] else "animation", "class": manifest["classes"][0],
+               "name": manifest["name"], "created": time.time(), "listed": True}
+        self._db.execute("INSERT INTO kits (id, owner, owner_name, kind, class, name, created, listed) "
+                         "VALUES (?, ?, ?, ?, ?, ?, ?, 1)",
+                         (kit["id"], owner, owner_name, kit["kind"], kit["class"], kit["name"], kit["created"]))
+        return kit
+
+    def _renew(self, kit: dict, owner_name: str, manifest: dict) -> dict:
+        """A package about to get a new version takes the new manifest's name (and its author's name)."""
+        self._db.execute("UPDATE kits SET name = ?, owner_name = ?, listed = 1 WHERE id = ?",
+                         (manifest["name"], owner_name, kit["id"]))
+        before = self._version(kit["id"], self.latest_any(kit["id"]))
+        if before and manifest["description"] != " ".join(str(before["manifest"].get("description") or "").split()):
+            # the author changed it in manifest.json: each version shows its own again
+            self._db.execute("UPDATE kits SET description = NULL WHERE id = ?", (kit["id"],))
+            for v in self.versions(kit["id"]):
+                self._register(kit["id"], v["version"])
+        return kit
+
+    def _store(self, kit_id: str, files: dict[str, str], status: str, source: str = "") -> int:
+        """Keeps a new version's files; returns its number."""
+        version = self.latest_any(kit_id) + 1
+        folder = self.folder(kit_id, version)
+        folder.mkdir(parents=True, exist_ok=True)
+        for name, text in files.items():
+            with open(folder / name, "w", encoding="utf-8", newline="\n") as f:
+                f.write(text)
+        stored = {k: v for k, v in json.loads(files["manifest.json"]).items()}
+        now = time.time()
+        self._db.execute("INSERT INTO versions (kit_id, version, manifest, status, created, decided, source) "
+                         "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                         (kit_id, version, json.dumps(stored), status, now, now if status == "public" else 0, source))
+        self._register(kit_id, version)
+        return version
+
+    # ------------------------------------------------------------------ the gallery's packages, from a repository
+    def from_repo(self, repo: str, folder: str, raw: dict[str, bytes], commit: str) -> str:
+        """A repository's folder Kits/<folder> as of `commit` (server/github.py): a package in the gallery, credited
+        to its manifest's author. Its files changing makes a new version. Returns "added", "updated", "back" (its
+        folder came back, unchanged) or "" (nothing changed). Raises KitError when the files don't pass the checks an
+        upload passes; the gallery then keeps the version it had."""
+        files = read_folder(raw)
+        digest = files_digest(files)
+        owner = REPO_OWNER + repo
+        with self._lock:
+            found = self._q("SELECT kit_id, files FROM sources WHERE repo = ? AND folder = ?", (repo, folder))
+            kit = self.kit(found[0][0]) if found else None
+            if kit is not None and self._q("SELECT 1 FROM versions WHERE kit_id = ? AND status = 'taken_down'",
+                                           (kit["id"],)):
+                raise KitError("It was taken down, so it gets no new versions.")
+            if kit is not None and found[0][1] == digest:
+                if kit["listed"]:
+                    return ""
+                self._q("UPDATE kits SET listed = 1 WHERE id = ?", (kit["id"],))
+                return "back"
+            taken = set().union(*(self.classes(k["id"]) for k in self.owned(owner)
+                                  if kit is None or k["id"] != kit["id"]))
+            manifest = read_manifest(files["manifest.json"], taken)
+            if kit is not None and manifest["object"]["class"] != kit["class"]:
+                raise KitError(f"A new version must keep the object {kit['class']} (a new folder starts a new "
+                               "customization).")
+            check_python(files["kit.py"], manifest["classes"])
+            check_javascript(files["kit.js"], manifest["classes"])
+            author = manifest["author"] or repo.split("/", 1)[0]
+            if kit is None:
+                kit = self._new_kit(owner, author, manifest)
+                self._db.execute("INSERT INTO sources (kit_id, repo, folder, files) VALUES (?, ?, ?, ?)",
+                                 (kit["id"], repo, folder, digest))
+                what = "added"
+            else:
+                self._renew(kit, author, manifest)
+                self._db.execute("UPDATE sources SET files = ? WHERE kit_id = ?", (digest, kit["id"]))
+                what = "updated"
+            self._store(kit["id"], files, "public", commit)
+            return what
+
+    def drop_missing(self, repo: str, folders) -> list[str]:
+        """The repository's packages whose folder is gone leave the gallery and every library, as a deleted upload
+        does (projects that use one keep it). Returns those folders."""
+        gone = []
+        for kit_id, folder in self._q("SELECT kit_id, folder FROM sources WHERE repo = ?", (repo,)):
+            kit = self.kit(kit_id)
+            if folder not in folders and kit is not None and kit["listed"]:
+                self._q("UPDATE kits SET listed = 0 WHERE id = ?", (kit_id,))
+                self._q("DELETE FROM library WHERE kit_id = ?", (kit_id,))
+                gone.append(folder)
+        return gone
 
     def latest_any(self, kit_id: str) -> int:
         return self._q("SELECT MAX(version) FROM versions WHERE kit_id = ?", (kit_id,))[0][0] or 0
@@ -698,7 +826,7 @@ class KitStore:
 
     # ------------------------------------------------------------------ who may use what
     def latest_public(self, kit_id: str) -> int:
-        """The newest version anyone may use (approved), 0 if none."""
+        """The newest version anyone may use (the gallery's), 0 if none."""
         return self._q("SELECT MAX(version) FROM versions WHERE kit_id = ? AND status = 'public'", (kit_id,))[0][0] or 0
 
     def library(self, user: str) -> list[dict]:
@@ -708,7 +836,7 @@ class KitStore:
         return [k for k in (self._kit_row(r) for r in rows) if self.latest_public(k["id"])]
 
     def usable(self, owner: str) -> list:
-        """The specs a user can add: the latest version of each of their packages, and the latest approved version of
+        """The specs a user can add: the latest version of each of their packages, and the latest gallery version of
         each package in their library."""
         specs = []
         for kit in self.owned(owner):
@@ -722,7 +850,7 @@ class KitStore:
 
     def check_use(self, owner: str, allowed: int, key: str, used: bool = False) -> None:
         """Raise unless this user may add this custom type to a project now (`allowed`: their plan's limit): one of
-        their own packages, or an approved version of one in their library. Something new gets the newest version
+        their own packages, or a gallery version of one in their library. Something new gets the newest version
         they can add, never a deleted package's; `used`: the project has this version already, and may keep it."""
         m = KIT_TYPE_RE.match(key) if isinstance(key, str) else None
         if m is None:
@@ -747,44 +875,14 @@ class KitStore:
                           f"version, {kit_type(kit['id'], newest, m.group(3) or '')}.")
 
     def readable(self, viewer: str, kit_id: str, version: int, admin: bool = False) -> bool:
-        """Whether someone may read a version's files: its author, the reviewer, or anyone once it is approved. (An
-        approved version stays readable, so projects that use it keep playing, unless it is taken down.)"""
+        """Whether someone may read a version's files: its author, the site's owner, or anyone if it is in the
+        gallery. (A gallery version stays readable, so projects that use it keep playing, unless it is taken down.)"""
         kit, row = self.kit(kit_id), self._version(kit_id, version)
         if kit is None or row is None or row["status"] == "taken_down":
             return False
         return admin or kit["owner"] == viewer or row["status"] == "public"
 
-    # ------------------------------------------------------------------ going public (reviewed by the site's owner)
-    def submit(self, owner: str, kit_id: str) -> None:
-        """Ask for the newest version to be made public; the reviewer decides (decide())."""
-        kit = self.kit(kit_id)
-        if kit is None or kit["owner"] != owner or not kit["listed"]:
-            raise KitError("That customization isn't yours.")
-        version = self.latest_any(kit_id)
-        row = self._version(kit_id, version)
-        if row["status"] == "pending":
-            raise KitError("It is already waiting for review.")
-        if row["status"] in ("public", "taken_down"):
-            raise KitError("Its newest version is already public." if row["status"] == "public"
-                           else "It was taken down.")
-        self._q("UPDATE versions SET status = 'pending', reason = '', decided = 0 WHERE kit_id = ? AND version = ?",
-                (kit_id, version))
-        self._register(kit_id, version)
-
-    def pending(self) -> list[dict]:
-        """Versions waiting for review, oldest first, with what the reviewer reads."""
-        rows = self._q("SELECT kit_id, version FROM versions WHERE status = 'pending' ORDER BY created")
-        return [{**self.summary(self.kit(kid)), "review_version": v} for kid, v in rows if self.kit(kid)]
-
-    def decide(self, kit_id: str, version: int, approve: bool, reason: str = "") -> None:
-        row = self._version(kit_id, version)
-        if row is None or row["status"] != "pending":
-            raise KitError("That version isn't waiting for review.")
-        status = "public" if approve else "rejected"
-        self._q("UPDATE versions SET status = ?, reason = ?, decided = ? WHERE kit_id = ? AND version = ?",
-                (status, " ".join(str(reason or "").split())[:300], time.time(), kit_id, version))
-        self._register(kit_id, version)
-
+    # ------------------------------------------------------------------ the site's owner looks after the gallery
     def take_down(self, kit_id: str, reason: str = "") -> None:
         """Stop a package everywhere: its code no longer runs or downloads, and projects show its objects as
         unavailable. It leaves the gallery and every library."""
@@ -798,13 +896,11 @@ class KitStore:
             self._register(kit_id, v["version"])
 
     # ------------------------------------------------------------------ the gallery, libraries and reports
-    def gallery(self, query: str = "", waiting: bool = False) -> list[dict]:
-        """Listed packages with an approved version (and, with `waiting`, the ones waiting for review), most recently
-        approved first."""
-        statuses = "('public', 'pending')" if waiting else "('public')"
+    def gallery(self, query: str = "") -> list[dict]:
+        """Listed packages with a version in the gallery, the most recently updated first."""
         rows = self._q("SELECT k.id, k.owner, k.owner_name, k.kind, k.class, k.name, k.created, k.listed, "
                        "MAX(v.decided) FROM kits k JOIN versions v ON v.kit_id = k.id "
-                       f"WHERE k.listed = 1 AND v.status IN {statuses} GROUP BY k.id ORDER BY MAX(v.decided) DESC")
+                       "WHERE k.listed = 1 AND v.status = 'public' GROUP BY k.id ORDER BY MAX(v.decided) DESC")
         out = []
         q = " ".join(str(query or "").lower().split())
         for r in rows:
@@ -856,15 +952,14 @@ class KitStore:
         self._q("UPDATE reports SET handled = 1 WHERE kit_id = ?", (kit_id,))
 
     def review(self, kit_id: str) -> dict:
-        """What waits for the reviewer on one package: the version asking to be public (0 if none) and open reports."""
-        version = self._q("SELECT MAX(version) FROM versions WHERE kit_id = ? AND status = 'pending'", (kit_id,))[0][0]
+        """What waits for the site's owner on one package: its open reports."""
         rows = self._q("SELECT reason, created FROM reports WHERE kit_id = ? AND handled = 0 ORDER BY created", (kit_id,))
-        return {"version": version or 0, "reports": [{"reason": r, "created": c} for r, c in rows]}
+        return {"reports": [{"reason": r, "created": c} for r, c in rows]}
 
     # ------------------------------------------------------------------ letting old versions go
     def unneeded(self) -> list[tuple[str, int]]:
-        """The versions nothing offers any more: every version of a package but its newest and its newest approved
-        one (the gallery's and libraries'), and every version of a deleted package. Versions waiting for review stay,
+        """The versions nothing offers any more: every version of a package but its newest and its newest gallery
+        one (the gallery's and libraries'), and every version of a deleted package. Versions once sent for review stay,
         and so does all of a package that was taken down. Each goes for good once no project uses it
         (server/web.py WorkspaceStore.prune_kits)."""
         listed = dict(self._q("SELECT id, listed FROM kits"))
@@ -896,7 +991,8 @@ class KitStore:
             self._by_sha = {sha: hits for sha, hits in self._by_sha.items() if hits}
             shutil.rmtree(self.folder(kit_id, version), ignore_errors=True)
             if not self._q("SELECT 1 FROM versions WHERE kit_id = ?", (kit_id,)):
-                for table, column in (("kits", "id"), ("library", "kit_id"), ("reports", "kit_id")):
+                for table, column in (("kits", "id"), ("library", "kit_id"), ("reports", "kit_id"),
+                                      ("sources", "kit_id")):
                     self._q(f"DELETE FROM {table} WHERE {column} = ?", (kit_id,))
                 shutil.rmtree(self.root / kit_id, ignore_errors=True)
 

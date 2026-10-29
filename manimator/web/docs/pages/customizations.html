@@ -8,8 +8,8 @@
         <ul>
           <li>Add other people's customizations from the <strong>Gallery</strong>.</li>
           <li>A customization's page shows a preview of its object.</li>
-          <li>A customization's page uploads a new version of it or makes it public. Each one is reviewed before it
-            joins the gallery.</li>
+          <li>A customization's page uploads a new version of it. The ones you upload are yours alone; the gallery's
+            come from GitHub (<a href="#sharing">below</a>).</li>
           <li>New objects and animations always use the newest version. Projects keep the version they were made with
             until you update them (the inspector offers the newest), and an older version that no project uses any
             more is deleted for good.</li>
@@ -19,6 +19,22 @@
         <p>Free keeps up to 5 customizations, Pro up to 20 and Max up to 100 (each with all its versions and
           animations). Deleting one takes it off your list and out of the editor, but projects that already use it
           keep working. Once none does, it is deleted for good.</p>
+
+        <h2 id="sharing">Sharing one in the gallery</h2>
+        <p>The gallery's customizations come from <a href="https://github.com/ManimatorApp/ManimKit">ManimKit</a>, a
+          repository on GitHub with one folder per customization. To share yours, add its folder there with a pull
+          request:</p>
+        <ol>
+          <li>Fork ManimKit and put your files in <code>Kits/&lt;Name&gt;</code>, named after your object's class.
+            Set <code>author</code> in manifest.json to your GitHub user name.</li>
+          <li>Run <code>python Build.py Kits/&lt;Name&gt;</code> to check it, and try the
+            <code>.manimkit</code> file it makes in your own Customizations.</li>
+          <li>Open a pull request. Its checks run on GitHub, and Manimator looks at the code.</li>
+        </ol>
+        <p>Once the pull request is merged, the customization joins the gallery within minutes, by your GitHub name. A
+          change to its folder later becomes its next version. ManimKit's
+          <a href="https://github.com/ManimatorApp/ManimKit/blob/main/CONTRIBUTING.md">contributing guide</a> has the
+          rules.</p>
 
         <h2 id="writing">Writing a customization</h2>
         <p>You write a customization twice: in JavaScript, which Manimator runs to draw it in your browser, and in
@@ -47,6 +63,7 @@
   "version": "1.1",
   "description": "A battery whose fill shows its charge",
   "license": "MIT",
+  "author": "SavithOnline",
   "object": {
     "class": "Battery",
     "style": "none",
@@ -69,6 +86,8 @@
         <ul>
           <li><code>name</code>, <code>description</code>: what the Customizations page and the editor show. The description is up to 25 words.
             <code>version</code> is your label for this version.</li>
+          <li><code>author</code>: your GitHub user name. The gallery credits you by it; a customization you upload
+            yourself doesn't need it.</li>
           <li><code>object</code>: the object. <code>class</code> is its class name in both files, in PascalCase; it
             can't be one of Manim's own names. <code>style</code> is which color controls the editor shows:
             <code>"none"</code> (your object keeps its own colors), <code>"shape"</code> (stroke and fill),

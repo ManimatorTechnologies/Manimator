@@ -75,9 +75,14 @@ class WebConfig:
     max_project_bytes: int = 2 * 1024 * 1024
     max_projects: int = 20  # projects one visitor can keep
     max_kits: int = 100  # customizations one visitor can keep (server/kits.py)
-    admins: frozenset = frozenset()  # account emails that review public customizations (MANIMATOR_ADMINS)
+    admins: frozenset = frozenset()  # account emails that look after the gallery: reports, taking down (MANIMATOR_ADMINS)
     limits: ProjectLimits = field(default_factory=ProjectLimits)
     site_url: str = ""  # the site's address, e.g. https://studio.example.com (else taken from each request)
+    # the GitHub repository the gallery's customizations come from, "owner/name" (server/github.py), its branch, and
+    # the secret its webhook signs with
+    kits_repo: str = ""
+    kits_branch: str = "main"
+    kits_secret: str = ""
 
     @classmethod
     def from_env(cls, data_dir: Path) -> WebConfig:
@@ -90,6 +95,9 @@ class WebConfig:
                 raise SystemExit(f"{name} must be a number, not {env(name)!r}") from None
 
         hosts = {h.strip().lower() for h in env("MANIMATOR_ALLOWED_HOSTS", "").split(",") if h.strip()}
+        repo = env("MANIMATOR_KITS_REPO", "").strip()
+        if repo and not re.match(r"^[\w.-]+/[\w.-]+$", repo):
+            raise SystemExit(f"MANIMATOR_KITS_REPO must be a GitHub repository like owner/name, not {repo!r}")
         return cls(
             data_dir=Path(data_dir),
             allowed_hosts=frozenset(hosts),
@@ -99,6 +107,9 @@ class WebConfig:
             max_projects=num("MANIMATOR_MAX_PROJECTS", 20, int),
             admins=frozenset(e.strip().lower() for e in env("MANIMATOR_ADMINS", "").split(",") if e.strip()),
             site_url=env("MANIMATOR_SITE_URL", "").strip().rstrip("/"),
+            kits_repo=repo,
+            kits_branch=env("MANIMATOR_KITS_BRANCH", "").strip() or "main",
+            kits_secret=env("MANIMATOR_KITS_SECRET", "").strip(),
         )
 
     def host_ok(self, host: str) -> bool:

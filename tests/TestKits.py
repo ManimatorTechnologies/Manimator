@@ -79,6 +79,16 @@ def renamed_package(cls: str, *animations: str, folder="Battery") -> bytes:
                    kit_py=code["kit.py"])
 
 
+def from_github(store, folder="Battery", commit="1" * 40, **changes) -> str:
+    """An example in the gallery, as if merged into its GitHub repository (server/github.py), with some files
+    replaced; returns its id."""
+    files = {p.name: p.read_bytes() for p in _folder(folder).iterdir() if p.is_file()}
+    files.update({name.replace("_", ".", 1): text.encode() for name, text in changes.items()})
+    store.from_repo("ManimatorApp/ManimKit", _folder(folder).name, files, commit)
+    cls = json.loads(files["manifest.json"])["object"]["class"]
+    return next(k["id"] for k in store.gallery() if k["class"] == cls)
+
+
 @pytest.fixture
 def old_uploads(monkeypatch):
     """Lets the store take first-format packages, as it did before format 2 (to make the versions kept from then)."""
@@ -665,18 +675,20 @@ def test_only_versions_nothing_offers_any_more_may_go(tmp_path):
     kid = store.add("owner-1", "Ada", package(), 5)["id"]
     for label in ("1.1", "1.2", "1.3"):
         store.add("owner-1", "Ada", package(manifest_json=manifest(version=label)), 5, kid)
-    store.submit("owner-1", kid)
-    store.decide(kid, 4, True)  # 4 public
-    store.add("owner-1", "Ada", package(manifest_json=manifest(version="1.4")), 5, kid)
-    assert store.unneeded() == [(kid, 1), (kid, 2), (kid, 3)]  # 5 is the newest, 4 the gallery's
-    store.submit("owner-1", kid)  # 5 waits for review: still kept, like 4
-    assert store.unneeded() == [(kid, 1), (kid, 2), (kid, 3)]
+    assert store.unneeded() == [(kid, 1), (kid, 2), (kid, 3)]  # 4 is the newest
+    # one that waited for review back when uploads could go public stays, for the record
+    store._q("UPDATE versions SET status = 'pending' WHERE kit_id = ? AND version = 2", (kid,))
+    assert store.unneeded() == [(kid, 1), (kid, 3)]
+    # the gallery's keep their newest
+    net = from_github(store, "NeuralNetwork")
+    from_github(store, "NeuralNetwork", "2" * 40, manifest_json=manifest("NeuralNetwork", version="1.2"))
+    assert [k for k in store.unneeded() if k[0] == net] == [(net, 1)]
     gone = store.add("owner-2", "Bo", package(), 5)["id"]
     store.add("owner-2", "Bo", package(manifest_json=manifest(version="1.1")), 5, gone)
     store.unlist("owner-2", gone)  # deleted: none of its versions is offered
     assert [k for k in store.unneeded() if k[0] == gone] == [(gone, 1), (gone, 2)]
     store.take_down(kid)  # taken down: all of it stays, for the record
-    assert store.unneeded() == [(gone, 1), (gone, 2)]
+    assert store.unneeded() == sorted([(net, 1), (gone, 1), (gone, 2)])
 
 
 def kit_store_and_workspaces(tmp_path):
@@ -716,18 +728,13 @@ def test_an_older_version_goes_for_good_once_no_project_or_undo_step_uses_it(tmp
 
 def test_a_closed_project_or_another_visitors_keeps_an_old_version_till_it_is_deleted(tmp_path):
     kits, workspaces = kit_store_and_workspaces(tmp_path)
-    ada, _ = workspaces.resolve(None, "1.1.1.1")
     bo, _ = workspaces.resolve(None, "2.2.2.2")
-    kid = kits.add(ada.owner_key, "Ada", package(), 5)["id"]
-    kits.submit(ada.owner_key, kid)
-    kits.decide(kid, 1, True)
+    kid = from_github(kits)
     kits.set_library(bo.owner_key, kid, True)
     bo.session.apply("add_mobject", {"scene_id": bo.session.project.scenes[0].id, "type": kit_type(kid, 1)})
     used = bo.current_id
     bo.create()  # Bo's project with version 1 is closed now, on disk
-    kits.add(ada.owner_key, "Ada", package(manifest_json=manifest(version="1.1")), 5, kid)
-    kits.submit(ada.owner_key, kid)
-    kits.decide(kid, 2, True)  # the gallery gives version 2 now
+    from_github(kits, commit="2" * 40, manifest_json=manifest(version="1.2"))  # the gallery gives version 2 now
     assert kits.unneeded() == [(kid, 1)] and workspaces.prune_kits() == 0
     workspaces._evict(bo)  # not in memory any more: only its files tell
     assert workspaces.prune_kits() == 0

@@ -35,6 +35,7 @@ from ..plan import plan_hash, project_plan, scene_plan
 from . import docs
 from .addon import Addon, Core, LayeredFiles
 from .catalog import animation_json, catalog, kit_part_json, mobject_json
+from .github import GitHubKits
 from .kits import SUFFIX as KIT_SUFFIX, KitStore, demo_project
 from ..registry.custom import kit_type
 from .mcp import USER_PATH, mount_mcp, site_of
@@ -89,7 +90,8 @@ def code_sandbox_csp(site: str) -> str:
 # Posted to by other sites' servers (AI chats): no X-Manimator. They read their own bodies, up to a limit, so they may
 # come chunked. An add-on may add paths of its own.
 SELF_LIMITED = frozenset({"/mcp", "/mcp/user"})
-EXTERNAL_POSTS = SELF_LIMITED
+KITS_WEBHOOK = "/api/kits/github"  # GitHub says the gallery's repository changed (server/github.py)
+EXTERNAL_POSTS = SELF_LIMITED | {KITS_WEBHOOK}
 
 
 class Refused(OpError):
@@ -139,6 +141,9 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
     never leaves the machine)."""
     kits = KitStore(web.data_dir / "kits")  # customizations: custom objects and animations (server/kits.py)
     store = WorkspaceStore(web, kits=kits)
+    # the gallery's customizations, from a GitHub repository's Kits/ folders (server/github.py)
+    repo = GitHubKits(kits, web.kits_repo, web.kits_branch, web.kits_secret, http=http,
+                      changed=store.kits_changed) if web.kits_repo else None
     accounts = addon is not None  # people can sign in; without accounts every visitor may use everything
     csp = addon.csp(CSP) if addon else CSP
     self_limited = SELF_LIMITED | (addon.self_limited if addon else frozenset())
@@ -147,7 +152,11 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
 
     @contextlib.asynccontextmanager
     async def lifespan(_app):
+        if repo:
+            repo.start()
         yield
+        if repo:
+            repo.close()
         store.close()
         kits.close()
         if addon:
@@ -155,6 +164,7 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
 
     app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
     app.add_middleware(GZipMiddleware, minimum_size=1024)
+    app.state.kits_repo = repo  # tests make it look at its repository now
 
     # ------------------------------------------------------------------ who is asking
     def current(request: Request):
@@ -664,12 +674,12 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
         return bytes(data)
 
     def is_admin(ws) -> bool:
-        """The site's owner, who reviews public customizations (MANIMATOR_ADMINS)."""
+        """The site's owner, who looks after the gallery: reports, and taking a customization down (MANIMATOR_ADMINS)."""
         return bool(accounts and ws.user and ws.user.get("email", "").lower() in web.admins)
 
     def public_view(kit: dict, ws, shown: int = 0) -> dict:
         """A package as the visitor sees it, as of version `shown` (default: the newest they may see). Someone other
-        than its author sees only approved versions, and no review notes."""
+        than its author sees only gallery versions, and no notes about them."""
         theirs = kit["owner"] == ws.owner_key or is_admin(ws)
         out = kits.summary(kit, ws.owner_key, shown or (0 if theirs else kits.latest_public(kit["id"])))
         if not theirs:
@@ -681,7 +691,10 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
         mine = [kits.summary(k, ws.owner_key) for k in kits.owned(ws.owner_key)]
         library = [public_view(k, ws) for k in kits.library(ws.owner_key) if k["owner"] != ws.owner_key]
         return {"kits": mine, "library": library, "limit": ws.plan.kits, "why": kits_allowed(ws),
-                "admin": is_admin(ws), "public": accounts}
+                "admin": is_admin(ws), "public": accounts,
+                # how to share one in the gallery: a pull request to its repository
+                "share": f"https://github.com/{web.kits_repo}/blob/{web.kits_branch}/CONTRIBUTING.md"
+                if accounts and web.kits_repo else ""}
 
     def with_mine(specs: dict, ws) -> dict:
         """Marks each custom spec as the visitor's own or someone else's (the Python download warns about those)."""
@@ -721,15 +734,15 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
         return {"kit": kits.summary(kit, ws.owner_key), **kits_listing(ws)}
 
     def visible_kit(ws, kid: str) -> dict:
-        """A package the visitor may look at: their own, one in the gallery, or (for the reviewer) any."""
+        """A package the visitor may look at: their own, one in the gallery, or (for the site's owner) any."""
         kit = kits.kit(kid)
         if kit is None or not (kit["owner"] == ws.owner_key or is_admin(ws) or kits.latest_public(kid)):
             raise Refused("That customization doesn't exist.", 404)
         return kit
 
     def shown_version(ws, kit: dict, asked: int = 0) -> int:
-        """Which version the visitor sees: the newest (or `asked`) for its author and the reviewer, else the newest
-        approved one."""
+        """Which version the visitor sees: the newest (or `asked`) for its author and the site's owner, else the
+        gallery's newest."""
         if kit["owner"] == ws.owner_key or is_admin(ws):
             return asked if asked and kits.readable(ws.owner_key, kit["id"], asked, True) else kits.latest_any(kit["id"])
         return kits.latest_public(kit["id"])
@@ -799,27 +812,17 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
                         headers={"Cache-Control": "private, max-age=31536000, immutable",
                                  "Content-Security-Policy": "default-src 'none'; sandbox"})
 
-    @app.post("/api/kits/{kid}/submit")
-    def submit_kit(kid: str, ws=Depends(current)):
-        """Ask for the newest version to be made public (the site's owner reviews it first)."""
-        need_accounts()
-        throttle(ws, "upload")
-        if kits_allowed(ws):
-            raise Refused(kits_allowed(ws), 403)
-        kits.submit(ws.owner_key, kid)
-        return kits_listing(ws)
-
     @app.get("/api/kits-gallery")
     def kit_gallery(q: str = "", ws=Depends(current)):
-        """Approved customizations anyone can look at (adding them takes an account). The reviewer also
-        sees the ones waiting for review, and each one's review; what waits for them comes first."""
+        """The gallery's customizations (from its repository, server/github.py), which anyone can look at (adding
+        them takes an account). The site's owner also sees each one's reports; reported ones come first."""
         if not accounts:
             return {"kits": [], "can_add": False, "why": ""}
         admin = is_admin(ws)
-        found = kits.gallery(q, waiting=admin)
+        found = kits.gallery(q)
         reviews = {k["id"]: kits.review(k["id"]) for k in found} if admin else {}
-        if admin:  # what waits for the reviewer first (the sort is stable: the gallery's order stays within each)
-            found.sort(key=lambda k: not (reviews[k["id"]]["version"] or reviews[k["id"]]["reports"]))
+        if admin:  # what waits for the owner first (the sort is stable: the gallery's order stays within each)
+            found.sort(key=lambda k: not reviews[k["id"]]["reports"])
         listed = [public_view(k, ws) | ({"review": reviews[k["id"]]} if admin else {}) for k in found[:200]]
         return {"kits": listed, "can_add": not kits_allowed(ws), "why": kits_allowed(ws)}
 
@@ -847,26 +850,35 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
     def need_admin(ws) -> None:
         need_accounts()
         if not is_admin(ws):
-            raise Refused("Only the site's owner reviews customizations.", 403)
+            raise Refused("Only the site's owner looks after the gallery.", 403)
 
     def review_queue() -> dict:
-        return {"pending": kits.pending(), "reports": kits.reports()}
+        return {"reports": kits.reports(), "repo": repo.state | {"repo": repo.repo} if repo else None}
 
     @app.get("/api/admin/kits")
     def kit_review(ws=Depends(current)):
-        """What waits for the reviewer: versions asking to be public, and reports about public ones."""
+        """What waits for the site's owner: reports about gallery customizations, and how the last look at the
+        gallery's repository went (folders it left out, and why)."""
         need_admin(ws)
         return review_queue()
 
-    @app.post("/api/admin/kits/{kid}/{version}/decide")
-    def kit_decide(kid: str, version: int, body: dict = Body(...), ws=Depends(current)):
-        need_admin(ws)
-        action = body.get("action")
-        if action not in ("approve", "reject"):
-            raise Refused("Approve or reject.", 400)
-        kits.decide(kid, version, action == "approve", str(body.get("reason") or ""))
-        store.kits_changed()  # an approved version replaces the gallery's older one
-        return review_queue()
+    @app.post(KITS_WEBHOOK)
+    async def kits_webhook(request: Request):
+        """GitHub's webhook for the gallery's repository, signed with MANIMATOR_KITS_SECRET: when its branch moves,
+        the site reads it again (server/github.py)."""
+        if repo is None or not repo.secret:
+            raise Refused("Not found.", 404)
+        body = await request.body()
+        if not repo.signed(body, request.headers.get("x-hub-signature-256", "")):
+            raise Refused("That isn't signed by GitHub.", 401)
+        if request.headers.get("x-github-event") == "push":
+            try:
+                ref = json.loads(body).get("ref")
+            except (ValueError, AttributeError):
+                ref = None
+            if ref == f"refs/heads/{repo.branch}":
+                repo.poke()
+        return {"ok": True}
 
     @app.post("/api/admin/kits/{kid}/take_down")
     def kit_take_down(kid: str, body: dict = Body(...), ws=Depends(current)):
