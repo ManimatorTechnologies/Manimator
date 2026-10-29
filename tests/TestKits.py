@@ -84,7 +84,7 @@ def from_github(store, folder="Battery", commit="1" * 40, **changes) -> str:
     replaced; returns its id."""
     files = {p.name: p.read_bytes() for p in _folder(folder).iterdir() if p.is_file()}
     files.update({name.replace("_", ".", 1): text.encode() for name, text in changes.items()})
-    store.from_repo("ManimatorApp/ManimKit", _folder(folder).name, files, commit)
+    store.from_repo("ManimatorTechnologies/ManimKit", _folder(folder).name, files, commit)
     cls = json.loads(files["manifest.json"])["object"]["class"]
     return next(k["id"] for k in store.gallery() if k["class"] == cls)
 

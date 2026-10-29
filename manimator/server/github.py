@@ -1,4 +1,4 @@
-"""The gallery's customizations, read from a GitHub repository (MANIMATOR_KITS_REPO, like "ManimatorApp/ManimKit").
+"""The gallery's customizations, read from a GitHub repository (MANIMATOR_KITS_REPO, like "ManimatorTechnologies/ManimKit").
 
 Each folder Kits/<Name> on the repository's branch is one customization: the manifest.json, kit.js, kit.py and
 README.md a .manimkit file holds (server/kits.py). People add theirs there with a pull request. Once one is merged,

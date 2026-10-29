@@ -21,7 +21,7 @@ from manimator.server.kits import KitError, KitStore, read_manifest
 from manimator.server.web import WebConfig
 from tests.TestKits import EXAMPLES, SEND, package
 
-REPO = "ManimatorApp/ManimKit"
+REPO = "ManimatorTechnologies/ManimKit"
 SECRET = "webhook secret"
 
 
@@ -103,7 +103,7 @@ def test_the_repositorys_folders_join_the_gallery_by_their_authors(github):
     assert repo.sync() == {"commit": sha, "changed": ["Battery: added", "NeuralNetwork: added"], "problems": []}
     assert changed == [1]
     # credited to the manifest's author, or to the repository's owner when it names none
-    assert sorted(gallery(store)) == [("Battery", "ada-l"), ("Neural network", "ManimatorApp")]
+    assert sorted(gallery(store)) == [("Battery", "ada-l"), ("Neural network", "ManimatorTechnologies")]
     battery = next(k for k in store.gallery() if k["name"] == "Battery")
     assert battery["owner"] == f"repo:{REPO}" and store.latest_public(battery["id"]) == 1
     page = store.summary(battery, "someone")
@@ -205,7 +205,7 @@ def test_a_failed_look_is_kept_and_tried_again(github, capsys):
     fake, store, repo, _ = github
     fake.head = "not a commit"
     assert repo.sync()["error"] == "GitHub didn't answer with a commit"
-    assert repo.state["error"] and "couldn't read ManimatorApp/ManimKit" in capsys.readouterr().err
+    assert repo.state["error"] and "couldn't read ManimatorTechnologies/ManimKit" in capsys.readouterr().err
     fake.push({"Battery": folder()})
     assert repo.sync()["changed"] == ["Battery: added"] and repo.state["error"] == ""
 
@@ -280,7 +280,7 @@ def test_without_a_secret_there_is_no_webhook(tmp_path):
 
 
 def test_a_repository_must_look_like_owner_and_name(tmp_path, monkeypatch):
-    monkeypatch.setenv("MANIMATOR_KITS_REPO", "https://github.com/ManimatorApp/ManimKit")
+    monkeypatch.setenv("MANIMATOR_KITS_REPO", "https://github.com/ManimatorTechnologies/ManimKit")
     with pytest.raises(SystemExit, match="owner/name"):
         WebConfig.from_env(tmp_path)
     monkeypatch.setenv("MANIMATOR_KITS_REPO", REPO)
@@ -289,5 +289,5 @@ def test_a_repository_must_look_like_owner_and_name(tmp_path, monkeypatch):
     assert (cfg.kits_repo, cfg.kits_branch, cfg.kits_secret) == (REPO, "main", "s3cret")
     store = KitStore(Path(tmp_path) / "k")
     with pytest.raises(ValueError, match="not a GitHub repository"):
-        GitHubKits(store, "ManimatorApp/Manim Kit")
+        GitHubKits(store, "ManimatorTechnologies/Manim Kit")
     store.close()
