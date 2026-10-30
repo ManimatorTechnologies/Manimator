@@ -367,6 +367,12 @@ def test_the_player_reports_the_chats_fonts_to_the_log(client, capsys):
     res = client.get("/mcp/style", params={"s": '{"families":["Anthropic Serif"]}'})
     assert res.status_code == 204 and res.headers["access-control-allow-origin"] == "*"
     assert 'mcp host style: {"families":["Anthropic Serif"]}' in capsys.readouterr().out
+    client.get("/mcp/style", params={"s": "a\rmcp forged line\n\x1b[2Jb"})  # anyone may send it: one plain line
+    out = capsys.readouterr().out
+    assert out == "mcp host style: a mcp forged line  [2Jb\n"
+    for _ in range(200):  # and only so many lines, however many are sent
+        client.get("/mcp/style", params={"s": "x"})
+    assert capsys.readouterr().out.count("mcp host style") < 120
 
 
 def test_a_frame_job_that_timed_out_is_never_drawn():

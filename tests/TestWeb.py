@@ -146,9 +146,14 @@ def test_only_the_configured_host_is_served_and_writes_need_the_header(cfg):
 
 def test_security_headers(app):
     res = visitor(app).get("/")
-    assert "script-src 'self'" in res.headers["content-security-policy"]
-    assert "frame-ancestors 'none'" in res.headers["content-security-policy"]
+    policy = res.headers["content-security-policy"]
+    # scripts only from the site's own files: not from /mcp/kit-js/, where the chat player finds anyone's customization
+    assert "script-src http://localhost/static/;" in policy and "'self'" not in policy.split("script-src")[1].split(";")[0]
+    assert "frame-ancestors 'none'" in policy
     assert res.headers["x-content-type-options"] == "nosniff"
+    assert "camera=()" in res.headers["permissions-policy"] and "microphone=()" in res.headers["permissions-policy"]
+    app_page = visitor(app).get("/app")  # every script the editor's page loads is one of those files
+    assert re.findall(r'<script[^>]* src="([^"]+)"', app_page.text) == ["/static/js/main.js"]
 
 
 def test_the_site_icon_is_served_where_browsers_look(app):
@@ -320,7 +325,9 @@ def test_uploading_a_picture(app):
     ("c.svg", b"<!DOCTYPE svg [<!ENTITY x SYSTEM 'file:///etc/passwd'>]><svg>&x;</svg>", "entity"),
     ("d.svg", b"<svg><a href='http://evil.example'><rect width='5' height='5'/></a></svg>", "link"),
     ("e.svg", b"just text", "not svg"),
-], ids=["extension", "content", "pixels", "format", "script", "image", "entity", "link", "not-svg"])
+    ("f.svg", b"<svg xmlns='http://www.w3.org/2000/svg' onload='alert(1)'><rect width='5' height='5'/></svg>", "handler"),
+    ("g.svg", b"<svg><rect width='5'\n  ONCLICK = 'alert(1)'/></svg>", "handler"),
+], ids=["extension", "content", "pixels", "format", "script", "image", "entity", "link", "not-svg", "onload", "onclick"])
 def test_uploads_that_are_not_plain_pictures_are_refused(app, name, data, why):
     res = upload(visitor(app), name, data)
     assert res.status_code in (400, 413), (why, res.text)
@@ -329,6 +336,21 @@ def test_uploads_that_are_not_plain_pictures_are_refused(app, name, data, why):
 def test_a_clean_svg_is_accepted(app):
     svg = b"<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><defs><linearGradient id='g'/></defs><rect fill='url(#g)' width='10' height='10'/></svg>"
     assert upload(visitor(app), "ok.svg", svg).status_code == 200
+    words = (b"<svg xmlns='http://www.w3.org/2000/svg'><text font-family='Montserrat' id='online'>one = 1, on = off"
+             b"</text></svg>")  # "on" in names and words is no event handler
+    assert upload(visitor(app), "words.svg", words).status_code == 200
+
+
+def test_checking_an_svg_takes_no_time_whatever_it_holds():
+    from manimator.server.web import check_svg
+
+    started = time.monotonic()
+    for text in ("<" * 1_000_000, "< on" * 250_000, "<a " + "onx" * 300_000):
+        try:
+            check_svg(f"<svg>{text}".encode())
+        except Exception:  # noqa: BLE001 - refused or not, it must be quick
+            pass
+    assert time.monotonic() - started < 2
 
 
 def test_upload_size_count_and_storage_limits(app, cfg):

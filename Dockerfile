@@ -12,8 +12,9 @@ FROM python:3.12-slim-bookworm
 ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 
 WORKDIR /app
-COPY RequirementsWeb.txt .
-RUN pip install -r RequirementsWeb.txt \
+# the exact versions the tests ran on (RequirementsLock.txt), with a pip that has no known problems
+COPY RequirementsLock.txt .
+RUN pip install --upgrade pip && pip install -r RequirementsLock.txt \
     && python -m playwright install --with-deps --only-shell chromium \
     && rm -rf /var/lib/apt/lists/*
 

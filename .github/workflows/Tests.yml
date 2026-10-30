@@ -20,7 +20,7 @@ jobs:
           python-version: "3.12"
       - name: Install
         run: |
-          pip install -r RequirementsWeb.txt pytest
+          pip install -r RequirementsLock.txt pytest
           python -m playwright install --with-deps chromium
       - name: Run the Python tests
         run: python -m pytest -q

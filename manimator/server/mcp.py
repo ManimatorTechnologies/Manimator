@@ -810,6 +810,11 @@ def site_of(request: Request, site_url: str) -> str:
     return str(request.base_url).rstrip("/")
 
 
+def loggable(text: str) -> str:
+    """Text a caller sent, made safe for one log line: no line breaks, terminal escapes or other control characters."""
+    return re.sub(r"[\x00-\x1f\x7f-\x9f]", " ", text)
+
+
 def log_call(server: McpServer, message: dict, reply: dict | None, session: str | None, started: float) -> None:
     """One line per tool call in the server's log: which tool, which conversation (a short hash), how it went. No
     scene contents, no account."""
@@ -819,7 +824,7 @@ def log_call(server: McpServer, message: dict, reply: dict | None, session: str 
     if params.get("name") == SHOW_ANIMATION and outcome == "ok":
         outcome += f" text={len((result.get('structuredContent') or {}).get('text') or '')}"
     tag = hashlib.sha256(session.encode()).hexdigest()[:6] if session else "------"
-    print(f"mcp {'user' if server.user else 'guest'} {str(params.get('name'))[:32]} session={tag} "
+    print(f"mcp {'user' if server.user else 'guest'} {loggable(str(params.get('name'))[:32])} session={tag} "
           f"{(time.monotonic() - started) * 1000:.0f}ms {outcome}", flush=True)
 
 
@@ -866,11 +871,14 @@ def mount_mcp(app: FastAPI, site_url: str = "", account=None,
             log_call(server, message, reply, session, started)
         return answer(reply, headers=headers)
 
+    reports = Bucket(rate=1, burst=60)  # the players' reports below: anyone may send them, the log takes so many
+
     @app.get("/mcp/style")
     def host_style(request: Request):
         """The player reports which fonts and style variables the chat gives it (names and font values only), so its
         text can be matched to the chat's. Nothing about the conversation."""
-        print("mcp host style: " + str(request.query_params.get("s") or "")[:900].replace("\n", " "), flush=True)
+        if reports.take():
+            print("mcp host style: " + loggable(str(request.query_params.get("s") or "")[:900]), flush=True)
         return Response(status_code=204, headers=CORS)
 
     @app.get("/mcp/kit-js/{sha}.js")
@@ -888,7 +896,8 @@ def mount_mcp(app: FastAPI, site_url: str = "", account=None,
         """The player says whether a scene's customizations played: ok, or failed (blocked: the old player, whose
         nested sandbox frame the chat didn't allow). One log line, nothing about the conversation."""
         said = str(request.query_params.get("s") or "")[:16]
-        print(f"mcp kit-frame {said if said in ('ok', 'failed', 'blocked') else '?'}", flush=True)
+        if reports.take():
+            print(f"mcp kit-frame {said if said in ('ok', 'failed', 'blocked') else '?'}", flush=True)
         return Response(status_code=204, headers=CORS)
 
     @app.post(GUEST_PATH)

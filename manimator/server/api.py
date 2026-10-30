@@ -58,6 +58,14 @@ SANDBOX_PAGE = "/static/sandbox/engine.html"
 CODE_SANDBOX_PAGE = "/static/sandbox/code.html"  # the Code view's Python runs there (web/sandbox/code.js)
 PYODIDE = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/"  # as web/js/code/PyBridge.js loads it
 ICONS = ("/favicon.ico", "/apple-touch-icon.png")  # the site's icons (web/favicon/), also served at the top
+# browser features no page here uses, so nothing on them (or framed by them) may ask for them
+PERMISSIONS = "camera=(), microphone=(), geolocation=(), usb=(), serial=(), hid=(), midi=()"
+
+
+def page_csp(csp: str, site: str) -> str:
+    """The pages' policy as served from `site`: their scripts come only from its /static/ folder, never from elsewhere
+    on the site (the chat player's customizations, anyone's code, are served under /mcp/kit-js/)."""
+    return csp.replace("script-src 'self'", f"script-src {site}/static/", 1)
 
 
 def _import_map_hash() -> str:
@@ -237,8 +245,9 @@ def create_app(web: WebConfig, http=None, renderer=None, addon: Addon | None = N
             response.headers["Content-Security-Policy"] = code_sandbox_csp(site_of(request, web.site_url))
         elif "content-security-policy" not in response.headers:  # an uploaded SVG brings a stricter one
             dev = path.startswith("/dev/") and os.environ.get("MANIMATOR_DEV_PAGES") == "1"
-            response.headers["Content-Security-Policy"] = DEV_CSP if dev else csp
-        response.headers.update({"X-Content-Type-Options": "nosniff", "Referrer-Policy": "same-origin"})
+            response.headers["Content-Security-Policy"] = DEV_CSP if dev else page_csp(csp, site_of(request, web.site_url))
+        response.headers.update({"X-Content-Type-Options": "nosniff", "Referrer-Policy": "same-origin",
+                                 "Permissions-Policy": PERMISSIONS})
         if chat:  # framed inside a chat's frame, wherever that is; it holds nothing but what its parent sends it
             response.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
         else:

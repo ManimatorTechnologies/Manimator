@@ -961,6 +961,7 @@ _SVG_BANNED = re.compile(
     r"<\s*(script|image|foreignobject|iframe|embed|object|audio|video|style)\b|<!doctype|<!entity|javascript:|file:|data:",
     re.IGNORECASE)
 _SVG_EXTERNAL_HREF = re.compile(r"href\s*=\s*[\"'](?!#)", re.IGNORECASE)
+_SVG_HANDLER = re.compile(r"<[^<>]*[\s/\"']on[a-z]+\s*=", re.IGNORECASE)  # onload="…" and the like: code to run
 
 
 def check_svg(data: bytes) -> None:
@@ -970,7 +971,8 @@ def check_svg(data: bytes) -> None:
         text = data.decode("utf-8")
     except UnicodeDecodeError:
         raise OpError("That SVG isn't valid text.") from None
-    if "<svg" not in text.lower() or _SVG_BANNED.search(text) or _SVG_EXTERNAL_HREF.search(text):
+    if "<svg" not in text.lower() or _SVG_BANNED.search(text) or _SVG_EXTERNAL_HREF.search(text) \
+            or _SVG_HANDLER.search(text):
         raise OpError("That SVG can't be used: it must be a plain drawing, with no scripts or links to other files.")
 
 
