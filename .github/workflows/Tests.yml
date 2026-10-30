@@ -1,0 +1,36 @@
+# Runs the tests on each pull request and on main: the Python tests (without Manim, so the ones that
+# check the exported Python against it skip) and the browser engine's JavaScript tests.
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          pip install -r RequirementsWeb.txt pytest
+          python -m playwright install --with-deps chromium
+      - name: Run the Python tests
+        run: python -m pytest -q
+
+  javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+      - name: Run the JavaScript tests
+        run: node --test tests/js/*.test.mjs
