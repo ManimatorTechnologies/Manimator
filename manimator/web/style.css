@@ -641,7 +641,7 @@ textarea.input { height: auto; min-height: 64px; padding: 8px 10px; resize: vert
 .toast {
   position: fixed; left: 16px; bottom: calc(var(--sheets) + 14px); z-index: 70; max-width: min(560px, 60vw); padding: 11px 16px 11px 34px;
   border-radius: 10px; background: rgba(21, 21, 21,.94); backdrop-filter: blur(12px); border: 1px solid var(--line-2);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, .6); color: var(--text); line-height: 1.4; cursor: pointer; animation: toast-in .18s ease-out;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .6); color: var(--text); line-height: 1.4; text-wrap: pretty; cursor: pointer; animation: toast-in .18s ease-out;
 }
 .toast::before { content: ""; position: absolute; left: 15px; top: 17px; width: 8px; height: 8px; border-radius: 50%; background: var(--text-3); }
 .toast.ok::before { background: var(--ok); }
@@ -883,8 +883,8 @@ textarea.input { height: auto; min-height: 64px; padding: 8px 10px; resize: vert
 .auth-foot:empty { display: none; }
 .auth-foot .link-btn { display: inline; }
 .form-error { color: var(--danger); font-size: 12.5px; line-height: 1.45; }
-.toast-action {
-  margin-left: 12px; padding: 2px 10px; border-radius: 999px; border: 1px solid currentColor; background: none;
+.toast-action { /* a row of its own under the message, lined up with its words; 16px from the toast's edge, like the words */
+  display: block; margin: 10px 0 4px; padding: 2px 10px; border-radius: 999px; border: 1px solid currentColor; background: none;
   color: inherit; font-weight: 600; cursor: pointer;
 }
 .centered .lbl { display: inline-block; } /* so centerText can move it with a transform (inline boxes ignore those) */
@@ -1123,6 +1123,7 @@ textarea.input { height: auto; min-height: 64px; padding: 8px 10px; resize: vert
 .storage-bar .st-data, .storage-legend i.st-data { background: #a78bfa; }
 :root { --code-right: 46vw; --code-console: 220px; }
 .code-shell { grid-template-rows: auto 1fr; }
+.code-shell .toast { bottom: 16px; } /* no scene tabs to sit above, as on the Projects page */
 .cv { display: grid; min-height: 0; grid-template-columns: minmax(240px, 1fr) 1px var(--code-right); }
 .cv-files { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .cv-tab { height: 28px; padding: 0 10px; border: 0; border-radius: var(--radius); background: none; color: var(--text-2); font: inherit; font-weight: 600; cursor: pointer; }
